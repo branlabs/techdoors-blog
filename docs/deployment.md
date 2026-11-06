@@ -4,14 +4,14 @@
 
 ## Trạng thái và ranh giới phê duyệt
 
-Mã nguồn, `static/CNAME`, CI và hướng dẫn này chỉ chuẩn bị cho phát hành. Chúng không thay đổi DNS hay tự đưa website lên mạng. Không bật Pages, đặt biến phê duyệt hoặc sửa zone iNET trước khi chủ domain đồng ý go live.
+Chủ repo đã phê duyệt phát hành lần đầu, merge PR #1 và cấu hình DNS iNET vào ngày 06/11/2026. GitHub Pages dùng GitHub Actions, custom domain `techdoors.io`, và biến `PAGES_DEPLOY_APPROVED=true`. Các thay đổi DNS hoặc quyền phát hành tiếp theo vẫn cần chủ domain đồng ý.
 
 `deploy.yml` chỉ chạy cho PR có `merged=true` vào `main`. Biến repo `PAGES_DEPLOY_APPROVED` phải có giá trị chính xác `true`; khi chưa tạo hoặc bằng `false`, job deploy bị bỏ qua. Không có trigger `push` hay `workflow_dispatch`. PR validation không có quyền ghi Pages hay OIDC.
 
 ## 1. Chuẩn bị GitHub sau khi được phê duyệt
 
 1. Giữ repo `branlabs/techdoors-blog` ở chế độ public để dùng GitHub Pages miễn phí.
-2. Trong **Settings → Environments**, tạo `github-pages`. Bật **Required reviewers**, chọn chủ repo hoặc người được ủy quyền. Khi có một người tự triển khai và tự duyệt, giữ tùy chọn ngăn self-review tắt; nếu có người duyệt độc lập, có thể bật tùy chọn đó. Giới hạn deployment branch ở `main`, tắt bypass nếu tài khoản hỗ trợ.
+2. Trong **Settings → Environments**, tạo `github-pages`. Bật **Required reviewers**, chọn chủ repo hoặc người được ủy quyền. Khi có một người tự triển khai và tự duyệt, giữ tùy chọn ngăn self-review tắt; nếu có người duyệt độc lập, có thể bật tùy chọn đó. Với workflow `pull_request: closed`, cho phép hai deployment branch pattern `main` và `refs/pull/*/merge`: GitHub gắn sự kiện PR với merge ref, dù PR đã được merge. Workflow vẫn chỉ build/deploy khi `merged=true` vào `main` và checkout đúng `merge_commit_sha`. Nếu chỉ cho phép `main` trong environment, GitHub sẽ chặn deploy trước khi chạy step. Giữ required reviewer; tắt bypass nếu tài khoản hỗ trợ.
 3. Tạo branch rule cho `main`: yêu cầu PR, ít nhất một approval phù hợp nhóm làm việc và check **TypeScript, production build and browser checks** phải xanh. Không bật auto-merge cho PR khởi tạo khi chưa review.
 4. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 5. Xác minh quyền sở hữu domain theo bước 2 dưới đây. Sau khi DNS đã được chấp thuận và trỏ đúng, đặt **Custom domain: `techdoors.io`**. Bản build vẫn chứa `CNAME` cho tính rõ ràng; với Actions, trường Custom domain trong Settings là cấu hình hosting cần thiết.
