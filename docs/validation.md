@@ -28,8 +28,8 @@ Một build riêng ngoài artifact bàn giao sử dụng sáu bài MDX tạm và
 
 Các file nguồn tạm đã được xóa. Repo và artifact bàn giao chỉ có một bài thật: **Chào mừng đến với TechDoors**.
 
-## Phạm vi còn chờ phát hành
+## Phạm vi kiểm chứng và phát hành
 
-Chưa merge PR, bật GitHub Pages, đổi DNS iNET hoặc kiểm tra TLS/redirect trên domain thật. Thực hiện các bước đó sau khi chủ repo/domain phê duyệt theo [deployment.md](deployment.md).
+Các kiểm tra local phía trên được thực hiện trước phát hành. Sau khi chủ repo/domain phê duyệt ngày 06/11/2026, PR #1 đã merge, GitHub Pages đã deploy thành công và DNS iNET đã được cập nhật. Tham khảo [deployment.md](deployment.md) cho cấu hình và cách kiểm tra TLS/redirect sau khi GitHub cấp chứng chỉ.
 
 Mobile được kiểm tra bằng Chromium emulation; chưa xác nhận riêng bằng thiết bị iOS, Safari hoặc Firefox. Kiểm tra tự động không thay thế hoàn toàn trải nghiệm với trình đọc màn hình và thiết bị thật.

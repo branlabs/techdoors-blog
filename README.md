@@ -2,7 +2,7 @@
 
 Blog kỹ thuật cá nhân bằng tiếng Việt tại **https://techdoors.io**. Docusaurus **3.10.2**, React 19, TypeScript strict và CSS Modules; xuất thành website tĩnh, không backend, database hay dịch vụ trả phí. Giao diện editorial ưu tiên nền sáng, có dark mode và tìm kiếm local.
 
-**Trạng thái phát hành:** mã nguồn được chuẩn bị để review qua PR. DNS iNET và production chưa được thay đổi. Workflow deploy mặc định khóa bằng biến `PAGES_DEPLOY_APPROVED`.
+**Cấu hình phát hành:** mã nguồn đã merge vào `main`, GitHub Pages dùng GitHub Actions và custom domain `techdoors.io`. DNS được quản lý tại iNET. Chủ repo đã bật `PAGES_DEPLOY_APPROVED`; mỗi lần deploy vẫn cần phê duyệt environment `github-pages`.
 
 ## Chạy local
 
@@ -83,6 +83,6 @@ Repo: https://github.com/branlabs/techdoors-blog (public).
 
 PR vào `main` chạy typecheck, production build, kiểm tra artifact và Playwright. Workflow deploy chỉ nhận sự kiện **PR đã merge vào `main`**, và chỉ chạy khi chủ repo đã bật biến `PAGES_DEPLOY_APPROVED=true`. Job phát hành dùng environment `github-pages`, cần cấu hình required reviewer trước khi bật biến này. Push trực tiếp vào `main` không deploy.
 
-Đọc **[hướng dẫn GitHub Pages, iNET DNS và HTTPS](docs/deployment.md)** trước khi bật production. Repo này không tự thay đổi DNS, bật Pages hay cấp chứng chỉ. Không cần PAT hoặc secret tự tạo; deploy dùng `GITHUB_TOKEN` và OIDC ngắn hạn của Actions.
+Đọc **[hướng dẫn GitHub Pages, iNET DNS và HTTPS](docs/deployment.md)** khi vận hành hoặc thay đổi cấu hình production. Workflow không tự sửa DNS; GitHub quản lý chứng chỉ HTTPS. Không cần PAT hoặc secret tự tạo; deploy dùng `GITHUB_TOKEN` và OIDC ngắn hạn của Actions.
 
 Các security override trong `package.json` ghim bản vá `tinypool` và `serialize-javascript`, cùng bản `uuid` tương thích cho `sockjs`. Kiểm tra lại chúng bằng build/browser tests và `npm audit` khi nâng Docusaurus. Chỉ cài các plugin/theme cần dùng; không cài preset chứa các tích hợp analytics và search bên ngoài không sử dụng.
