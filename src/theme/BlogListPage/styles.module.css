@@ -1,0 +1,65 @@
+.page {
+  width: 100%;
+  max-width: 1064px;
+  margin: 0 auto;
+  padding: 65px 40px 65px;
+}
+.header h1 {
+  font-size: clamp(2.25rem, 4.5vw, 3.4rem);
+  letter-spacing: -0.07em;
+  line-height: 1.4;
+  margin: 23px 0;
+}
+.header > p:last-child {
+  color: var(--td-muted);
+  font-size: 0.94rem;
+  line-height: 1.95;
+}
+.topics {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--td-line);
+  padding: 26px 0 30px;
+  margin-top: 40px;
+}
+.topics a {
+  border: 1px solid var(--td-line);
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  color: var(--td-muted);
+  border-radius: 3px;
+}
+.topics a:hover {
+  color: var(--td-accent);
+  border-color: var(--td-accent);
+  text-decoration: none;
+}
+.topics a.active {
+  color: var(--td-paper);
+  background: var(--td-ink);
+  border-color: var(--td-ink);
+}
+.list {
+  margin-top: 4px;
+}
+.note {
+  border-top: 1px solid var(--td-line);
+  font-size: 0.75rem;
+  color: var(--td-muted);
+  padding-top: 24px;
+  margin-top: 25px;
+  line-height: 1.9;
+}
+.note span {
+  color: var(--td-accent);
+  margin-right: 8px;
+}
+@media (max-width: 600px) {
+  .page {
+    padding: 40px 24px;
+  }
+  .topics {
+    margin-top: 30px;
+  }
+}

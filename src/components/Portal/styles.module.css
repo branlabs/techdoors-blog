@@ -1,0 +1,37 @@
+.portal {
+  color: var(--td-ink);
+  position: relative;
+  width: 100%;
+}
+.drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.label {
+  font:
+    9px 'JetBrains Mono Variable',
+    monospace;
+  letter-spacing: 1px;
+  fill: currentColor;
+  opacity: 0.66;
+}
+.caption {
+  display: block;
+  font-size: 0.7rem;
+  text-align: right;
+  color: var(--td-muted);
+  margin: 12px 0 0;
+}
+.compact .caption {
+  display: none;
+}
+.compact {
+  max-width: 275px;
+}
+.door {
+  transition: filter 250ms ease;
+}
+.portal:hover .door {
+  filter: brightness(1.08);
+}

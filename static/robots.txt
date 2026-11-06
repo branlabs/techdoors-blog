@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://techdoors.io/sitemap.xml
