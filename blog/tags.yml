@@ -1,0 +1,40 @@
+devops:
+  label: DevOps
+  permalink: /devops
+  description: Tự động hóa, cộng tác và vòng đời của hệ thống.
+sre:
+  label: SRE
+  permalink: /sre
+  description: Độ tin cậy, vận hành và cách đo sức khỏe dịch vụ.
+kubernetes:
+  label: Kubernetes
+  permalink: /kubernetes
+  description: Điều phối container và tìm hiểu cụm Kubernetes.
+platform-engineering:
+  label: Platform Engineering
+  permalink: /platform-engineering
+  description: Nền tảng nội bộ và trải nghiệm phát triển phần mềm.
+observability:
+  label: Observability
+  permalink: /observability
+  description: Logs, metrics và traces để hiểu hệ thống.
+ci-cd:
+  label: CI/CD
+  permalink: /ci-cd
+  description: Kiểm thử, tích hợp và chuyển giao thay đổi.
+linux:
+  label: Linux
+  permalink: /linux
+  description: Dòng lệnh, tiến trình, mạng và hệ điều hành.
+infrastructure:
+  label: Infrastructure
+  permalink: /infrastructure
+  description: Hạ tầng, mạng, lưu trữ và Infrastructure as Code.
+homelab:
+  label: Homelab
+  permalink: /homelab
+  description: Không gian thực hành và thử nghiệm hạ tầng.
+openstack:
+  label: OpenStack
+  permalink: /openstack
+  description: Tìm hiểu hạ tầng đám mây với OpenStack.

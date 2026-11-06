@@ -1,0 +1,15 @@
+.mobileTOC {
+  display: none;
+}
+@media (max-width: 996px) {
+  .mobileTOC {
+    display: block;
+    margin: 0 0 28px;
+    border: 1px solid var(--td-line);
+    border-radius: 4px;
+    font-size: 0.83rem;
+  }
+  .mobileTOC > div {
+    background: var(--td-surface);
+  }
+}
