@@ -140,7 +140,8 @@
 @media (max-width: 600px) {
   .trigger {
     border-color: transparent;
-    min-width: 40px;
+    min-width: 44px;
+    min-height: 44px;
     justify-content: center;
   }
   .trigger span {

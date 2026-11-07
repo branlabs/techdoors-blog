@@ -186,6 +186,13 @@ input {
 .navbar__toggle {
   margin-right: 12px;
 }
+.navbar__toggle,
+.navbar-sidebar__close {
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
 .navbar-sidebar {
   background: var(--td-paper);
 }
@@ -242,7 +249,12 @@ main p a {
   text-decoration: underline;
 }
 .blog-post-page .container {
+  max-width: 1024px;
   padding-top: 56px !important;
+}
+.blog-post-page .markdown {
+  font-size: 1.06rem;
+  line-height: 1.85;
 }
 .blog-post-page article header {
   padding-bottom: 25px;
@@ -251,7 +263,7 @@ main p a {
 }
 .blog-post-page article header h1 {
   max-width: 800px;
-  font-size: clamp(2.1rem, 4.3vw, 3.1rem);
+  font-size: clamp(2.1rem, 4.3vw, 2.8rem);
   line-height: 1.35;
   letter-spacing: -0.065em;
 }
@@ -307,17 +319,24 @@ main p a {
   box-shadow: none !important;
 }
 .theme-code-block pre {
-  font-size: 0.76rem;
-  line-height: 1.8;
+  font-size: 0.85rem;
+  line-height: 1.75;
 }
-.theme-code-block [class*='buttonGroup'] button {
-  opacity: 1;
+.theme-code-block pre code {
+  /* Let the end of long lines scroll clear of the copy and wrap controls. */
+  padding-inline-end: 7rem;
+}
+.theme-code-block button[aria-label] {
+  min-width: 44px;
+  min-height: 44px;
+  /* Docusaurus otherwise hides these controls until hover, including on touch screens. */
+  opacity: 1 !important;
   border-color: var(--td-line);
   background: var(--td-paper);
   color: var(--td-ink);
 }
 .theme-code-block [class*='codeBlockTitle'] {
-  font-size: 0.7rem;
+  font-size: 0.76rem;
 }
 [class*='tagWithCount'] {
   border-color: var(--td-line) !important;
@@ -353,6 +372,8 @@ main p a {
   }
   .blog-post-page main.col--9 {
     --ifm-col-width: 100%;
+    max-width: calc(700px + 2 * var(--ifm-spacing-horizontal));
+    margin-inline: auto;
     padding-right: var(--ifm-spacing-horizontal);
   }
   .blog-post-page .container {
@@ -381,6 +402,9 @@ main p a {
   }
   .markdown {
     font-size: 0.91rem;
+  }
+  .blog-post-page .markdown {
+    font-size: 0.97rem;
   }
   .markdown h2 {
     font-size: 1.4rem;

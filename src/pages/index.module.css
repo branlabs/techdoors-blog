@@ -111,7 +111,8 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 0.68rem;
+  font-size: 0.76rem;
+  min-height: 32px;
   color: var(--td-muted);
   white-space: nowrap;
 }
@@ -217,9 +218,6 @@
   .desktopBreak {
     display: none;
   }
-  .allPosts {
-    font-size: 0.64rem;
-  }
 }
 @media (max-width: 760px) {
   .home {
@@ -288,6 +286,6 @@
     font-size: 1.15rem;
   }
   .allPosts {
-    font-size: 0.6rem;
+    min-height: 44px;
   }
 }

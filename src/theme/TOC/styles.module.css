@@ -1,0 +1,10 @@
+/* Let the original TOC stay sticky throughout the article's full height. */
+.landmark {
+  height: 100%;
+}
+
+@media (max-width: 996px) {
+  .landmark {
+    display: none;
+  }
+}
