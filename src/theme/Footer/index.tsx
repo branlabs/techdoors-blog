@@ -24,14 +24,6 @@ export default function Footer(): ReactNode {
             <Link to="/projects">Dự án</Link>
             <Link to="/about">Giới thiệu</Link>
             <Link to="/blog/tags/">Chủ đề</Link>
-          </nav>
-          <nav aria-label="Theo dõi TechDoors">
-            <a href="/blog/rss.xml">
-              RSS <Arrow diagonal />
-            </a>
-            <a href="/blog/atom.xml">
-              Atom <Arrow diagonal />
-            </a>
             <a
               href="https://github.com/branlabs/techdoors-blog"
               target="_blank"

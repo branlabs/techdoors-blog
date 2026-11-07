@@ -47,8 +47,7 @@ export default function About(): ReactNode {
             <p>
               Bạn có thể bắt đầu với{' '}
               <Link to="/blog/chao-mung-den-voi-techdoors/">bài viết chào mừng</Link>, xem{' '}
-              <Link to="/projects">khu vực dự án</Link> hoặc theo dõi{' '}
-              <a href="/blog/rss.xml">RSS</a> để đọc những ghi chép tiếp theo.
+              <Link to="/projects">khu vực dự án</Link> để tìm hiểu thêm về TechDoors.
             </p>
           </div>
           <aside className={styles.aside}>
