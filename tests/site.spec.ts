@@ -45,6 +45,11 @@ test('homepage recent articles retain metadata, article links and the blog topic
     await settle(page);
     await setTheme(page, mode);
     const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
+    const heroTitle = await page.locator('#hero-title').boundingBox();
+    const recentBox = await recent.boundingBox();
+    expect(Math.abs((heroTitle?.x ?? 0) - (recentBox?.x ?? 0))).toBeLessThan(1);
+    await expect(page.locator('main > section')).toHaveCount(2);
+    await expect(page.getByRole('link', {name: /RSS|Atom/})).toHaveCount(0);
     const posts = recent.getByRole('article');
     expect(await posts.count()).toBeGreaterThan(0);
     expect(await posts.count()).toBeLessThanOrEqual(5);
@@ -73,21 +78,19 @@ test('homepage recent articles retain metadata, article links and the blog topic
 });
 
 for (const mode of ['light', 'dark'] as const) {
-  test(`inline RSS link remains distinguishable in ${mode} mode`, async ({page}, testInfo) => {
+  test(`feed navigation stays hidden while XML feeds remain available in ${mode} mode`, async ({
+    page,
+    request,
+  }, testInfo) => {
     await page.goto('/blog/');
     await settle(page);
     await setTheme(page, mode);
-    const rss = page.locator('main').getByRole('link', {name: 'Theo dõi RSS.'});
-    await expect(rss).toHaveCSS('text-decoration-line', 'underline');
-    await rss.hover();
-    await expect(rss).toHaveCSS('text-decoration-line', 'underline');
-    await rss.focus();
-    await page.keyboard.press('Shift+Tab');
-    await page.keyboard.press('Tab');
-    await expect(rss).toBeFocused();
-    await expect(rss).toHaveCSS('outline-style', 'solid');
-    await page.mouse.move(0, 0);
-    await rss.blur();
+    await expect(page.getByRole('link', {name: /RSS|Atom/})).toHaveCount(0);
+    for (const format of ['rss', 'atom']) {
+      const response = await request.get('/blog/' + format + '.xml');
+      expect(response.status()).toBe(200);
+      expect(await response.text()).toContain('Chào mừng đến với TechDoors');
+    }
     const {violations} = await new AxeBuilder({page})
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
       .analyze();
@@ -156,6 +159,9 @@ test('all public flows render without console errors or horizontal overflow', as
     expect(response?.status(), route).toBe(200);
     await settle(page);
     await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('footer a[href$="rss.xml"], footer a[href$="atom.xml"]')).toHaveCount(
+      0,
+    );
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );
@@ -237,7 +243,7 @@ test('Vietnamese local search opens a real article without external requests', a
   await expect(previousFocus).toBeFocused();
   await trigger.click();
   await search.fill('Chào mừng');
-  const result = dialog.getByRole('link').filter({hasText: 'Chào mừng đến với TechDoors'}).first();
+  const result = dialog.locator('a[href="' + article + '"]');
   await expect(result).toBeVisible();
   const {violations} = await new AxeBuilder({page})
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
@@ -251,7 +257,15 @@ test('Vietnamese local search opens a real article without external requests', a
   await trigger.click();
   await search.fill('Chào mừng');
   await expect(result).toBeVisible();
+  const resultIndex = await dialog
+    .getByRole('link')
+    .evaluateAll(
+      (links, path) => links.findIndex((link) => link.getAttribute('href') === path),
+      article,
+    );
+  expect(resultIndex).toBeGreaterThanOrEqual(0);
   await search.press('ArrowDown');
+  for (let index = 0; index < resultIndex; index++) await page.keyboard.press('ArrowDown');
   await expect(result).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(new RegExp(article));

@@ -46,10 +46,6 @@ export default function BlogListPage(props: Props): ReactNode {
           ))}
         </section>
         <BlogListPaginator metadata={metadata} />
-        <div className={styles.note}>
-          <span aria-hidden="true">↳</span> Bạn thích đọc qua trình đọc tin?{' '}
-          <a href="/blog/rss.xml">Theo dõi RSS.</a>
-        </div>
       </main>
     </Layout>
   );

@@ -48,21 +48,7 @@ export default function Home(): ReactNode {
             <Portal />
           </div>
         </section>
-        <div className={styles.subjectLine}>
-          <span>HẠ TẦNG TỐT BẮT ĐẦU TỪ SỰ TÒ MÒ.</span>
-          <span aria-hidden="true">↓ GHI CHÉP TỪ BÊN TRONG HỆ THỐNG</span>
-        </div>
         <RecentArticles posts={posts} />
-        <section className={styles.follow} aria-labelledby="follow-title">
-          <div>
-            <p className="eyebrow">MỘT CÁCH ĐỌC CHẬM HƠN</p>
-            <h2 id="follow-title">Bài mới, trong trình đọc của bạn.</h2>
-            <p>Theo dõi qua RSS. Đọc khi có thời gian, theo nhịp của bạn.</p>
-          </div>
-          <a href="/blog/rss.xml" className="td-button td-button-outline">
-            Theo dõi RSS <Arrow diagonal />
-          </a>
-        </section>
       </main>
     </Layout>
   );
