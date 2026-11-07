@@ -50,6 +50,12 @@ test('homepage recent articles retain metadata, article links and the blog topic
     expect(Math.abs((heroTitle?.x ?? 0) - (recentBox?.x ?? 0))).toBeLessThan(1);
     await expect(page.locator('main > section')).toHaveCount(2);
     await expect(page.getByRole('link', {name: /RSS|Atom/})).toHaveCount(0);
+    const footerNav = page.getByRole('navigation', {name: 'Liên kết cuối trang'});
+    await expect(page.locator('footer nav')).toHaveCount(1);
+    await expect(footerNav.getByRole('link', {name: /GitHub/})).toHaveAttribute(
+      'href',
+      'https://github.com/branlabs/techdoors-blog',
+    );
     const posts = recent.getByRole('article');
     expect(await posts.count()).toBeGreaterThan(0);
     expect(await posts.count()).toBeLessThanOrEqual(5);
