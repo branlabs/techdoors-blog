@@ -18,7 +18,7 @@
   gap: 12px;
   color: var(--td-muted);
   font:
-    0.71rem 'JetBrains Mono Variable',
+    0.76rem 'JetBrains Mono Variable',
     monospace;
 }
 .body :is(h2, h3) {
@@ -59,10 +59,13 @@
 .tags a {
   border: 1px solid var(--td-line);
   border-radius: 3px;
-  padding: 3px 9px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 9px;
   color: var(--td-muted);
   font:
-    0.66rem 'JetBrains Mono Variable',
+    0.74rem/1.6 'JetBrains Mono Variable',
     monospace;
 }
 .tags a:hover {
@@ -74,5 +77,8 @@
   .card {
     grid-template-columns: 24px 1fr;
     gap: 12px;
+  }
+  .tags a {
+    min-height: 44px;
   }
 }

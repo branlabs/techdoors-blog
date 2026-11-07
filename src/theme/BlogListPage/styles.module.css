@@ -24,9 +24,12 @@
   margin-top: 40px;
 }
 .topics a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
   border: 1px solid var(--td-line);
   padding: 6px 12px;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   color: var(--td-muted);
   border-radius: 3px;
 }
@@ -55,11 +58,23 @@
   color: var(--td-accent);
   margin-right: 8px;
 }
+.note a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+.note a:hover,
+.note a:focus-visible {
+  color: var(--td-ink);
+  text-decoration-thickness: 2px;
+}
 @media (max-width: 600px) {
   .page {
     padding: 40px 24px;
   }
   .topics {
     margin-top: 30px;
+  }
+  .topics a {
+    min-height: 44px;
   }
 }

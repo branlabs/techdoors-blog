@@ -18,6 +18,96 @@ async function settle(page: Page) {
   await page.evaluate(() => document.fonts.ready);
 }
 
+async function setTheme(page: Page, mode: 'light' | 'dark') {
+  if ((await page.locator('html').getAttribute('data-theme')) === mode) return;
+  const toggle = page.getByRole('button', {name: /Chuyển đổi chế độ sáng và tối/});
+  if (!(await toggle.filter({visible: true}).count()))
+    await page.locator('.navbar__toggle').click();
+  await toggle.filter({visible: true}).click();
+  const close = page.locator('.navbar-sidebar__close');
+  if (await close.isVisible()) await close.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', mode);
+  await page.evaluate(async () => {
+    await Promise.all(
+      document
+        .getAnimations()
+        .filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity)
+        .map((animation) => animation.finished.catch(() => {})),
+    );
+  });
+}
+
+for (const mode of ['light', 'dark'] as const) {
+  test(`inline RSS link remains distinguishable in ${mode} mode`, async ({page}, testInfo) => {
+    await page.goto('/blog/');
+    await settle(page);
+    await setTheme(page, mode);
+    const rss = page.locator('main').getByRole('link', {name: 'Theo dõi RSS.'});
+    await expect(rss).toHaveCSS('text-decoration-line', 'underline');
+    await rss.hover();
+    await expect(rss).toHaveCSS('text-decoration-line', 'underline');
+    await rss.focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(rss).toBeFocused();
+    await expect(rss).toHaveCSS('outline-style', 'solid');
+    await page.mouse.move(0, 0);
+    await rss.blur();
+    const {violations} = await new AxeBuilder({page})
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(
+      violations.map((item) => ({id: item.id, nodes: item.nodes.map((node) => node.target)})),
+    ).toEqual([]);
+    await page.screenshot({path: testInfo.outputPath(`blog-${mode}.png`), fullPage: true});
+  });
+}
+
+test('article landmarks, sticky TOC and touch controls work in both themes', async ({
+  page,
+  isMobile,
+}, testInfo) => {
+  for (const mode of ['light', 'dark'] as const) {
+    await page.goto(article);
+    await settle(page);
+    await setTheme(page, mode);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),
+    ).toBeLessThanOrEqual(1);
+    const desktopTOC = page.getByRole('navigation', {name: 'Mục lục bài viết'});
+    if (isMobile) {
+      await expect(desktopTOC).toBeHidden();
+      const toggle = page.locator('.navbar__toggle');
+      const target = await toggle.boundingBox();
+      expect(target?.width).toBeGreaterThanOrEqual(44);
+      expect(target?.height).toBeGreaterThanOrEqual(44);
+    } else {
+      await expect(desktopTOC).toBeVisible();
+      await page.evaluate(() => window.scrollTo({top: 600, behavior: 'instant'}));
+      await expect(desktopTOC.getByRole('link').first()).toBeInViewport();
+      await desktopTOC.getByRole('link').filter({hasText: 'Những cánh cửa'}).click();
+      await expect(page).toHaveURL(/#/);
+    }
+    const {violations} = await new AxeBuilder({page})
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa', 'best-practice'])
+      .analyze();
+    expect(
+      violations.map((item) => ({id: item.id, nodes: item.nodes.map((node) => node.target)})),
+    ).toEqual([]);
+    const copy = page.getByRole('button', {name: 'Sao chép mã vào bộ nhớ tạm'});
+    await expect(copy).toHaveCSS('opacity', '1');
+    if (!isMobile) {
+      await page.locator('.theme-code-block').hover();
+      await expect(copy).toHaveCSS('opacity', '1');
+    }
+    const target = await copy.boundingBox();
+    expect(target?.width).toBeGreaterThanOrEqual(44);
+    expect(target?.height).toBeGreaterThanOrEqual(44);
+    await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant'}));
+    await page.screenshot({path: testInfo.outputPath(`article-${mode}.png`), fullPage: true});
+  }
+});
+
 test('all public flows render without console errors or horizontal overflow', async ({
   page,
 }, testInfo) => {
@@ -100,6 +190,8 @@ test('Vietnamese local search opens a real article without external requests', a
   await page.goto('/');
   await settle(page);
   const trigger = page.getByRole('button', {name: 'Tìm kiếm trên TechDoors'});
+  const previousFocus = page.getByRole('link', {name: 'Khám phá bài viết', exact: true});
+  await previousFocus.focus();
   await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', {name: 'Tìm trong TechDoors'});
   await expect(dialog).toBeVisible();
@@ -107,6 +199,7 @@ test('Vietnamese local search opens a real article without external requests', a
   await expect(search).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();
+  await expect(previousFocus).toBeFocused();
   await trigger.click();
   await search.fill('Chào mừng');
   const result = dialog.getByRole('link').filter({hasText: 'Chào mừng đến với TechDoors'}).first();
@@ -119,6 +212,7 @@ test('Vietnamese local search opens a real article without external requests', a
   ).toEqual([]);
   await search.press('Escape');
   await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
   await trigger.click();
   await search.fill('Chào mừng');
   await expect(result).toBeVisible();
@@ -141,7 +235,7 @@ test('Markdown, syntax highlighting, code copy, TOC and related navigation', asy
   await settle(page);
   await expect(page.locator('.theme-code-block code')).toContainText('free -h');
   expect(await page.locator('.theme-code-block .token').count()).toBeGreaterThan(0);
-  await page.getByRole('button', {name: 'Sao chép mã vào bộ nhớ tạm'}).click();
+  await page.getByRole('button', {name: 'Sao chép mã vào bộ nhớ tạm'}).press('Enter');
   await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('free -h');
   if (isMobile) await page.getByRole('button', {name: 'Trên trang này'}).click();
   const toc = page

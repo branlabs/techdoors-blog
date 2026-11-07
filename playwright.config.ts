@@ -25,6 +25,26 @@ export default defineConfig({
         deviceScaleFactor: 1,
       },
     },
+    {
+      name: 'narrow-mobile',
+      use: {
+        browserName: 'chromium',
+        viewport: {width: 320, height: 780},
+        isMobile: true,
+        hasTouch: true,
+        deviceScaleFactor: 1,
+      },
+    },
+    {
+      name: 'tablet',
+      use: {
+        browserName: 'chromium',
+        viewport: {width: 820, height: 1180},
+        isMobile: true,
+        hasTouch: true,
+        deviceScaleFactor: 1,
+      },
+    },
   ],
   webServer: {
     command: 'npm run serve',
