@@ -37,6 +37,41 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
   });
 }
 
+test('homepage recent articles retain metadata, article links and the blog topic filters', async ({
+  page,
+}) => {
+  for (const mode of ['light', 'dark'] as const) {
+    await page.goto('/');
+    await settle(page);
+    await setTheme(page, mode);
+    const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
+    const posts = recent.getByRole('article');
+    expect(await posts.count()).toBeGreaterThan(0);
+    expect(await posts.count()).toBeLessThanOrEqual(5);
+    const first = posts.first();
+    await expect(first.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}/);
+    await expect(first.getByText(/\d+ phút đọc/)).toBeVisible();
+    const title = first.getByRole('heading', {level: 3}).getByRole('link');
+    const articleTitle = await title.innerText();
+    await title.click();
+    await expect(
+      page.getByRole('heading', {level: 1, name: articleTitle, exact: true}),
+    ).toBeVisible();
+    await page.goto('/');
+    await settle(page);
+    await recent.getByRole('link', {name: 'Xem tất cả', exact: true}).click();
+    await expect(page).toHaveURL(/\/blog\/$/);
+    await page
+      .getByRole('navigation', {name: 'Lọc bài viết theo chủ đề'})
+      .getByRole('link', {name: 'DevOps', exact: true})
+      .click();
+    await expect(page).toHaveURL(/\/blog\/tags\/devops\/$/);
+    await expect(
+      page.getByRole('link', {name: 'Chào mừng đến với TechDoors', exact: true}),
+    ).toBeVisible();
+  }
+});
+
 for (const mode of ['light', 'dark'] as const) {
   test(`inline RSS link remains distinguishable in ${mode} mode`, async ({page}, testInfo) => {
     await page.goto('/blog/');
