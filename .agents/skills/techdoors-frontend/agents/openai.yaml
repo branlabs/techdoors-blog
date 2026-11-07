@@ -1,0 +1,6 @@
+interface:
+  display_name: 'TechDoors Frontend'
+  short_description: 'Editorial Docusaurus design for TechDoors'
+  default_prompt: 'Use $techdoors-frontend to implement the requested TechDoors frontend change and verify readability, accessibility, responsive layouts, and both color modes.'
+policy:
+  allow_implicit_invocation: true
