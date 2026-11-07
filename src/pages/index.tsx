@@ -4,8 +4,8 @@ import Link from '@docusaurus/Link';
 import {usePluginData} from '@docusaurus/useGlobalData';
 import Arrow from '../components/Arrow';
 import Portal from '../components/Portal';
-import PostCard from '../components/PostCard';
-import {topics, type PostSummary} from '../types/content';
+import RecentArticles from '../components/RecentArticles';
+import type {PostSummary} from '../types/content';
 import styles from './index.module.css';
 
 export default function Home(): ReactNode {
@@ -52,41 +52,7 @@ export default function Home(): ReactNode {
           <span>HẠ TẦNG TỐT BẮT ĐẦU TỪ SỰ TÒ MÒ.</span>
           <span aria-hidden="true">↓ GHI CHÉP TỪ BÊN TRONG HỆ THỐNG</span>
         </div>
-        <div className={styles.editorial}>
-          <section aria-labelledby="recent-title" className={styles.recent}>
-            <div className={styles.sectionHeading}>
-              <h2 id="recent-title">
-                Ghi chép mới nhất
-                <span className={styles.count}>{String(posts.length).padStart(2, '0')}</span>
-              </h2>
-              <Link to="/blog" className={styles.allPosts}>
-                Tất cả bài viết <Arrow />
-              </Link>
-            </div>
-            {posts.slice(0, 3).map((post, index) => (
-              <PostCard key={post.permalink} post={post} index={index} />
-            ))}
-            <div className={styles.smallNote}>
-              <span aria-hidden="true">↳</span> Blog vừa mở cửa. Những ghi chép tiếp theo sẽ xuất
-              hiện tại đây.
-            </div>
-          </section>
-          <aside className={styles.topics} aria-labelledby="topics-title">
-            <p className="eyebrow">CÁC CHỦ ĐỀ</p>
-            <h2 id="topics-title">Đi từ điều bạn tò mò.</h2>
-            <div className={styles.topicLinks}>
-              {topics.map((topic) => (
-                <Link to={`/blog/tags/${topic.slug}/`} key={topic.slug}>
-                  {topic.label}
-                  <Arrow diagonal />
-                </Link>
-              ))}
-            </div>
-            <Link to="/blog/tags/" className={styles.tagIndex}>
-              Xem mục lục chủ đề <Arrow />
-            </Link>
-          </aside>
-        </div>
+        <RecentArticles posts={posts} />
         <section className={styles.follow} aria-labelledby="follow-title">
           <div>
             <p className="eyebrow">MỘT CÁCH ĐỌC CHẬM HƠN</p>
