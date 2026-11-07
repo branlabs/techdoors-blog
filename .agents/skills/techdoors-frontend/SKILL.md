@@ -51,6 +51,6 @@ Paths below refer to this repository, not the skill installation directory.
 ## Verify and hand off
 
 - Run checks required by `AGENTS.md`; `npm run verify` runs typecheck, production build, artifact/link checks, and the existing Playwright suite. Install locked dependencies or browsers only if missing.
-- For visible UI changes, inspect a local production preview in light and dark mode on desktop and mobile. Include a small phone (320–390 px), a wide desktop (about 1440 px), and the breakpoints affected by the change. Existing Playwright projects cover 390 px mobile and 1440 px desktop; they do not prove every intermediate layout works.
+- For visible UI changes, inspect a local production preview in light and dark mode on desktop and mobile. Include a small phone (320–390 px), a wide desktop (about 1440 px), and the breakpoints affected by the change. Existing Playwright projects cover 320, 390, 820, and 1440 px; add checks for other breakpoints affected by the change.
 - Check keyboard use, overflow, contrast, console errors, and the affected article flow. Capture useful before/after screenshots when they help assess the change; state any browser or device verification limits.
 - Report what changed, why, and what passed. Keep hosting, DNS, PR merges, and production deployment outside this skill's scope; they require a separate explicit request.
