@@ -81,98 +81,6 @@
   letter-spacing: 0.04em;
   color: var(--td-muted);
 }
-.editorial {
-  display: grid;
-  grid-template-columns: 1fr 285px;
-  gap: 65px;
-  padding: 53px 0 60px;
-}
-.sectionHeading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 22px;
-}
-.sectionHeading h2 {
-  font-size: 1.3rem;
-  letter-spacing: -0.05em;
-  margin: 0;
-}
-.count {
-  color: var(--td-muted);
-  font:
-    0.65rem 'JetBrains Mono Variable',
-    monospace;
-  margin-left: 12px;
-  vertical-align: super;
-}
-.allPosts {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.76rem;
-  min-height: 32px;
-  color: var(--td-muted);
-  white-space: nowrap;
-}
-.smallNote {
-  display: flex;
-  gap: 13px;
-  border-top: 1px solid var(--td-line);
-  padding-top: 18px;
-  color: var(--td-muted);
-  font-size: 0.72rem;
-  line-height: 1.9;
-}
-.smallNote span {
-  color: var(--td-accent);
-}
-.topics {
-  padding-left: 30px;
-  border-left: 1px solid var(--td-line);
-}
-.topics h2 {
-  font-size: 1.1rem;
-  letter-spacing: -0.045em;
-  line-height: 1.5;
-  margin: 15px 0 22px;
-}
-.topicLinks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.topicLinks a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--td-line);
-  padding: 6px 9px;
-  font-size: 0.64rem;
-  border-radius: 3px;
-  color: var(--td-ink);
-  transition:
-    background-color 150ms,
-    border-color 150ms;
-}
-.topicLinks a svg {
-  width: 11px;
-  height: 11px;
-}
-.topicLinks a:hover {
-  text-decoration: none;
-  border-color: var(--td-accent);
-  background: var(--td-accent-wash);
-}
-.tagIndex {
-  font-size: 0.69rem;
-  color: var(--td-muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 22px;
-}
 .follow {
   border-top: 1px solid var(--td-line);
   padding: 34px 0 43px;
@@ -207,13 +115,6 @@
   }
   .heroText h1 {
     font-size: 3.2rem;
-  }
-  .editorial {
-    gap: 32px;
-    grid-template-columns: 1fr 240px;
-  }
-  .topics {
-    padding-left: 23px;
   }
   .desktopBreak {
     display: none;
@@ -256,36 +157,9 @@
   .subjectLine span:last-child {
     display: none;
   }
-  .editorial {
-    grid-template-columns: 1fr;
-    gap: 36px;
-    padding-top: 35px;
-    padding-bottom: 36px;
-  }
-  .topics {
-    border-left: 0;
-    padding: 27px 0 0;
-    border-top: 1px solid var(--td-line);
-  }
-  .topics h2 {
-    font-size: 1.2rem;
-  }
-  .topicLinks {
-    gap: 9px;
-  }
-  .topicLinks a {
-    padding: 7px 11px;
-    font-size: 0.7rem;
-  }
   .follow {
     flex-direction: column;
     align-items: flex-start;
     padding: 30px 0 40px;
-  }
-  .sectionHeading h2 {
-    font-size: 1.15rem;
-  }
-  .allPosts {
-    min-height: 44px;
   }
 }
