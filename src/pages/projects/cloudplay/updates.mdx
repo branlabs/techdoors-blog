@@ -1,0 +1,89 @@
+---
+title: Nhật ký cải tiến CloudPlay
+description: Các bước phát triển CloudPlay, từ chuẩn bị GPU đến streaming 1080p60 trong LAN, cùng giới hạn và việc cần kiểm thử tiếp.
+hide_table_of_contents: true
+---
+
+import {cloudplay} from '@site/src/data/projects';
+import {ProjectLinks} from '@site/src/components/ProjectInfo';
+import styles from '@site/src/components/ProjectInfo/styles.module.css';
+
+<div className={styles.document}>
+
+# Nhật ký cải tiến CloudPlay
+
+Lưu điều đã thay đổi, kết quả đã quan sát và phần chưa được kiểm chứng. Các mục ban đầu được **biên soạn hồi cứu ngày 08/11/2026**, không phải các phiên kiểm thử mới trong ngày này. Khi chưa xác định được ngày thực hiện chính xác, mình ghi giai đoạn thay vì tự đặt ngày.
+
+<ProjectLinks project={cloudplay} active="updates" />
+
+## CP-U05 - Chốt hiện trạng và hướng đi {#cp-u05}
+
+**Ngày ghi chép:** 08/11/2026. **Loại:** cập nhật nội dung, không thay đổi hệ thống lab. **Liên quan:** CP-M04 đến CP-M07.
+
+Mình chốt tên dự án là **CloudPlay**. Mục đích bắt đầu là tận dụng server/GPU sẵn có để giải trí sau giờ làm, đồng thời thử xây một nền tảng cloud gaming riêng trên homelab OpenStack đã có.
+
+**Hiện trạng:** phiên cuối đã ghi nhận streaming 1080p60 trong LAN; máy nhận là PC Windows 11 qua Wi-Fi. Mình chưa chơi thử game. Tình trạng nghiệm thu sau reboot của toàn bộ chuỗi chưa được chốt.
+
+**Hướng tiếp theo:** thử game thực tế và kiểm tra phục hồi trước; cấp phát GPU cho nhiều VM là hướng nghiên cứu dài hạn. Không có cam kết rằng GTX 1650 SUPER hiện tại chia được số CUDA core tùy ý cho nhiều Windows VM.
+
+**Tác động:** cập nhật trang tổng quan và viết bài hành trình. Không nâng trạng thái lên "dịch vụ sẵn sàng".
+
+## CP-U04 - Một màn hình, luồng hình ảnh quanh 60 FPS {#cp-u04}
+
+**Thời điểm:** giai đoạn sau các phiên đầu tháng 11, trước khi chốt nội dung ngày 08/11/2026; không gán ngày thử chính xác. **Liên quan:** CP-M03, CP-M04.
+
+**Vấn đề:** cần thống nhất cấu hình hiển thị trong Windows VM và kiểm tra luồng streaming cuối, thay vì chỉ xác nhận đã thấy desktop.
+
+**Thay đổi được báo cáo:** NVIDIA Virtual Display là màn hình chính ở 1920×1080@60Hz; QEMU DISPLAY1 đã disconnect, adapter vẫn được giữ nguyên. Sunshine dùng HEVC NVENC. Phương án khôi phục cấu hình màn hình qua SSH đã được thử trong desktop session thực.
+
+**Kết quả:** báo cáo Single Display ghi nhận Moonlight 60,03-60,11 FPS, host processing 4,0-4,2 ms, mất gói 0% trong phiên quan sát. Các kiểm tra SSH, Internet, GPU và Controller trong báo cáo được ghi nhận healthy. Không có reboot trong lần thao tác cuối này.
+
+**Giới hạn:** không suy ra game chạy 60 FPS, độ trễ toàn tuyến 4 ms hay khả năng phục hồi sau reboot. Không có thí nghiệm A/B đủ chi tiết để quy toàn bộ mức cải thiện cho một thay đổi màn hình hoặc codec. Thời lượng, bitrate và tải thử của phiên cuối chưa được công bố đầy đủ.
+
+**Bước tiếp:** nghiệm thu game và phục hồi bằng các lần thử riêng có ghi lại điều kiện.
+
+## CP-U03 - Đã lên hình, nhưng vẫn còn khoảng 15-17 FPS {#cp-u03}
+
+**Dấu mốc bằng chứng:** ảnh chụp trong ngày 04/11/2026. **Liên quan:** CP-M03, CP-M04.
+
+**Quan sát:** một ảnh Moonlight hiển thị video 1920×1080, H.264, **16,85 FPS**. Một ảnh khác ghi **17,29 FPS**, đồng thời cho thấy GTX 1650 SUPER báo Code 43 trong Device Manager và log lỗi tạo encoder D3D11.
+
+**Ý nghĩa:** có desktop truyền về không đủ để khẳng định GPU và đường mã hóa đã hoạt động như mong muốn. Đây là chặng mình nhớ là mất nhiều thời gian nhất trong quá trình đi từ khoảng 15 FPS lên 60 FPS.
+
+**Giới hạn:** ảnh chụp chứng minh các hiện tượng ở thời điểm đó, không đủ để kết luận Code 43 là nguyên nhân duy nhất hay H.264 mặc nhiên chậm hơn HEVC. Chưa công bố một chuỗi lệnh sửa lỗi hoàn chỉnh vì chưa có đủ bằng chứng từng bước để người khác lặp lại an toàn.
+
+**Kết quả về sau:** cấu hình streaming cuối được lưu riêng ở CP-U04. Không sửa con số cũ thành con số mới.
+
+## CP-U02 - VFIO đã sẵn sàng, Nova vẫn còn phần việc riêng {#cp-u02}
+
+**Thời điểm:** sau bước IOMMU; ngày thực hiện chính xác không được chốt trong bản tổng hợp này. **Liên quan:** CP-M02, CP-M03.
+
+**Thay đổi và kiểm chứng:** báo cáo tiếp nối ghi nhận cả bốn chức năng PCI thuộc nhóm GPU được `vfio-pci` nhận tự động sau boot. Đây là nghiệm thu việc chuẩn bị thiết bị ở phía host.
+
+**Trạng thái tại thời điểm báo cáo:** Nova GPU Scheduling được ghi là chưa triển khai. Những đề xuất phục hồi cấu hình và triển khai Nova trong cùng tài liệu vẫn là kế hoạch tại thời điểm đó, không phải kết quả đã thực hiện.
+
+**Ý nghĩa:** host chuẩn bị được GPU và OpenStack cấp được GPU cho VM là hai mốc khác nhau. Các kết quả Windows/streaming về sau cho thấy dự án đã tiến tiếp, nhưng không cho phép tự dựng lại chính xác mọi thao tác ở khoảng giữa.
+
+**Giới hạn:** báo cáo VFIO không phải chứng nhận an toàn cho mọi thao tác reset GPU hoặc toàn bộ hệ thống.
+
+## CP-U01 - Bật IOMMU trước, chưa vội chuyển GPU {#cp-u01}
+
+**Dấu mốc:** báo cáo IOMMU ngày 01/11/2026. **Liên quan:** CP-M01, CP-M02.
+
+**Bối cảnh:** GPU đang nằm trong server vừa đảm nhiệm các dịch vụ OpenStack, nên thay đổi phải tách thành từng giai đoạn. Ở thời điểm ban đầu, GPU vẫn là boot VGA và các điều kiện phục hồi cần được xem xét riêng.
+
+**Thay đổi:** bật IOMMU và thực hiện một lần reboot đã được cho phép. Báo cáo ghi nhận **95 IOMMU groups**, các dịch vụ chính và phân bổ máy ảo được kiểm tra sau boot.
+
+**Kết quả:** mốc IOMMU đạt. Driver GPU vẫn được giữ nguyên; giai đoạn này chưa detach GPU, chưa bind VFIO, chưa thay cấu hình Nova/Kolla. Quyết định bước kế tiếp vẫn là chưa tiến hành VFIO ngay.
+
+**Bài học:** một lần kiểm tra đạt chỉ khép lại đúng phạm vi của nó. Không biến "host đã lên lại" thành "toàn bộ cloud gaming đã xong".
+
+## Nguồn và giới hạn của bản tổng hợp {#sources}
+
+Nguồn dự án gồm bản kiểm kê homelab cuối tháng 10/2026, báo cáo IOMMU, báo cáo tiếp nối VFIO/Nova, ảnh chụp Windows/Moonlight đầu tháng 11, báo cáo Single Display và phần xác nhận của người thực hiện ngày 08/11/2026. Tài liệu gốc được giữ riêng; bài công khai chỉ dùng phần đã lược bỏ thông tin nhạy cảm.
+
+Các số cuối của CP-U04 là **số liệu trong báo cáo đã cung cấp**, không phải phép đo độc lập do bài viết thực hiện. Các ảnh CP-U03 là hai lần quan sát khác nhau, không phải một bộ benchmark cùng điều kiện. Ngày biên soạn không thay thế ngày thực nghiệm. Kế hoạch không được đổi nhãn thành kết quả.
+
+Tài liệu bên ngoài chỉ dùng để giải thích cơ chế và kiểm tra phạm vi hỗ trợ: [OpenStack PCI passthrough](https://docs.openstack.org/nova/2024.2/admin/pci-passthrough.html), [Sunshine](https://docs.lizardbyte.dev/projects/sunshine/latest/), [CPU Intel cho Windows 11](https://learn.microsoft.com/en-us/windows-hardware/design/minimum/supported/windows-11-supported-intel-processors), [vòng đời Windows 10 Home/Pro](https://learn.microsoft.com/en-us/lifecycle/products/windows-10-home-and-pro), [GPU hỗ trợ MIG](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/supported-gpus.html) và [GPU hỗ trợ NVIDIA vGPU](https://docs.nvidia.com/vgpu/gpus-supported-by-vgpu.html). Đối chiếu khi biên soạn ngày 08/11/2026.
+
+</div>

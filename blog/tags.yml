@@ -38,3 +38,11 @@ openstack:
   label: OpenStack
   permalink: /openstack
   description: Tìm hiểu hạ tầng đám mây với OpenStack.
+gpu-passthrough:
+  label: GPU Passthrough
+  permalink: /gpu-passthrough
+  description: Cấp thiết bị đồ họa vật lý cho máy ảo và kiểm chứng cấu hình.
+cloud-gaming:
+  label: Cloud Gaming
+  permalink: /cloud-gaming
+  description: Thử nghiệm môi trường chơi game từ xa, streaming và trải nghiệm sử dụng.
