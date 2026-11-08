@@ -43,6 +43,8 @@
 }
 .document th,
 .document td {
+  /* Scroll the table on small screens instead of squeezing text into thin columns. */
+  min-width: 10rem;
   overflow-wrap: normal;
 }
 @media (max-width: 600px) {
