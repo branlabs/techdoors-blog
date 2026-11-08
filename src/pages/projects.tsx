@@ -2,20 +2,14 @@ import type {ReactNode} from 'react';
 import Layout from '@theme/Layout';
 import styles from './info.module.css';
 
-const placeholders = [
+const projects = [
   {
     number: '01',
-    title: '[Tên dự án homelab]',
+    category: 'Dự án Homelab',
+    title: 'BranLabs CloudPlay - OpenStack GPU Gaming Lab',
     description:
-      '[Mô tả mục tiêu của lab, phần cứng hoặc môi trường sử dụng và câu hỏi kỹ thuật bạn muốn giải đáp.]',
-    scope: 'Homelab / Linux / Infrastructure',
-  },
-  {
-    number: '02',
-    title: '[Tên dự án nền tảng]',
-    description:
-      '[Mô tả một thử nghiệm về nền tảng, tự động hóa hoặc quan sát hệ thống. Ghi rõ phạm vi và giới hạn trước khi chia sẻ.]',
-    scope: 'Kubernetes / CI/CD / Observability',
+      'Xây dựng hệ thống Cloud Gaming trên OpenStack, sử dụng PCI GPU Passthrough, Windows VM, Sunshine và Moonlight để streaming game từ xa ở 1080p60.',
+    topics: 'OpenStack / KVM / GPU Passthrough / Cloud Gaming',
   },
 ];
 
@@ -23,36 +17,29 @@ export default function Projects(): ReactNode {
   return (
     <Layout
       title="Dự án"
-      description="Không gian dành cho các dự án và thử nghiệm kỹ thuật của TechDoors. Hiện gồm các khung nội dung mẫu, chưa phải dự án đã thực hiện."
+      description="Các dự án homelab và thử nghiệm kỹ thuật của TechDoors, bắt đầu với BranLabs CloudPlay — OpenStack GPU Gaming Lab."
     >
       <main className={styles.page}>
         <header className={styles.header}>
           <p className="eyebrow">02 / DỰ ÁN & THỬ NGHIỆM</p>
           <h1>Nơi ý tưởng được thử.</h1>
-          <p>
-            Khu vực dành cho lab, công cụ và thử nghiệm kỹ thuật. Các mục dưới đây là{' '}
-            <strong>khung nội dung mẫu</strong>, sẽ được thay bằng dự án thực tế khi có tài liệu để
-            chia sẻ.
-          </p>
+          <p>Không gian ghi lại những dự án homelab và thử nghiệm kỹ thuật về hạ tầng.</p>
         </header>
-        <section className={styles.projects} aria-label="Khung nội dung dự án">
-          {placeholders.map((project) => (
+        <section className={styles.projects} aria-label="Các dự án">
+          {projects.map((project) => (
             <article className={styles.project} key={project.number}>
-              <span className={styles.badge}>{project.number} / Placeholder — chưa triển khai</span>
+              <span className={styles.badge}>
+                {project.number} / {project.category}
+              </span>
               <h2>{project.title}</h2>
               <p>{project.description}</p>
               <dl>
-                <dt>HƯỚNG NỘI DUNG DỰ KIẾN</dt>
-                <dd>{project.scope}</dd>
-                <dt>MÃ NGUỒN & BÀI VIẾT</dt>
-                <dd>Chưa có — bổ sung khi dự án được công bố.</dd>
+                <dt>CHỦ ĐỀ</dt>
+                <dd>{project.topics}</dd>
               </dl>
             </article>
           ))}
         </section>
-        <p className={styles.endnote}>
-          Đây là các vị trí chờ nội dung, chưa mô tả sản phẩm đang hoạt động hay thành tựu cá nhân.
-        </p>
       </main>
     </Layout>
   );
