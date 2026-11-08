@@ -47,7 +47,7 @@ test('projects page introduces the real CloudPlay homelab card without placehold
   await expect(card).toHaveCount(1);
   await expect(
     card.getByRole('heading', {
-      name: 'BranLabs CloudPlay - OpenStack GPU Gaming Lab',
+      name: 'CloudPlay - OpenStack GPU Gaming Lab',
       exact: true,
     }),
   ).toBeVisible();
@@ -57,7 +57,10 @@ test('projects page introduces the real CloudPlay homelab card without placehold
   await expect(card).toContainText('Windows VM, Sunshine và Moonlight');
   await expect(card).toContainText('1080p60');
   await expect(card).toContainText('OpenStack / KVM / GPU Passthrough / Cloud Gaming');
-  await expect(projects).not.toContainText(/placeholder|chưa triển khai|khung nội dung mẫu/i);
+  await expect(projects).not.toContainText(/placeholder|chưa triển khai|khung nội dung mẫu|BranLabs/i);
+  await expect(card.getByRole('link', {name: 'Xem chi tiết dự án'})).toHaveAttribute(
+    'href', '/projects/cloudplay/',
+  );
 });
 
 test('homepage recent articles retain metadata, article links and the blog topic filters', async ({
