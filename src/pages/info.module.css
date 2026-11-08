@@ -90,7 +90,8 @@
 }
 .projects {
   display: grid;
-  grid-template-columns: minmax(0, 720px);
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 720px;
   gap: 26px;
 }
 .project {
