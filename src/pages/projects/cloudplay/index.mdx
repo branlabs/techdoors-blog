@@ -1,0 +1,87 @@
+---
+title: CloudPlay - OpenStack GPU Gaming Lab
+description: Hành trình tận dụng GPU trong server để xây cloud gaming tại nhà. Hiện đã thử streaming 1080p60 trong LAN, chưa kiểm thử game thực tế.
+hide_table_of_contents: true
+---
+
+import {cloudplay} from '@site/src/data/projects';
+import {ProjectMeta, ProjectLinks} from '@site/src/components/ProjectInfo';
+import styles from '@site/src/components/ProjectInfo/styles.module.css';
+
+<div className={styles.document}>
+
+# CloudPlay
+
+Một chiếc card trong server, một ý tưởng chơi game sau giờ làm và khá nhiều thứ cần tìm hiểu trước khi bấm Play.
+
+<ProjectMeta project={cloudplay} />
+<ProjectLinks project={cloudplay} active="overview" />
+
+## Vì sao có dự án này? {#overview}
+
+Mình bắt đầu CloudPlay vào đầu tháng 11/2026 để tận dụng server và GPU sẵn có, vừa phục vụ nhu cầu giải trí, vừa thử xây một nền tảng cloud gaming riêng. Server đã nằm trong homelab OpenStack, nên mình chọn mở rộng hệ thống đó thay vì dựng lại từ đầu.
+
+Trang này ghi **trạng thái hiện tại của dự án**. Câu chuyện từ ý tưởng đến phiên stream đầu tiên nằm trong [bài hành trình](/blog/cloudplay-tu-card-trong-server-den-stream-60fps/); những thay đổi về sau được lưu trong [nhật ký cải tiến](/projects/cloudplay/updates/).
+
+## Hiện tại đã làm được gì? {#current-state}
+
+**Đã thử truyền hình ảnh 1920×1080 ở khoảng 60 FPS trong cùng mạng LAN. Chưa kiểm thử game thực tế.** Đây là bản thử nghiệm cá nhân, chưa phải dịch vụ cloud gaming hoàn chỉnh.
+
+| Thành phần | Cấu hình đã ghi nhận |
+| --- | --- |
+| CPU máy chủ | Intel Xeon E5-2686 v4 |
+| GPU | NVIDIA GeForce GTX 1650 SUPER |
+| Máy ảo | Windows 10 x64, 8 vCPU, 16 GiB RAM, ổ hệ thống 128 GiB |
+| Phần mềm phía máy ảo | Sunshine |
+| Máy nhận hình ảnh | Moonlight trên PC Windows 11 |
+| Kết nối thử nghiệm | Cùng LAN, PC nhận hình qua Wi-Fi |
+
+Trong báo cáo Single Display gần nhất, NVIDIA Virtual Display là màn hình chính ở **1920×1080@60Hz**; QEMU DISPLAY1 đã disconnect nhưng adapter vẫn được giữ lại. Sunshine sử dụng **HEVC NVENC**. Moonlight ghi nhận **60,03-60,11 FPS**, host processing **4,0-4,2 ms** và mất gói **0% trong phiên quan sát**.
+
+Đây là số liệu của phiên thử nghiệm đã báo cáo, không phải phép đo mới ngày 08/11. FPS của luồng video không phải FPS của game; host processing không phải toàn bộ độ trễ từ phím bấm đến hình ảnh. Thời lượng, bitrate và kịch bản tải của phiên cuối chưa đủ thông tin để công bố một bài benchmark có thể lặp lại.
+
+Chưa có kết quả nghiệm thu cho chơi game, âm thanh/tay cầm trong game, streaming qua Internet hoặc khôi phục toàn bộ chuỗi sau reboot với cấu hình cuối. Bản Windows/edition đang cài và tình trạng cập nhật bảo mật cũng cần được đối chiếu trước khi dùng lâu dài.
+
+## Hệ thống được nối với nhau như thế nào? {#architecture}
+
+OpenStack quản lý máy ảo và việc cấp phát thiết bị. GPU vật lý trong server được giao cho Windows VM bằng PCI passthrough. Sunshine trong VM nhận hình ảnh để mã hóa và truyền đi; Moonlight trên PC nhận luồng video qua mạng nội bộ.
+
+**Luồng hình ảnh:** Windows VM dùng GPU → Sunshine → mạng LAN → Moonlight trên PC Windows 11.
+
+**Luồng điều khiển:** thao tác ở Moonlight đi ngược về máy ảo. Khả năng hoạt động của từng thiết bị input và từng game vẫn cần kiểm thử riêng.
+
+Đây là sơ đồ logic, không mô tả chi tiết bridge, router hoặc địa chỉ mạng riêng. GPU không nằm "sau" Sunshine như một máy chủ khác; nó là thiết bị được Windows VM sử dụng. Cơ chế cấp thiết bị được mô tả trong [tài liệu PCI passthrough của OpenStack](https://docs.openstack.org/nova/2024.2/admin/pci-passthrough.html); vai trò streaming được mô tả trong [tài liệu Sunshine](https://docs.lizardbyte.dev/projects/sunshine/latest/).
+
+## Các mốc phát triển {#milestones}
+
+Các mã CP-M dưới đây dùng để tổ chức nội dung công khai, không thay thế mã giai đoạn trong báo cáo vận hành cũ. "Đạt" luôn đi kèm phạm vi, không có nghĩa toàn bộ dự án đã hoàn thành.
+
+| Mốc | Phạm vi và tiêu chí | Trạng thái |
+| --- | --- | --- |
+| CP-M01 - Nền tảng | Có homelab OpenStack và xác định máy chủ/GPU dùng cho lab | Đã có nền tảng |
+| CP-M02 - Chuẩn bị GPU | Có IOMMU; VFIO nhận các chức năng GPU sau boot | Đạt phạm vi báo cáo host |
+| CP-M03 - Windows và GPU | Có Windows VM; cấu hình cuối sử dụng được NVENC để stream | Đã có kết quả lab |
+| CP-M04 - Streaming LAN | Quan sát luồng 1920×1080 quanh 60 FPS trên Moonlight | Đạt trong phiên đã báo cáo |
+| CP-M05 - Chơi game | Ghi lại game, thiết lập, thời gian thử, hình ảnh, âm thanh và input | Chưa kiểm thử |
+| CP-M06 - Phục hồi | Kiểm tra kết nối lại và khởi động lại với cấu hình cuối | Chưa nghiệm thu toàn chuỗi |
+| CP-M07 - Chia sẻ GPU | Xác minh phần cứng/phần mềm phù hợp và thử nhiều VM có GPU | Hướng nghiên cứu |
+
+## Cập nhật gần nhất {#updates}
+
+[Chốt hiện trạng và định hướng ngày 08/11/2026](/projects/cloudplay/updates/#cp-u05) phân biệt kết quả streaming với việc chơi game, đồng thời ghi nhận mục tiêu cấp phát tài nguyên GPU cho nhiều VM.
+
+[Chặng một màn hình và khoảng 60 FPS](/projects/cloudplay/updates/#cp-u04) lưu cấu hình cuối và giới hạn của số liệu. [Chặng đã lên hình nhưng còn khoảng 15-17 FPS](/projects/cloudplay/updates/#cp-u03) giữ lại vấn đề đã gặp, thay vì chỉ kể phần thành công.
+
+## Đi tiếp đến đâu? {#next}
+
+Ưu tiên gần nhất là chơi thử một game với điều kiện ghi lại rõ ràng, rồi kiểm tra việc kết nối lại và phục hồi. Các phép thử có ảnh hưởng đến máy chủ sẽ được thực hiện riêng, không khởi động lại hệ thống chỉ để bổ sung nội dung bài viết.
+
+Mục tiêu dài hạn là **cung cấp VM có tài nguyên GPU theo nhu cầu**, sau đó mới nghiên cứu cung cấp môi trường chơi game như một dịch vụ. Đó là định hướng, chưa phải tính năng hiện có.
+
+Với cấu hình passthrough hiện tại, GPU đang dành cho một VM tại một thời điểm. GTX 1650 SUPER không có trong [danh sách GPU hỗ trợ MIG](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/supported-gpus.html) hoặc [danh sách hỗ trợ chính thức của NVIDIA vGPU](https://docs.nvidia.com/vgpu/gpus-supported-by-vgpu.html) được đối chiếu khi biên soạn. Vì vậy, mình chưa hứa chia một số CUDA core tùy ý cho mỗi Windows VM. Cần đánh giá cả xử lý đồ họa, bộ nhớ GPU, mã hóa video, mức cách ly và phần mềm hỗ trợ.
+
+## Nguồn và cách đọc kết quả {#sources}
+
+Nội dung được tổng hợp từ báo cáo lab, ảnh chụp và xác nhận của người thực hiện. [Nhật ký có phần nguồn và giới hạn](/projects/cloudplay/updates/#sources), tách rõ bằng chứng thực nghiệm với tài liệu tham khảo bên ngoài. Không có log thô, địa chỉ mạng riêng hoặc thông tin đăng nhập được công bố.
+
+</div>

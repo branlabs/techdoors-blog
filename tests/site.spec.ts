@@ -47,7 +47,7 @@ test('projects page introduces the real CloudPlay homelab card without placehold
   await expect(card).toHaveCount(1);
   await expect(
     card.getByRole('heading', {
-      name: 'BranLabs CloudPlay - OpenStack GPU Gaming Lab',
+      name: 'CloudPlay - OpenStack GPU Gaming Lab',
       exact: true,
     }),
   ).toBeVisible();
@@ -57,7 +57,10 @@ test('projects page introduces the real CloudPlay homelab card without placehold
   await expect(card).toContainText('Windows VM, Sunshine và Moonlight');
   await expect(card).toContainText('1080p60');
   await expect(card).toContainText('OpenStack / KVM / GPU Passthrough / Cloud Gaming');
-  await expect(projects).not.toContainText(/placeholder|chưa triển khai|khung nội dung mẫu/i);
+  await expect(projects).not.toContainText(/placeholder|chưa triển khai|khung nội dung mẫu|BranLabs/i);
+  await expect(card.getByRole('link', {name: 'Xem chi tiết dự án'})).toHaveAttribute(
+    'href', '/projects/cloudplay/',
+  );
 });
 
 test('homepage recent articles retain metadata, article links and the blog topic filters', async ({
@@ -322,10 +325,18 @@ test('Markdown, syntax highlighting, code copy, TOC and related navigation', asy
     .filter({visible: true});
   await toc.click();
   await expect(page).toHaveURL(/#/);
-  await expect(page.getByRole('heading', {name: 'Tiếp tục khám phá'})).toBeVisible();
+  // A second real post replaces the related-content empty state.
+  const related = page.getByRole('region', {name: 'Ghi chép liên quan'});
+  await expect(related.getByRole('heading', {name: 'Ghi chép liên quan', exact: true})).toBeVisible();
+  const cloudplay = '/blog/cloudplay-tu-card-trong-server-den-stream-60fps/';
+  const nextPost = related.locator(`a[href="${cloudplay}"]`);
+  await expect(nextPost).toBeVisible();
   await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant'}));
   await page.screenshot({path: testInfo.outputPath('article.png'), fullPage: true});
-  await page.getByRole('link', {name: 'Về TechDoors', exact: true}).click();
+  await nextPost.click();
+  await expect(page).toHaveURL(new RegExp(cloudplay + '$'));
+  await expect(page.locator('h1')).toHaveText('CloudPlay: từ chiếc card trong server đến luồng hình ảnh 60 FPS');
+  await page.locator('footer').getByRole('link', {name: 'Giới thiệu', exact: true}).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByText('[Tên hoặc biệt danh của bạn]', {exact: true})).toBeVisible();
 });
