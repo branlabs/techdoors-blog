@@ -37,6 +37,29 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
   });
 }
 
+test('projects page introduces the real CloudPlay homelab card without placeholders', async ({
+  page,
+}) => {
+  await page.goto('/projects/');
+  await settle(page);
+  const projects = page.getByRole('region', {name: 'Các dự án'});
+  const card = projects.getByRole('article');
+  await expect(card).toHaveCount(1);
+  await expect(
+    card.getByRole('heading', {
+      name: 'BranLabs CloudPlay - OpenStack GPU Gaming Lab',
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(card).toContainText(
+    'Xây dựng hệ thống Cloud Gaming trên OpenStack, sử dụng PCI GPU Passthrough',
+  );
+  await expect(card).toContainText('Windows VM, Sunshine và Moonlight');
+  await expect(card).toContainText('1080p60');
+  await expect(card).toContainText('OpenStack / KVM / GPU Passthrough / Cloud Gaming');
+  await expect(projects).not.toContainText(/placeholder|chưa triển khai|khung nội dung mẫu/i);
+});
+
 test('homepage recent articles retain metadata, article links and the blog topic filters', async ({
   page,
 }) => {
