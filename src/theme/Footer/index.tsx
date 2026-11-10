@@ -8,22 +8,17 @@ export default function Footer(): ReactNode {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.top}>
-          <div>
+          <div className={styles.identity}>
             <Link to="/" className={styles.brand}>
               <img src="/img/mark.svg" alt="" width="22" height="25" />
               TechDoors
             </Link>
-            <p>
-              Ghi chép về hạ tầng.
-              <br />
-              Mở thêm một cánh cửa.
-            </p>
+            <p>Ghi chép về hạ tầng.</p>
           </div>
           <nav aria-label="Liên kết cuối trang">
             <Link to="/blog">Bài viết</Link>
             <Link to="/projects">Dự án</Link>
             <Link to="/about">Giới thiệu</Link>
-            <Link to="/blog/tags/">Chủ đề</Link>
             <a
               href="https://github.com/branlabs/techdoors-blog"
               target="_blank"
@@ -36,7 +31,6 @@ export default function Footer(): ReactNode {
         </div>
         <div className={styles.bottom}>
           <span>© {new Date().getFullYear()} TechDoors</span>
-          <span>Được viết bằng sự tò mò. Được xây với Docusaurus.</span>
           <span lang="en">Keep opening doors.</span>
         </div>
       </div>
