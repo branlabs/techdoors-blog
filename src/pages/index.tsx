@@ -18,34 +18,20 @@ export default function Home(): ReactNode {
       <main id="main-content" className={styles.home}>
         <section className={styles.hero} aria-labelledby="hero-title">
           <div className={styles.heroText}>
-            <p className="eyebrow">
-              <span className={styles.dot} /> BLOG KỸ THUẬT CÁ NHÂN
-            </p>
             <h1 id="hero-title">
               Mở cửa vào
               <br />
               thế giới <span>hạ tầng.</span>
             </h1>
             <p className={styles.intro}>
-              Những ghi chép về cách hệ thống được xây dựng,
-              <br className={styles.desktopBreak} /> vận hành và cải thiện. Mỗi bài viết, thêm một
-              góc nhìn.
+              Ghi chép về những hệ thống mình xây dựng, vận hành và học hỏi.
             </p>
-            <div className={styles.actions}>
-              <Link className="td-button" to="/blog">
-                Khám phá bài viết <Arrow />
-              </Link>
-              <Link className={styles.aboutLink} to="/about">
-                Về TechDoors <Arrow diagonal />
-              </Link>
-            </div>
-            <div className={styles.heroNote}>
-              <span aria-hidden="true">~/techdoors</span>
-              <span>Học. Thử. Hiểu. Chia sẻ.</span>
-            </div>
+            <Link className="td-button" to="/blog">
+              Khám phá bài viết <Arrow />
+            </Link>
           </div>
           <div className={styles.visual}>
-            <Portal />
+            <Portal showCaption={false} />
           </div>
         </section>
         <RecentArticles posts={posts} />
