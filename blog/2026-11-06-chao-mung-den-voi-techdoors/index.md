@@ -1,6 +1,6 @@
 ---
 title: Chào mừng đến với TechDoors
-description: Một cánh cửa nhỏ để cùng tìm hiểu DevOps, hạ tầng và cách những hệ thống phía sau màn hình hoạt động.
+description: Một vài lời giới thiệu về TechDoors và những chủ đề mình muốn chia sẻ.
 date: 2026-11-06T08:00:00+07:00
 slug: chao-mung-den-voi-techdoors
 authors: [techdoors]
