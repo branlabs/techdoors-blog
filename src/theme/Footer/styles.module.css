@@ -116,3 +116,13 @@
     align-items: flex-start;
   }
 }
+
+@media (max-width: 360px) {
+  .top nav {
+    column-gap: 12px;
+  }
+
+  .top nav a {
+    font-size: 0.76rem;
+  }
+}
