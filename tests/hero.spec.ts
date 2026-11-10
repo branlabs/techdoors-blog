@@ -37,7 +37,7 @@ for (const mode of ['light', 'dark'] as const) {
     )).toBeVisible();
     await expect(hero.getByRole('link')).toHaveCount(1);
     await expect(hero.getByRole('link', {name: 'Khám phá bài viết'})).toHaveAttribute(
-      'href', '/blog',
+      'href', '/blog/',
     );
     await expect(hero.getByText('BLOG KỸ THUẬT CÁ NHÂN')).toHaveCount(0);
     await expect(hero.getByText('Về TechDoors')).toHaveCount(0);
