@@ -19,7 +19,7 @@ export default function Home(): ReactNode {
         <section className={styles.hero} aria-labelledby="hero-title">
           <div className={styles.heroText}>
             <h1 id="hero-title">
-              Mở cửa vào
+              Mở cửa vào{' '}
               <br />
               thế giới <span>hạ tầng.</span>
             </h1>
