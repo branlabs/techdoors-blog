@@ -31,7 +31,7 @@ for (const mode of ['light', 'dark'] as const) {
   for (const [label, route, title] of [
     ['hub', hub, 'CloudPlay'],
     ['updates', updates, 'Nhật ký cải tiến CloudPlay'],
-    ['story', story, 'CloudPlay: từ chiếc card trong server đến luồng hình ảnh 60 FPS'],
+    ['story', story, 'CloudPlay: từ 15 FPS đến 60 FPS trên OpenStack'],
   ] as const) {
     test(`CloudPlay ${label} is readable and accessible in ${mode}`, async ({page}, testInfo) => {
       const errors: string[] = [];
