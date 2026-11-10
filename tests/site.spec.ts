@@ -335,7 +335,7 @@ test('Markdown, syntax highlighting, code copy, TOC and related navigation', asy
   await page.screenshot({path: testInfo.outputPath('article.png'), fullPage: true});
   await nextPost.click();
   await expect(page).toHaveURL(new RegExp(cloudplay + '$'));
-  await expect(page.locator('h1')).toHaveText('CloudPlay: từ chiếc card trong server đến luồng hình ảnh 60 FPS');
+  await expect(page.locator('h1')).toHaveText('CloudPlay: từ 15 FPS đến 60 FPS trên OpenStack');
   await page.locator('footer').getByRole('link', {name: 'Giới thiệu', exact: true}).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByText('[Tên hoặc biệt danh của bạn]', {exact: true})).toBeVisible();

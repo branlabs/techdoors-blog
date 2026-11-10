@@ -1,6 +1,6 @@
 ---
-title: "CloudPlay: từ chiếc card trong server đến luồng hình ảnh 60 FPS"
-description: "Muốn chơi game sau giờ làm, mình tận dụng server sẵn có và đi từ khoảng 15 FPS đến streaming 1080p60 trong LAN. Đây là hành trình CloudPlay, trước lần thử game thực tế."
+title: "CloudPlay: từ 15 FPS đến 60 FPS trên OpenStack"
+description: "Tận dụng GPU trong server để thử cloud gaming. Hành trình từ các phiên stream khoảng 15 FPS đến 1080p60 trong LAN, trước khi thử game."
 date: 2026-11-08T17:00:00+07:00
 slug: cloudplay-tu-card-trong-server-den-stream-60fps
 authors: [techdoors]
