@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react';
 import styles from './styles.module.css';
 
-export default function Portal({compact = false}: {compact?: boolean}): ReactNode {
+export default function Portal({compact = false, showCaption = true}: {compact?: boolean; showCaption?: boolean}): ReactNode {
   return (
     <div className={`${styles.portal} ${compact ? styles.compact : ''}`} aria-hidden="true">
       <svg viewBox="0 0 480 440" fill="none" className={styles.drawing}>
@@ -69,7 +69,7 @@ export default function Portal({compact = false}: {compact?: boolean}): ReactNod
           BUILD. BREAK. UNDERSTAND.
         </text>
       </svg>
-      <span className={styles.caption}>Một cánh cửa. Nhiều điều để khám phá.</span>
+      {showCaption && <span className={styles.caption}>Một cánh cửa. Nhiều điều để khám phá.</span>}
     </div>
   );
 }

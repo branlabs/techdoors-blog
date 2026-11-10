@@ -16,7 +16,7 @@
   line-height: 1.22;
   letter-spacing: -0.075em;
   font-weight: 600;
-  margin: 27px 0 24px;
+  margin: 0 0 24px;
 }
 .heroText h1 span {
   color: var(--td-accent);
@@ -25,45 +25,7 @@
   color: var(--td-muted);
   font-size: 0.96rem;
   line-height: 1.9;
-  margin-bottom: 30px;
-}
-.dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  background: var(--td-accent);
-  border-radius: 50%;
-  margin-right: 8px;
-}
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 25px;
-}
-.aboutLink {
-  color: var(--td-ink);
-  font-size: 0.79rem;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.aboutLink:hover {
-  color: var(--td-accent);
-  text-decoration: none;
-}
-.heroNote {
-  margin-top: 44px;
-  font:
-    0.64rem 'JetBrains Mono Variable',
-    monospace;
-  color: var(--td-muted);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-}
-.heroNote span:first-child {
-  color: var(--td-accent);
+  margin: 0 0 30px;
 }
 .visual {
   margin-top: -8px;
@@ -83,9 +45,6 @@
   }
   .heroText h1 {
     font-size: 3.2rem;
-  }
-  .desktopBreak {
-    display: none;
   }
 }
 @media (max-width: 760px) {
@@ -111,12 +70,5 @@
   }
   .visual :global(svg) {
     max-height: 265px;
-  }
-  .visual :global([class*='caption']) {
-    font-size: 0.6rem;
-    margin-top: 0;
-  }
-  .heroNote {
-    margin-top: 30px;
   }
 }
