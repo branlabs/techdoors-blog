@@ -56,6 +56,15 @@ for (const mode of ['light', 'dark'] as const) {
       expect(Math.abs(brandTop - navTop)).toBeLessThanOrEqual(8);
     }
 
+    if (testInfo.project.name === 'narrow-mobile') {
+      const linkBoxes = await Promise.all(
+        (await nav.getByRole('link').all()).map((link) => link.boundingBox()),
+      );
+      const linkTopEdges = linkBoxes.map((box) => box!.y);
+      // Four navigation items should share one row at 320px.
+      expect(Math.max(...linkTopEdges) - Math.min(...linkTopEdges)).toBeLessThanOrEqual(4);
+    }
+
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow).toBeLessThanOrEqual(1);
 
