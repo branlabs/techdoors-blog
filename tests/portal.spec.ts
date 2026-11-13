@@ -105,5 +105,9 @@ test('living portal honors reduced-motion preferences', async ({page}) => {
   const door = portal.getByTestId('portal-door-leaf');
   await portal.getByRole('button', {name: 'Mở cánh cửa minh họa'}).click();
   await expect(portal).toHaveAttribute('data-door-state', 'open');
-  await expect(door).toHaveCSS('transition-duration', '0s');
+  // Docusaurus may clamp reduced-motion transitions to 0.01ms instead of 0ms.
+  const seconds = await door.evaluate(
+    (element) => parseFloat(getComputedStyle(element).transitionDuration),
+  );
+  expect(seconds).toBeLessThanOrEqual(0.001);
 });
