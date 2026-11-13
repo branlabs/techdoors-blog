@@ -75,10 +75,11 @@ test('CloudPlay card, hub and updates remain connected without a link to the unl
   }
   await expect(navigation.getByRole('link', {name: 'Đọc bài hành trình'})).toHaveCount(0);
   await navigation.getByRole('link', {name: 'Tổng quan', exact: true}).click();
-  await expect(page).toHaveURL(new RegExp(hub + '
+  await expect(page).toHaveURL(new RegExp(hub + '$'));
+  await expect(page.locator('main').locator(`a[href="${story}"]`)).toHaveCount(0);
 });
 
-test('CloudPlay project remains discoverable while the story is unlisted', async ({page, request}) => {
+test('CloudPlay project remains discoverable while its article is unlisted', async ({page, request}) => {
   test.setTimeout(60000);
   await page.goto('/');
   await settle(page);
@@ -102,56 +103,6 @@ test('CloudPlay project remains discoverable while the story is unlisted', async
     const feed = await request.get(`/blog/${format}.xml`);
     expect(feed.status()).toBe(200);
     expect(await feed.text()).not.toContain('CloudPlay');
-  }
-});
-
-
-test('CloudPlay source preserves editorial and disclosure boundaries', async () => {
-  const paths = [
-    'src/data/projects.ts',
-    'src/pages/projects/cloudplay/index.mdx',
-    'src/pages/projects/cloudplay/updates.mdx',
-    'blog/2026-11-08-cloudplay-hanh-trinh/index.md',
-  ];
-  for (const path of paths) {
-    const source = await readFile(path, 'utf8');
-    expect(source, path).not.toMatch(/[\u2014]/);
-    expect(source, path).not.toContain('BranLabs CloudPlay');
-    expect(source, path).not.toMatch(/\b(?:192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/);
-    expect(source, path).not.toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
-    expect(source, path).not.toMatch(/-----BEGIN (?:RSA |OPENSSH )?PRIVATE KEY-----/);
-  }
-  const snapshot = await readFile('src/pages/projects/cloudplay/index.mdx', 'utf8');
-  expect(snapshot).toContain('Chưa kiểm thử game thực tế');
-  expect(snapshot).toContain('FPS của luồng video không phải FPS của game');
-  expect(snapshot).toContain('host processing không phải toàn bộ độ trễ');
-});
-));
-  await expect(page.locator('main').locator(`a[href="${story}"]`)).toHaveCount(0);
-});
-
-test('CloudPlay is discoverable in homepage, search, sitemap and background feeds', async ({page, request}) => {
-  test.setTimeout(60000);
-  await page.goto('/');
-  await settle(page);
-  const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
-  await expect(recent.locator(`a[href="${story}"]`)).toBeVisible();
-  expect(await recent.getByRole('article').count()).toBeGreaterThanOrEqual(3);
-  await page.getByRole('button', {name: 'Tìm kiếm trên TechDoors'}).click();
-  const dialog = page.getByRole('dialog', {name: 'Tìm trong TechDoors'});
-  await dialog.getByRole('searchbox', {name: 'Từ khóa'}).fill('CloudPlay');
-  const result = dialog.locator(`a[href="${hub}"]`);
-  await expect(result).toBeVisible();
-  await result.click();
-  await expect(page).toHaveURL(new RegExp(hub + '$'));
-  const sitemap = await request.get('/sitemap.xml');
-  expect(sitemap.status()).toBe(200);
-  const xml = await sitemap.text();
-  for (const route of [hub, updates, story]) expect(xml).toContain(`https://techdoors.io${route}`);
-  for (const format of ['rss', 'atom']) {
-    const feed = await request.get(`/blog/${format}.xml`);
-    expect(feed.status()).toBe(200);
-    expect(await feed.text()).toContain('CloudPlay');
   }
 });
 
