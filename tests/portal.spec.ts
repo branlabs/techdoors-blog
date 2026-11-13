@@ -36,7 +36,7 @@ for (const mode of ['light', 'dark'] as const) {
     const portal = hero.locator('[data-door-state]');
     const artwork = portal.locator('[aria-hidden="true"] svg');
     const door = artwork.getByTestId('portal-door-leaf');
-    const control = portal.getByRole('button', {name: 'Mở cánh cửa minh họa'});
+    const control = portal.locator('button[aria-pressed]');
 
     await expect(portal).toHaveAttribute('data-door-state', 'rest');
     await expect(door).toBeVisible();
@@ -44,6 +44,7 @@ for (const mode of ['light', 'dark'] as const) {
       'd',
       'm166 114 90 28v218l-90-32Z',
     );
+    await expect(control).toHaveAttribute('aria-label', 'Mở cánh cửa minh họa');
     await expect(control).toHaveAttribute('aria-pressed', 'false');
     await expect(hero.getByRole('link', {name: 'Khám phá bài viết'})).toBeVisible();
     expect((await control.boundingBox())!.width).toBeGreaterThanOrEqual(44);
