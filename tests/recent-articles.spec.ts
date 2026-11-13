@@ -1,12 +1,8 @@
 import {test, expect, type Page} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const cloudplayTitle = 'CloudPlay: từ 15 FPS đến 60 FPS trên OpenStack';
-const cloudplayDescription =
-  'Tận dụng GPU trong server để thử cloud gaming. Hành trình từ các phiên stream khoảng 15 FPS đến 1080p60 trong LAN, trước khi thử game.';
-const welcomeDescription =
-  'Một vài lời giới thiệu về TechDoors và những chủ đề mình muốn chia sẻ.';
-const cloudplayUrl = '/blog/cloudplay-tu-card-trong-server-den-stream-60fps/';
+const articleUrl = '/blog/chiec-may-tinh-vo-hinh/';
+const articleTitle = 'Chiếc máy tính vô hình';
 
 async function setTheme(page: Page, mode: 'light' | 'dark') {
   if ((await page.locator('html').getAttribute('data-theme')) === mode) return;
@@ -21,7 +17,7 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
 }
 
 for (const mode of ['light', 'dark'] as const) {
-  test(`recent articles remain concise and readable in ${mode} mode`, async ({page}, testInfo) => {
+  test(`recent articles show only public posts in ${mode} mode`, async ({page}, testInfo) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     page.on('console', (message) => {
@@ -34,33 +30,20 @@ for (const mode of ['light', 'dark'] as const) {
 
     const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
     const posts = recent.getByRole('article');
-    expect(await posts.count()).toBeGreaterThanOrEqual(3);
-    const newStory = posts.filter({has: page.locator('a[href="/blog/chiec-may-tinh-vo-hinh/"]')});
-    await expect(newStory.getByRole('heading', {level: 3})).toHaveText('Chiếc máy tính vô hình');
+    await expect(posts).toHaveCount(1);
+    const story = posts.first();
+    const title = story.getByRole('heading', {level: 3}).getByRole('link');
+    await expect(title).toHaveText(articleTitle);
+    await expect(title).toHaveAttribute('href', articleUrl);
+    await expect(story.locator('time')).toHaveAttribute('datetime', /^2026-11-13/);
 
-    const cloudplay = posts.filter({has: page.locator(`a[href="${cloudplayUrl}"]`)});
-    const title = cloudplay.getByRole('heading', {level: 3}).getByRole('link');
-    await expect(title).toHaveText(cloudplayTitle);
-    await expect(title).toHaveAttribute('href', cloudplayUrl);
-    await expect(cloudplay.getByText(cloudplayDescription, {exact: true})).toBeVisible();
-    await expect(cloudplay.locator('time')).toHaveAttribute('datetime', /^2026-11-08/);
-
-    const welcome = posts.filter({has: page.getByRole('heading', {level: 3, name: 'Chào mừng đến với TechDoors'})});
-    await expect(
-      welcome.getByRole('heading', {level: 3, name: 'Chào mừng đến với TechDoors'}),
-    ).toBeVisible();
-    await expect(welcome.getByText(welcomeDescription, {exact: true})).toBeVisible();
-
-    for (const post of await posts.all()) {
-      const description = await post.locator('p').last().innerText();
-      expect(description.length).toBeLessThanOrEqual(140);
-    }
-
-    // Tighten spacing while preserving the existing font size and one-column layout.
-    await expect(posts.first()).toHaveCSS('padding-top', '26px');
-    await expect(posts.first()).toHaveCSS('padding-bottom', '26px');
-    await expect(posts.last()).toHaveCSS('padding-bottom', '0px');
+    const description = await story.locator('p').last().innerText();
+    expect(description.length).toBeLessThanOrEqual(140);
+    await expect(story).toHaveCSS('padding-top', '26px');
+    await expect(story).toHaveCSS('padding-bottom', '0px');
     await expect(recent.getByRole('link', {name: 'Xem tất cả'})).toHaveAttribute('href', '/blog/');
+    await expect(recent.locator('a[href*="chao-mung-den-voi-techdoors"]')).toHaveCount(0);
+    await expect(recent.locator('a[href*="cloudplay-tu-card"]')).toHaveCount(0);
 
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     const {violations} = await new AxeBuilder({page})
@@ -68,17 +51,11 @@ for (const mode of ['light', 'dark'] as const) {
       .analyze();
     expect(violations.map((item) => ({id: item.id, nodes: item.nodes.map((node) => node.target)}))).toEqual([]);
     expect(errors).toEqual([]);
-
-    const screenshot = await recent.screenshot({
-      path: testInfo.outputPath(`recent-articles-${mode}.png`),
-    });
-    await testInfo.attach(`recent-articles-${mode}`, {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+    const screenshot = await recent.screenshot({path: testInfo.outputPath(`recent-articles-${mode}.png`)});
+    await testInfo.attach(`recent-articles-${mode}`, {body: screenshot, contentType: 'image/png'});
 
     await title.click();
-    await expect(page).toHaveURL(new RegExp(cloudplayUrl + '$'));
-    await expect(page.getByRole('heading', {level: 1})).toHaveText(cloudplayTitle);
+    await expect(page).toHaveURL(new RegExp(articleUrl + '$'));
+    await expect(page.getByRole('heading', {level: 1})).toHaveText(articleTitle);
   });
 }

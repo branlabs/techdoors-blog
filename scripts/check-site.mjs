@@ -77,7 +77,9 @@ for (const [file, element] of [
 ]) {
   const xml = load(await readFile(path.join(root, file), 'utf8'), {xmlMode: true});
   assert(xml(element).length >= 1, `${file}: published post`);
-  assert(xml('title').text().includes('Chào mừng đến với TechDoors'), `${file}: welcome article`);
+  assert(xml('title').text().includes('Chiếc máy tính vô hình'), `${file}: published article`);
+  assert(!xml('title').text().includes('Chào mừng đến với TechDoors'), `${file}: unlisted welcome`);
+  assert(!xml('title').text().includes('CloudPlay:'), `${file}: unlisted CloudPlay`);
   assert(
     !(await readFile(path.join(root, file), 'utf8')).includes('localhost'),
     `${file}: production URLs`,
@@ -87,12 +89,18 @@ const sitemap = load(await readFile(path.join(root, 'sitemap.xml'), 'utf8'), {xm
 const locations = sitemap('loc')
   .toArray()
   .map((element) => sitemap(element).text());
-for (const route of ['/', '/about/', '/projects/', '/blog/', '/blog/chao-mung-den-voi-techdoors/'])
+for (const route of ['/', '/about/', '/projects/', '/blog/', '/blog/chiec-may-tinh-vo-hinh/'])
   assert(locations.includes(origin + route), `Sitemap missing ${route}`);
 assert(
   !locations.some((url) => /404|\/search\//.test(url)),
   'Search and 404 must not be in the sitemap',
 );
+for (const hidden of ['/blog/chao-mung-den-voi-techdoors/', '/blog/cloudplay-tu-card-trong-server-den-stream-60fps/']) {
+  assert(!locations.includes(origin + hidden), `${hidden}: unlisted post in sitemap`);
+  const hiddenPage = await targetFor(new URL(origin + hidden));
+  assert(hiddenPage, `${hidden}: direct URL should still exist`);
+  assert.match(parsed.get(hiddenPage)('meta[name="robots"]').attr('content') ?? '', /noindex/, `${hidden}: not blocked from indexing`);
+}
 for (const location of locations) {
   const url = new URL(location);
   assert.equal(url.origin, origin);

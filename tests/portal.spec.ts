@@ -46,7 +46,7 @@ for (const mode of ['light', 'dark'] as const) {
     );
     await expect(control).toHaveAttribute('aria-label', 'Mở cánh cửa minh họa');
     await expect(control).toHaveAttribute('aria-pressed', 'false');
-    await expect(hero.getByRole('link', {name: 'Khám phá bài viết'})).toBeVisible();
+    await expect(hero.getByRole('link', {name: 'Gõ cửa'})).toBeVisible();
     expect((await control.boundingBox())!.width).toBeGreaterThanOrEqual(44);
     expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
 

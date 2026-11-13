@@ -60,7 +60,7 @@ for (const mode of ['light', 'dark'] as const) {
   }
 }
 
-test('CloudPlay card, hub, updates and story form a connected reading flow', async ({page}) => {
+test('CloudPlay card, hub and updates remain connected without a link to the unlisted story', async ({page}) => {
   await page.goto('/projects/');
   await settle(page);
   await page.getByRole('link', {name: 'Xem chi tiết dự án', exact: true}).click();
@@ -73,23 +73,23 @@ test('CloudPlay card, hub, updates and story form a connected reading flow', asy
   for (const id of ['cp-u01', 'cp-u02', 'cp-u03', 'cp-u04', 'cp-u05', 'sources']) {
     await expect(page.locator(`[id="${id}"]`)).toHaveCount(1);
   }
-  await navigation.getByRole('link', {name: 'Đọc bài hành trình', exact: true}).click();
-  await expect(page).toHaveURL(new RegExp(story + '$'));
-  await expect(page.locator('main')).toContainText('mình chưa chơi thử game thực tế');
-  await page.locator('main').getByRole('link', {name: 'Trang dự án', exact: true}).click();
+  await expect(navigation.getByRole('link', {name: 'Đọc bài hành trình'})).toHaveCount(0);
+  await navigation.getByRole('link', {name: 'Tổng quan', exact: true}).click();
   await expect(page).toHaveURL(new RegExp(hub + '$'));
+  await expect(page.locator('main').locator(`a[href="${story}"]`)).toHaveCount(0);
 });
 
-test('CloudPlay is discoverable in homepage, search, sitemap and background feeds', async ({page, request}) => {
+test('CloudPlay project remains discoverable while its article is unlisted', async ({page, request}) => {
   test.setTimeout(60000);
   await page.goto('/');
   await settle(page);
   const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
-  await expect(recent.locator(`a[href="${story}"]`)).toBeVisible();
-  expect(await recent.getByRole('article').count()).toBeGreaterThanOrEqual(3);
+  await expect(recent.locator(`a[href="${story}"]`)).toHaveCount(0);
+  await expect(recent.getByRole('article')).toHaveCount(1);
   await page.getByRole('button', {name: 'Tìm kiếm trên TechDoors'}).click();
   const dialog = page.getByRole('dialog', {name: 'Tìm trong TechDoors'});
   await dialog.getByRole('searchbox', {name: 'Từ khóa'}).fill('CloudPlay');
+  await expect(dialog.locator(`a[href="${story}"]`)).toHaveCount(0);
   const result = dialog.locator(`a[href="${hub}"]`);
   await expect(result).toBeVisible();
   await result.click();
@@ -97,11 +97,12 @@ test('CloudPlay is discoverable in homepage, search, sitemap and background feed
   const sitemap = await request.get('/sitemap.xml');
   expect(sitemap.status()).toBe(200);
   const xml = await sitemap.text();
-  for (const route of [hub, updates, story]) expect(xml).toContain(`https://techdoors.io${route}`);
+  for (const route of [hub, updates]) expect(xml).toContain(`https://techdoors.io${route}`);
+  expect(xml).not.toContain(`https://techdoors.io${story}`);
   for (const format of ['rss', 'atom']) {
     const feed = await request.get(`/blog/${format}.xml`);
     expect(feed.status()).toBe(200);
-    expect(await feed.text()).toContain('CloudPlay');
+    expect(await feed.text()).not.toContain('CloudPlay');
   }
 });
 

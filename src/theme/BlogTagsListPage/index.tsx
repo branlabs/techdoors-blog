@@ -10,7 +10,7 @@ export default function BlogTagsListPage({tags}: Props): ReactNode {
   return (
     <Layout
       title="Các chủ đề"
-      description="Khám phá các ghi chép TechDoors theo chủ đề: DevOps, SRE, Kubernetes, Platform Engineering, Observability, CI/CD, Linux, Infrastructure, Homelab và OpenStack."
+      description="Khám phá các ghi chép TechDoors theo chủ đề, từ ảo hóa và Linux đến kiến trúc hạ tầng."
     >
       <SearchMetadata tag="blog_tags_list" />
       <main className={styles.page}>

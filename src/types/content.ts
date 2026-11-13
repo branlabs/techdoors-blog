@@ -10,14 +10,8 @@ export type PostSummary = {
 };
 
 export const topics = [
-  {label: 'DevOps', slug: 'devops'},
-  {label: 'SRE', slug: 'sre'},
-  {label: 'Kubernetes', slug: 'kubernetes'},
-  {label: 'Platform Engineering', slug: 'platform-engineering'},
-  {label: 'Observability', slug: 'observability'},
-  {label: 'CI/CD', slug: 'ci-cd'},
+  {label: 'Under the Hood', slug: 'under-the-hood'},
+  {label: 'Virtualization', slug: 'virtualization'},
   {label: 'Linux', slug: 'linux'},
   {label: 'Infrastructure', slug: 'infrastructure'},
-  {label: 'Homelab', slug: 'homelab'},
-  {label: 'OpenStack', slug: 'openstack'},
 ] as const;

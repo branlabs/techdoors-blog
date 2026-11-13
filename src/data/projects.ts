@@ -12,7 +12,7 @@ export interface ProjectSummary {
   updatedLabel: string;
   href: string;
   updatesHref: string;
-  articleHref: string;
+  articleHref?: string;
 }
 
 // Shared identity and current status. Historical articles retain their own dated snapshots.
@@ -31,7 +31,6 @@ export const cloudplay: ProjectSummary = {
   updatedLabel: '08/11/2026',
   href: '/projects/cloudplay/',
   updatesHref: '/projects/cloudplay/updates/',
-  articleHref: '/blog/cloudplay-tu-card-trong-server-den-stream-60fps/',
 };
 
 export const projects: readonly ProjectSummary[] = [cloudplay];
