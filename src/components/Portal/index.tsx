@@ -38,8 +38,8 @@ export default function Portal({
               <path d="M32 0H0v32" stroke="currentColor" strokeWidth=".6" />
             </pattern>
             <linearGradient id={lightId} x1="0" y1="0" x2="1" y2=".5">
-              <stop offset="0" stopColor="var(--td-accent)" stopOpacity=".34" />
-              <stop offset="1" stopColor="var(--td-accent)" stopOpacity=".04" />
+              <stop offset="0" stopColor="var(--td-accent)" stopOpacity=".29" />
+              <stop offset="1" stopColor="var(--td-accent)" stopOpacity=".025" />
             </linearGradient>
           </defs>
           <rect width="480" height="440" fill={`url(#${gridId})`} opacity=".17" />
