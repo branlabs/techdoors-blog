@@ -46,3 +46,11 @@ cloud-gaming:
   label: Cloud Gaming
   permalink: /cloud-gaming
   description: Thử nghiệm môi trường chơi game từ xa, streaming và trải nghiệm sử dụng.
+under-the-hood:
+  label: Under the Hood
+  permalink: /under-the-hood
+  description: Những câu chuyện kỹ thuật được giải thích từ các nguyên lý dễ hiểu.
+virtualization:
+  label: Virtualization
+  permalink: /virtualization
+  description: Máy ảo, hypervisor và cách sử dụng phần cứng để vận hành các hệ điều hành.
