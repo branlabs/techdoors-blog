@@ -102,7 +102,7 @@ export default function SearchBar(): ReactNode {
         const document = data.documents.get(result.ref);
         return document ? [document] : [];
       })
-      .filter((document) => !unlistedBlogRoutes.has(document.sectionRoute.split('#')[0]))
+      .filter((document) => !unlistedBlogRoutes.has(document.sectionRoute.split('#')[0] ?? ''))
       .slice(0, 8);
   }, [data, query]);
 
