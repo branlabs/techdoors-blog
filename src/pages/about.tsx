@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import {topics} from '../types/content';
 import styles from './info.module.css';
 
 export default function About(): ReactNode {
@@ -48,10 +49,11 @@ export default function About(): ReactNode {
             <h2>Từ câu hỏi nhỏ đến hệ thống lớn.</h2>
             <p>Những cánh cửa đầu tiên để bắt đầu khám phá.</p>
             <div className={styles.tags}>
-              <Link to="/blog/tags/under-the-hood/">Under the Hood</Link>
-              <Link to="/blog/tags/virtualization/">Virtualization</Link>
-              <Link to="/blog/tags/linux/">Linux</Link>
-              <Link to="/blog/tags/infrastructure/">Infrastructure</Link>
+              {topics.map((topic) => (
+                <Link key={topic.slug} to={`/blog/tags/${topic.slug}/`}>
+                  {topic.label}
+                </Link>
+              ))}
             </div>
           </aside>
         </div>

@@ -280,7 +280,7 @@ test('Vietnamese local search opens a real article without external requests', a
   await expect(previousFocus).toBeFocused();
   await trigger.click();
   await search.fill('QEMU');
-  const result = dialog.locator('a[href="' + publicArticle + '"]');
+  const result = dialog.getByRole('list', {name: 'Kết quả tìm kiếm'}).locator('a[href="' + publicArticle + '"]').first();
   await expect(result).toBeVisible();
   const {violations} = await new AxeBuilder({page})
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
