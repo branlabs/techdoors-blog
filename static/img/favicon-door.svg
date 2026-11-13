@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">TechDoors</title>
+  <rect width="64" height="64" rx="13" fill="#ad4228"/>
+  <path d="M16 52V12h32v40" fill="none" stroke="#f6f5f0" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M23 20 40 24v26l-17-5Z" fill="#f6f5f0"/>
+  <path d="M35 35v6" stroke="#ad4228" stroke-width="3" stroke-linecap="round"/>
+</svg>
