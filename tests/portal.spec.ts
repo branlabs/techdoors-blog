@@ -68,7 +68,7 @@ for (const mode of ['light', 'dark'] as const) {
     // Wait for the leaf's known final transform rather than unrelated page animations.
     await expect(door).toHaveCSS(
       'transform',
-      'matrix(0.62, 0.22, 0, 1, 63.08, -36.52)',
+      'matrix(0.68, 0.17, 0, 1, 53.12, -28.22)',
     );
     await portal.screenshot({
       path: testInfo.outputPath(`portal-${mode}-open.png`),
@@ -81,6 +81,10 @@ for (const mode of ['light', 'dark'] as const) {
     await control.press('Enter');
     await expect(portal).toHaveAttribute('data-door-state', 'open');
     await control.press('Escape');
+    await expect(portal).toHaveAttribute('data-door-state', 'rest');
+    await control.press('Space');
+    await expect(portal).toHaveAttribute('data-door-state', 'open');
+    await control.press('Space');
     await expect(portal).toHaveAttribute('data-door-state', 'rest');
 
     const {violations} = await new AxeBuilder({page})
