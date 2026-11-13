@@ -3,11 +3,17 @@
   position: relative;
   width: 100%;
 }
+
+.artwork {
+  width: 100%;
+}
+
 .drawing {
   display: block;
   width: 100%;
   height: auto;
 }
+
 .label {
   font:
     9px 'JetBrains Mono Variable',
@@ -16,6 +22,7 @@
   fill: currentColor;
   opacity: 0.66;
 }
+
 .caption {
   display: block;
   font-size: 0.7rem;
@@ -23,15 +30,94 @@
   color: var(--td-muted);
   margin: 12px 0 0;
 }
+
 .compact .caption {
   display: none;
 }
+
 .compact {
   max-width: 275px;
 }
-.door {
-  transition: filter 250ms ease;
+
+/* A restrained 2.5D projection: x=166 is the fixed vertical hinge.
+   At rest the original SVG paths are unchanged, with no extra light or shadow. */
+.doorLeaf {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform 680ms cubic-bezier(0.2, 0.78, 0.2, 1);
 }
-.portal:hover .door {
-  filter: brightness(1.08);
+
+.lightReveal {
+  opacity: 0;
+  transition: opacity 560ms ease-out;
+}
+
+.castShadow {
+  opacity: 0;
+  transition: opacity 560ms ease-out;
+}
+
+.doorEdge {
+  opacity: 0;
+  transition: opacity 540ms ease-out;
+}
+
+.portal[data-door-state='peek'] .doorLeaf {
+  transform: matrix(0.92, 0.04, 0, 1, 13.28, -6.64);
+}
+
+.portal[data-door-state='peek'] .lightReveal {
+  opacity: 0.32;
+}
+
+.portal[data-door-state='peek'] .castShadow {
+  opacity: 0.045;
+}
+
+.portal[data-door-state='open'] .doorLeaf {
+  transform: matrix(0.62, 0.22, 0, 1, 63.08, -36.52);
+}
+
+.portal[data-door-state='open'] .lightReveal {
+  opacity: 0.72;
+}
+
+.portal[data-door-state='open'] .castShadow {
+  opacity: 0.1;
+}
+
+.portal[data-door-state='open'] .doorEdge {
+  opacity: 0.28;
+}
+
+/* The image itself is the control; no added chrome or separate visible button. */
+.doorHotspot {
+  position: absolute;
+  left: 34%;
+  top: 25%;
+  width: 23%;
+  height: 58%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.doorHotspot:focus-visible {
+  outline: 2px solid var(--td-accent);
+  outline-offset: 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doorLeaf,
+  .lightReveal,
+  .castShadow,
+  .doorEdge {
+    transition: none;
+  }
 }
