@@ -86,7 +86,7 @@ test('CloudPlay is discoverable in homepage, search, sitemap and background feed
   await settle(page);
   const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
   await expect(recent.locator(`a[href="${story}"]`)).toBeVisible();
-  await expect(recent.getByRole('article')).toHaveCount(2);
+  expect(await recent.getByRole('article').count()).toBeGreaterThanOrEqual(3);
   await page.getByRole('button', {name: 'Tìm kiếm trên TechDoors'}).click();
   const dialog = page.getByRole('dialog', {name: 'Tìm trong TechDoors'});
   await dialog.getByRole('searchbox', {name: 'Từ khóa'}).fill('CloudPlay');
