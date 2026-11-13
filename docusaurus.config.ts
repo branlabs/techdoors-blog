@@ -41,8 +41,6 @@ const config: Config = {
   url: 'https://techdoors.io',
   baseUrl: '/',
   trailingSlash: true,
-  organizationName: 'branlabs',
-  projectName: 'techdoors-blog',
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
   markdown: {
@@ -74,7 +72,6 @@ const config: Config = {
           language: 'vi-VN',
           copyright: `© ${new Date().getFullYear()} TechDoors`,
         },
-        editUrl: 'https://github.com/branlabs/techdoors-blog/edit/main/',
       } satisfies Partial<BlogOptions>,
     ],
     '@docusaurus/plugin-content-pages',

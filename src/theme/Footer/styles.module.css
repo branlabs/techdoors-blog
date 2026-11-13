@@ -63,10 +63,6 @@
   text-decoration: none;
 }
 
-.top nav svg {
-  width: 12px;
-}
-
 .top nav a:hover {
   color: var(--td-accent);
   text-decoration: underline;
