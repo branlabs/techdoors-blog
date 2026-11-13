@@ -1,0 +1,34 @@
+.byline {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  margin-top: 0.35rem;
+  color: var(--td-muted);
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+.author {
+  color: var(--td-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.author:hover,
+.author:focus-visible {
+  color: var(--td-accent);
+  text-decoration: underline;
+}
+
+.separator {
+  color: var(--td-muted);
+  user-select: none;
+}
+
+@media (max-width: 600px) {
+  .byline {
+    font-size: 0.75rem;
+    column-gap: 0.5rem;
+  }
+}

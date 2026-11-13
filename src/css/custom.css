@@ -257,15 +257,16 @@ main p a {
   line-height: 1.85;
 }
 .blog-post-page article header {
-  padding-bottom: 25px;
+  padding-bottom: 17px;
   border-bottom: 1px solid var(--td-line);
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 .blog-post-page article header h1 {
   max-width: 800px;
   font-size: clamp(2.1rem, 4.3vw, 2.8rem);
   line-height: 1.35;
   letter-spacing: -0.065em;
+  margin-bottom: 0.6rem;
 }
 .blog-post-page article header a {
   color: var(--td-ink);
@@ -274,17 +275,6 @@ main p a {
 .blog-post-page article header small {
   color: var(--td-muted);
   font-size: 0.75rem;
-}
-.blog-post-page .avatar__name {
-  font-size: 0.82rem;
-}
-.blog-post-page .avatar__subtitle {
-  font-size: 0.7rem;
-  color: var(--td-muted);
-}
-.blog-post-page .avatar__photo {
-  width: 36px;
-  height: 36px;
 }
 .blog-post-page main.col--9 {
   --ifm-col-width: 75%;
