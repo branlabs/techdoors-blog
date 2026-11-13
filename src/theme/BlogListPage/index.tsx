@@ -14,9 +14,8 @@ import styles from './styles.module.css';
 // Use all public posts rather than the current pagination page.
 function usefulTopics(posts: PostSummary[]) {
   if (posts.length < 4) return [];
-  return topics.filter(({slug}) => {
-    const route = `/tags/${slug}/`;
-    const hasTag = (post: PostSummary) => post.tags.some((tag) => tag.permalink.endsWith(route));
+  return topics.filter(({label}) => {
+    const hasTag = (post: PostSummary) => post.tags.some((tag) => tag.label === label);
     return posts.some(hasTag) && posts.some((post) => !hasTag(post));
   });
 }

@@ -21,7 +21,7 @@ export default function PostCard({
   const Heading = headingLevel === 2 ? 'h2' : 'h3';
   const date = dateFormat.format(new Date(post.date)).replaceAll('/', '.');
   // A series label belongs beside the date; topic tags stay in the article.
-  const series = post.tags.find(({permalink}) => permalink.endsWith('/tags/under-the-hood/'));
+  const series = post.tags.find(({label}) => label === 'Under the Hood');
   return (
     <article className={styles.card}>
       <div className={styles.body}>
