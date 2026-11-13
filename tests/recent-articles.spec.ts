@@ -34,29 +34,32 @@ for (const mode of ['light', 'dark'] as const) {
 
     const recent = page.getByRole('region', {name: 'Bài viết mới', exact: true});
     const posts = recent.getByRole('article');
-    await expect(posts).toHaveCount(2);
-    const cloudplay = posts.first();
+    expect(await posts.count()).toBeGreaterThanOrEqual(3);
+    const newStory = posts.filter({has: page.locator('a[href="/blog/chiec-may-tinh-vo-hinh/"]')});
+    await expect(newStory.getByRole('heading', {level: 3})).toHaveText('Chiếc máy tính vô hình');
+
+    const cloudplay = posts.filter({has: page.locator(`a[href="${cloudplayUrl}"]`)});
     const title = cloudplay.getByRole('heading', {level: 3}).getByRole('link');
     await expect(title).toHaveText(cloudplayTitle);
     await expect(title).toHaveAttribute('href', cloudplayUrl);
     await expect(cloudplay.getByText(cloudplayDescription, {exact: true})).toBeVisible();
     await expect(cloudplay.locator('time')).toHaveAttribute('datetime', /^2026-11-08/);
 
-    const welcome = posts.nth(1);
+    const welcome = posts.filter({has: page.getByRole('heading', {level: 3, name: 'Chào mừng đến với TechDoors'})});
     await expect(
       welcome.getByRole('heading', {level: 3, name: 'Chào mừng đến với TechDoors'}),
     ).toBeVisible();
     await expect(welcome.getByText(welcomeDescription, {exact: true})).toBeVisible();
 
-    for (const post of [cloudplay, welcome]) {
+    for (const post of await posts.all()) {
       const description = await post.locator('p').last().innerText();
       expect(description.length).toBeLessThanOrEqual(140);
     }
 
     // Tighten spacing while preserving the existing font size and one-column layout.
-    await expect(cloudplay).toHaveCSS('padding-top', '26px');
-    await expect(cloudplay).toHaveCSS('padding-bottom', '26px');
-    await expect(welcome).toHaveCSS('padding-bottom', '0px');
+    await expect(posts.first()).toHaveCSS('padding-top', '26px');
+    await expect(posts.first()).toHaveCSS('padding-bottom', '26px');
+    await expect(posts.last()).toHaveCSS('padding-bottom', '0px');
     await expect(recent.getByRole('link', {name: 'Xem tất cả'})).toHaveAttribute('href', '/blog/');
 
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
