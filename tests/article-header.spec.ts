@@ -52,6 +52,6 @@ for (const mode of ['light', 'dark'] as const) {
     await testInfo.attach(`article-header-${mode}`, {body: screenshot, contentType: 'image/png'});
     await author.click();
     await expect(page).toHaveURL(/\/about\/$/);
-    await expect(page.getByRole('heading', {level: 1})).toHaveText('Chào, mình là Brandon.');
+    await expect(page.getByRole('heading', {level: 1})).toHaveText('Một chút về mình');
   });
 }

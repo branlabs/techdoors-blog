@@ -20,6 +20,37 @@
   line-height: 1.9;
   max-width: 700px;
 }
+.aboutHeader {
+  margin-bottom: 28px;
+}
+.aboutHeader h1 {
+  margin-bottom: 0;
+}
+.aboutStory {
+  max-width: 690px;
+  border-top: 1px solid var(--td-line);
+  padding-top: 28px;
+  font-size: 0.97rem;
+  line-height: 1.95;
+}
+.aboutStory p {
+  margin: 0 0 1.45em;
+  color: var(--td-muted);
+}
+.aboutStory p:first-child {
+  color: var(--td-ink);
+  font-size: 1.02rem;
+}
+.aboutStory p:last-child {
+  margin-bottom: 0;
+}
+.aboutStory a {
+  color: var(--td-ink);
+  text-decoration: underline;
+}
+.aboutStory a:hover {
+  color: var(--td-accent);
+}
 .split {
   display: grid;
   grid-template-columns: 1fr 300px;
