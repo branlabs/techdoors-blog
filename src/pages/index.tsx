@@ -31,7 +31,7 @@ export default function Home(): ReactNode {
             </Link>
           </div>
           <div className={styles.visual}>
-            <Portal showCaption={false} />
+            <Portal showCaption={false} interactive />
           </div>
         </section>
         <RecentArticles posts={posts} />
