@@ -18,17 +18,6 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
   await expect(page.locator('html')).toHaveAttribute('data-theme', mode);
 }
 
-async function finishMotion(page: Page) {
-  await page.evaluate(async () => {
-    await Promise.all(
-      document
-        .getAnimations()
-        .filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity)
-        .map((animation) => animation.finished.catch(() => {})),
-    );
-  });
-}
-
 for (const mode of ['light', 'dark'] as const) {
   test(`living SVG portal is a subtle accessible interaction in ${mode}`, async ({
     page,
@@ -75,8 +64,11 @@ for (const mode of ['light', 'dark'] as const) {
     await expect(portal).toHaveAttribute('data-door-state', 'open');
     const close = portal.getByRole('button', {name: 'Khép cánh cửa minh họa'});
     await expect(close).toHaveAttribute('aria-pressed', 'true');
-    await finishMotion(page);
-    await expect(door).not.toHaveCSS('transform', 'none');
+    // Wait for the leaf's known final transform rather than unrelated page animations.
+    await expect(door).toHaveCSS(
+      'transform',
+      'matrix(0.62, 0.22, 0, 1, 63.08, -36.52)',
+    );
     await portal.screenshot({
       path: testInfo.outputPath(`portal-${mode}-open.png`),
     });
