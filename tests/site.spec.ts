@@ -2,7 +2,7 @@ import {test, expect, type Page} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const article = '/blog/chao-mung-den-voi-techdoors/'; // Unlisted: keeps the code/TOC fixture.
-const publicArticle = '/blog/chiec-may-tinh-vo-hinh/';
+const publicArticle = '/blog/the-invisible-computer/';
 const routes = [
   '/',
   '/blog/',
@@ -338,6 +338,34 @@ test('Markdown, syntax highlighting, code copy, TOC and related navigation', asy
   await page.locator('footer').getByRole('link', {name: 'Giới thiệu', exact: true}).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByRole('heading', {level: 1, name: 'Chào, mình là Brandon.'})).toBeVisible();
+});
+
+test('older Vietnamese blog URL redirects to the English-slug permalink', async ({page, request}) => {
+  const oldUrl = '/blog/chiec-may-tinh-vo-hinh/';
+  const destination = '/blog/the-invisible-computer/';
+  const redirect = await request.get(oldUrl);
+  expect(redirect.status()).toBe(200);
+  const html = await redirect.text();
+  expect(html).toContain('http-equiv="refresh"');
+  expect(html).toContain('url=' + destination);
+  expect(html).toContain('name="robots" content="noindex, follow"');
+
+  await page.goto(oldUrl);
+  await expect(page).toHaveURL(new RegExp(destination + '
+  await page.goto('/');
+  await settle(page);
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', {name: 'Chuyển tới nội dung chính'})).toBeFocused();
+  await page.keyboard.press('Enter');
+  await page.goto('/duong-dan-khong-ton-tai/');
+  await settle(page);
+  await expect(page.locator('h1')).toHaveText('Có vẻ bạn đã đi lạc.');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
+  await page.getByRole('link', {name: 'Về trang chủ'}).click();
+  await expect(page).toHaveURL('http://127.0.0.1:3000/');
+});
+));
+  await expect(page.getByRole('heading', {level: 1})).toHaveText('Chiếc máy tính vô hình');
 });
 
 test('keyboard skip link and custom 404 recovery', async ({page}) => {
