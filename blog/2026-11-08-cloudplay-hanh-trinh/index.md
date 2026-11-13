@@ -4,6 +4,7 @@ description: "Tận dụng GPU trong server để thử cloud gaming. Hành trì
 date: 2026-11-08T17:00:00+07:00
 slug: cloudplay-tu-card-trong-server-den-stream-60fps
 authors: [techdoors]
+unlisted: true
 tags: [homelab, openstack, gpu-passthrough, cloud-gaming]
 project_id: cloudplay
 ---

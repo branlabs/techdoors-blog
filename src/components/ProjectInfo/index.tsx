@@ -27,7 +27,7 @@ export function ProjectLinks({
       <Link to={project.updatesHref} aria-current={active === 'updates' ? 'page' : undefined}>
         Nhật ký cải tiến
       </Link>
-      <Link to={project.articleHref}>Đọc bài hành trình</Link>
+      {project.articleHref && <Link to={project.articleHref}>Đọc bài hành trình</Link>}
     </nav>
   );
 }

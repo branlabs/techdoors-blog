@@ -4,6 +4,7 @@ description: Một vài lời giới thiệu về TechDoors và những chủ đ
 date: 2026-11-06T08:00:00+07:00
 slug: chao-mung-den-voi-techdoors
 authors: [techdoors]
+unlisted: true
 tags: [devops, sre, kubernetes, platform-engineering, observability, ci-cd, linux, infrastructure, homelab, openstack]
 image: /img/og-default.png
 ---

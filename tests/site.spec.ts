@@ -1,15 +1,17 @@
 import {test, expect, type Page} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const article = '/blog/chao-mung-den-voi-techdoors/';
+const article = '/blog/chao-mung-den-voi-techdoors/'; // Unlisted: keeps the code/TOC fixture.
+const publicArticle = '/blog/chiec-may-tinh-vo-hinh/';
 const routes = [
   '/',
   '/blog/',
   article,
+  publicArticle,
   '/about/',
   '/projects/',
   '/blog/tags/',
-  '/blog/tags/devops/',
+  '/blog/tags/under-the-hood/',
   '/404.html',
 ];
 
@@ -100,11 +102,11 @@ test('homepage recent articles retain metadata, article links and the blog topic
     await expect(page).toHaveURL(/\/blog\/$/);
     await page
       .getByRole('navigation', {name: 'Lọc bài viết theo chủ đề'})
-      .getByRole('link', {name: 'DevOps', exact: true})
+      .getByRole('link', {name: 'Under the Hood', exact: true})
       .click();
-    await expect(page).toHaveURL(/\/blog\/tags\/devops\/$/);
+    await expect(page).toHaveURL(/\/blog\/tags\/under-the-hood\/$/);
     await expect(
-      page.getByRole('link', {name: 'Chào mừng đến với TechDoors', exact: true}),
+      page.getByRole('link', {name: 'Chiếc máy tính vô hình', exact: true}),
     ).toBeVisible();
   }
 });
@@ -121,7 +123,10 @@ for (const mode of ['light', 'dark'] as const) {
     for (const format of ['rss', 'atom']) {
       const response = await request.get('/blog/' + format + '.xml');
       expect(response.status()).toBe(200);
-      expect(await response.text()).toContain('Chào mừng đến với TechDoors');
+      const feed = await response.text();
+      expect(feed).toContain('Chiếc máy tính vô hình');
+      expect(feed).not.toContain('Chào mừng đến với TechDoors');
+      expect(feed).not.toContain('CloudPlay');
     }
     const {violations} = await new AxeBuilder({page})
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
@@ -263,7 +268,7 @@ test('Vietnamese local search opens a real article without external requests', a
   await page.goto('/');
   await settle(page);
   const trigger = page.getByRole('button', {name: 'Tìm kiếm trên TechDoors'});
-  const previousFocus = page.getByRole('link', {name: 'Khám phá bài viết', exact: true});
+  const previousFocus = page.getByRole('link', {name: 'Gõ cửa', exact: true});
   await previousFocus.focus();
   await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', {name: 'Tìm trong TechDoors'});
@@ -274,8 +279,8 @@ test('Vietnamese local search opens a real article without external requests', a
   await expect(dialog).not.toBeVisible();
   await expect(previousFocus).toBeFocused();
   await trigger.click();
-  await search.fill('Chào mừng');
-  const result = dialog.locator('a[href="' + article + '"]');
+  await search.fill('QEMU');
+  const result = dialog.locator('a[href="' + publicArticle + '"]');
   await expect(result).toBeVisible();
   const {violations} = await new AxeBuilder({page})
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
@@ -287,21 +292,21 @@ test('Vietnamese local search opens a real article without external requests', a
   await expect(dialog).not.toBeVisible();
   await expect(trigger).toBeFocused();
   await trigger.click();
-  await search.fill('Chào mừng');
+  await search.fill('QEMU');
   await expect(result).toBeVisible();
   const resultIndex = await dialog
     .getByRole('link')
     .evaluateAll(
       (links, path) => links.findIndex((link) => link.getAttribute('href') === path),
-      article,
+      publicArticle,
     );
   expect(resultIndex).toBeGreaterThanOrEqual(0);
   await search.press('ArrowDown');
   for (let index = 0; index < resultIndex; index++) await page.keyboard.press('ArrowDown');
   await expect(result).toBeFocused();
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(new RegExp(article));
-  await expect(page.locator('h1')).toHaveText('Chào mừng đến với TechDoors');
+  await expect(page).toHaveURL(new RegExp(publicArticle));
+  await expect(page.locator('h1')).toHaveText('Chiếc máy tính vô hình');
   expect(external).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -325,20 +330,14 @@ test('Markdown, syntax highlighting, code copy, TOC and related navigation', asy
     .filter({visible: true});
   await toc.click();
   await expect(page).toHaveURL(/#/);
-  // A second real post replaces the related-content empty state.
+  // Unlisted stories should never appear in publicly recommended content.
   const related = page.getByRole('region', {name: 'Ghi chép liên quan'});
-  await expect(related.getByRole('heading', {name: 'Ghi chép liên quan', exact: true})).toBeVisible();
-  const cloudplay = '/blog/cloudplay-tu-card-trong-server-den-stream-60fps/';
-  const nextPost = related.locator(`a[href="${cloudplay}"]`);
-  await expect(nextPost).toBeVisible();
-  await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant'}));
+  await expect(related.locator('a[href*="cloudplay-tu-card"]')).toHaveCount(0);
+  await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant' }));
   await page.screenshot({path: testInfo.outputPath('article.png'), fullPage: true});
-  await nextPost.click();
-  await expect(page).toHaveURL(new RegExp(cloudplay + '$'));
-  await expect(page.locator('h1')).toHaveText('CloudPlay: từ 15 FPS đến 60 FPS trên OpenStack');
   await page.locator('footer').getByRole('link', {name: 'Giới thiệu', exact: true}).click();
   await expect(page).toHaveURL(/\/about\/$/);
-  await expect(page.getByText('[Tên hoặc biệt danh của bạn]', {exact: true})).toBeVisible();
+  await expect(page.getByRole('heading', {level: 1, name: 'Chào, mình là Brandon.'})).toBeVisible();
 });
 
 test('keyboard skip link and custom 404 recovery', async ({page}) => {

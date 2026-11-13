@@ -36,7 +36,7 @@ for (const mode of ['light', 'dark'] as const) {
       {exact: true},
     )).toBeVisible();
     await expect(hero.getByRole('link')).toHaveCount(1);
-    await expect(hero.getByRole('link', {name: 'Khám phá bài viết'})).toHaveAttribute(
+    await expect(hero.getByRole('link', {name: 'Gõ cửa'})).toHaveAttribute(
       'href', '/blog/',
     );
     await expect(hero.getByText('BLOG KỸ THUẬT CÁ NHÂN')).toHaveCount(0);
@@ -48,7 +48,7 @@ for (const mode of ['light', 'dark'] as const) {
     await expect(illustration).toBeVisible();
     await expect(illustration.locator('path')).not.toHaveCount(0);
 
-    const cta = hero.getByRole('link', {name: 'Khám phá bài viết'});
+    const cta = hero.getByRole('link', {name: 'Gõ cửa'});
     const ctaBox = await cta.boundingBox();
     expect(ctaBox!.height).toBeGreaterThanOrEqual(44);
     const pageOverflow = await page.evaluate(

@@ -27,7 +27,7 @@ export default function Home(): ReactNode {
               Ghi chép về những hệ thống mình xây dựng, vận hành và học hỏi.
             </p>
             <Link className="td-button" to="/blog">
-              Khám phá bài viết <Arrow />
+              Gõ cửa <Arrow />
             </Link>
           </div>
           <div className={styles.visual}>
