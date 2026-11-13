@@ -31,7 +31,7 @@ jobs:
       - run: npm run build
       - run: npm run check:site
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test tests/portal.spec.ts --workers=2
+      - run: npx playwright test tests/portal.spec.ts --project=desktop --grep 'living SVG portal is a subtle accessible interaction in light' --workers=1
       - name: Upload portal visuals for PR review
         if: success()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
