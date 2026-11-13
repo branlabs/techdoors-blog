@@ -39,7 +39,7 @@ export default function About(): ReactNode {
             </p>
             <h2>Bắt đầu từ một cánh cửa</h2>
             <p>
-              Bạn có thể đọc <Link to="/blog/chiec-may-tinh-vo-hinh/">Chiếc máy tính vô hình</Link>
+              Bạn có thể đọc <Link to="/blog/the-invisible-computer/">Chiếc máy tính vô hình</Link>
               {' '}— câu chuyện mở đầu series <em>Under the Hood</em> — hoặc ghé
               {' '}<Link to="/blog/">tất cả bài viết</Link> để chọn một câu hỏi khiến bạn tò mò.
             </p>

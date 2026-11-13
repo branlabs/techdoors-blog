@@ -2,7 +2,7 @@
 title: "Chiếc máy tính vô hình"
 description: "Một chiếc máy tính không cần lắp thêm linh kiện vẫn có thể chạy hệ điều hành riêng. QEMU và KVM khiến điều đó trở nên khả thi như thế nào?"
 date: 2026-11-13T13:00:00+07:00
-slug: chiec-may-tinh-vo-hinh
+slug: the-invisible-computer
 authors: [techdoors]
 tags: [under-the-hood, virtualization, linux, infrastructure]
 ---

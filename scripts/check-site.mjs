@@ -47,7 +47,8 @@ for (const [file, $] of parsed) {
   assert.equal($('h1').length, 1, `${route}: exactly one h1`);
   assert($('title').text().includes('TechDoors'), `${route}: branded title`);
   assert($('meta[name="description"]').attr('content'), `${route}: description`);
-  assert.equal($('link[rel="canonical"]').attr('href'), pageUrl.href, `${route}: canonical`);
+  const expectedCanonical = route === '/blog/chiec-may-tinh-vo-hinh/' ? 'https://techdoors.io/blog/the-invisible-computer/' : pageUrl.href;
+  assert.equal($('link[rel="canonical"]').attr('href'), expectedCanonical, `${route}: canonical`);
   assert.equal(
     $('meta[property="og:image"]').attr('content'),
     `${origin}/img/og-default.png`,
@@ -89,7 +90,7 @@ const sitemap = load(await readFile(path.join(root, 'sitemap.xml'), 'utf8'), {xm
 const locations = sitemap('loc')
   .toArray()
   .map((element) => sitemap(element).text());
-for (const route of ['/', '/about/', '/projects/', '/blog/', '/blog/chiec-may-tinh-vo-hinh/'])
+for (const route of ['/', '/about/', '/projects/', '/blog/', '/blog/the-invisible-computer/'])
   assert(locations.includes(origin + route), `Sitemap missing ${route}`);
 assert(
   !locations.some((url) => /404|\/search\//.test(url)),
@@ -101,6 +102,16 @@ for (const hidden of ['/blog/chao-mung-den-voi-techdoors/', '/blog/cloudplay-tu-
   assert(hiddenPage, `${hidden}: direct URL should still exist`);
   assert.match(parsed.get(hiddenPage)('meta[name="robots"]').attr('content') ?? '', /noindex/, `${hidden}: not blocked from indexing`);
 }
+const legacyRoute = '/blog/chiec-may-tinh-vo-hinh/';
+assert(!locations.includes(origin + legacyRoute), 'Legacy permalink must not appear in sitemap');
+const legacyPage = await targetFor(new URL(origin + legacyRoute));
+assert(legacyPage, 'Legacy permalink redirect page must exist');
+const legacy = parsed.get(legacyPage);
+assert(legacy, 'Legacy redirect must be parsed');
+assert.equal(legacy('link[rel="canonical"]').attr('href'), origin + '/blog/the-invisible-computer/');
+assert.equal(legacy('meta[name="robots"]').attr('content'), 'noindex, follow');
+assert.match(legacy('meta[http-equiv="refresh"]').attr('content') ?? '', /url=\/blog\/the-invisible-computer\//);
+
 for (const location of locations) {
   const url = new URL(location);
   assert.equal(url.origin, origin);

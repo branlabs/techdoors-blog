@@ -1,7 +1,7 @@
 import {test, expect, type Page} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const articleUrl = '/blog/chiec-may-tinh-vo-hinh/';
+const articleUrl = '/blog/the-invisible-computer/';
 const articleTitle = 'Chiếc máy tính vô hình';
 
 async function setTheme(page: Page, mode: 'light' | 'dark') {
