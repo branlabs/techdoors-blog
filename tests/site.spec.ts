@@ -65,7 +65,7 @@ test('projects page introduces the real CloudPlay homelab card without placehold
   );
 });
 
-test('homepage recent articles retain metadata, article links and the blog topic filters', async ({
+test('homepage links to the focused blog index and topic pages remain reachable', async ({
   page,
 }) => {
   for (const mode of ['light', 'dark'] as const) {
@@ -100,10 +100,12 @@ test('homepage recent articles retain metadata, article links and the blog topic
     await settle(page);
     await recent.getByRole('link', {name: 'Xem tất cả', exact: true}).click();
     await expect(page).toHaveURL(/\/blog\/$/);
-    await page
-      .getByRole('navigation', {name: 'Lọc bài viết theo chủ đề'})
-      .getByRole('link', {name: 'Under the Hood', exact: true})
-      .click();
+    // Filters are hidden when the blog only has one public article.
+    await expect(
+      page.getByRole('navigation', {name: 'Lọc bài viết theo chủ đề'}),
+    ).toHaveCount(0);
+    // Readers can still use direct links to topic pages.
+    await page.goto('/blog/tags/under-the-hood/');
     await expect(page).toHaveURL(/\/blog\/tags\/under-the-hood\/$/);
     await expect(
       page.getByRole('link', {name: 'Chiếc máy tính vô hình', exact: true}),

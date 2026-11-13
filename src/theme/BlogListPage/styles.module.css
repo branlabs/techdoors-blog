@@ -15,6 +15,13 @@
   font-size: 0.94rem;
   line-height: 1.95;
 }
+.indexHeader h1 {
+  margin-bottom: 16px;
+}
+.indexHeader > p:last-child {
+  max-width: 710px;
+  margin: 0;
+}
 .topics {
   display: flex;
   gap: 10px;
@@ -44,7 +51,10 @@
   border-color: var(--td-ink);
 }
 .list {
-  margin-top: 4px;
+  margin-top: 34px;
+}
+.topics + .list {
+  margin-top: 0;
 }
 @media (max-width: 600px) {
   .page {
@@ -52,6 +62,12 @@
   }
   .topics {
     margin-top: 30px;
+  }
+  .list {
+    margin-top: 26px;
+  }
+  .topics + .list {
+    margin-top: 0;
   }
   .topics a {
     min-height: 44px;

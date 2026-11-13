@@ -1,31 +1,27 @@
 .card {
   border-top: 1px solid var(--td-line);
-  padding: 30px 0;
-  display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 18px;
+  padding: 26px 0 30px;
 }
-.index {
-  font:
-    0.75rem 'JetBrains Mono Variable',
-    monospace;
-  color: var(--td-muted);
-  padding-top: 5px;
+.card:last-child {
+  padding-bottom: 0;
 }
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  align-items: baseline;
+  gap: 7px 10px;
   color: var(--td-muted);
-  font:
-    0.76rem 'JetBrains Mono Variable',
-    monospace;
+  font: 0.74rem/1.8 var(--ifm-font-family-monospace);
+}
+.series {
+  text-transform: uppercase;
+  letter-spacing: 0.035em;
 }
 .body :is(h2, h3) {
   font-size: clamp(1.3rem, 2.1vw, 1.8rem);
   letter-spacing: -0.055em;
   line-height: 1.4;
-  margin: 16px 0 14px;
+  margin: 13px 0 11px;
 }
 .body :is(h2, h3) a {
   color: var(--td-ink);
@@ -48,37 +44,15 @@
   color: var(--td-muted);
   font-size: 0.91rem;
   max-width: 620px;
-  margin-bottom: 20px;
+  margin: 0;
   line-height: 1.85;
-}
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.tags a {
-  border: 1px solid var(--td-line);
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  min-height: 30px;
-  padding: 4px 9px;
-  color: var(--td-muted);
-  font:
-    0.74rem/1.6 'JetBrains Mono Variable',
-    monospace;
-}
-.tags a:hover {
-  border-color: var(--td-accent);
-  color: var(--td-accent);
-  text-decoration: none;
 }
 @media (max-width: 600px) {
   .card {
-    grid-template-columns: 24px 1fr;
-    gap: 12px;
+    padding: 24px 0 28px;
   }
-  .tags a {
-    min-height: 44px;
+  .meta {
+    font-size: 0.7rem;
+    gap: 5px 8px;
   }
 }

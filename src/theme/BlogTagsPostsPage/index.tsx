@@ -29,12 +29,11 @@ export default function BlogTagsPostsPage({tag, items, listMetadata}: Props): Re
           <Link to="/blog">Tất cả bài viết</Link>
         </nav>
         <section aria-label={`Bài viết về ${tag.label}`} className={styles.list}>
-          {items.map(({content}, index) => (
+          {items.map(({content}) => (
             <PostCard
               key={content.metadata.permalink}
               post={content.metadata}
               headingLevel={2}
-              index={(listMetadata.page - 1) * listMetadata.postsPerPage + index}
             />
           ))}
         </section>

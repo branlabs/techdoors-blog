@@ -1,48 +1,55 @@
 import type {ReactNode} from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import {usePluginData} from '@docusaurus/useGlobalData';
 import BlogListPaginator from '@theme/BlogListPaginator';
 import BlogListPageStructuredData from '@theme/BlogListPage/StructuredData';
 import SearchMetadata from '@theme/SearchMetadata';
 import type {Props} from '@theme/BlogListPage';
 import PostCard from '../../components/PostCard';
-import {topics} from '../../types/content';
+import {topics, type PostSummary} from '../../types/content';
 import styles from './styles.module.css';
+
+// Only show filters when they distinguish a meaningful set of published posts.
+// Use all public posts rather than the current pagination page.
+function usefulTopics(posts: PostSummary[]) {
+  if (posts.length < 4) return [];
+  return topics.filter(({label}) => {
+    const hasTag = (post: PostSummary) => post.tags.some((tag) => tag.label === label);
+    return posts.some(hasTag) && posts.some((post) => !hasTag(post));
+  });
+}
 
 export default function BlogListPage(props: Props): ReactNode {
   const {items, metadata} = props;
+  const {posts} = usePluginData('techdoors-content') as {posts: PostSummary[]};
+  const filterTopics = usefulTopics(posts);
+  const showFilters = filterTopics.length >= 2;
   return (
     <Layout title={metadata.blogTitle} description={metadata.blogDescription}>
       <SearchMetadata tag="blog_posts_list" />
       <BlogListPageStructuredData {...props} />
       <main className={styles.page}>
-        <header className={styles.header}>
-          <p className="eyebrow">TECHDOORS / TẤT CẢ BÀI VIẾT</p>
+        <header className={`${styles.header} ${styles.indexHeader}`}>
+          <p className="eyebrow">TECHDOORS / BÀI VIẾT</p>
           <h1>Những điều được ghi lại.</h1>
-          <p>
-            Từ một câu hỏi nhỏ đến cách hiểu một hệ thống.
-            <br />
-            Ghi chép về hạ tầng, vận hành và những điều còn muốn tìm hiểu.
-          </p>
+          <p>Ghi chép về hạ tầng, thử nghiệm và những điều mình muốn hiểu rõ hơn.</p>
         </header>
-        <nav className={styles.topics} aria-label="Lọc bài viết theo chủ đề">
-          <Link to="/blog" className={styles.active} aria-current="page">
-            Tất cả
-          </Link>
-          {topics.map((topic) => (
-            <Link to={`/blog/tags/${topic.slug}/`} key={topic.slug}>
-              {topic.label}
+        {showFilters && (
+          <nav className={styles.topics} aria-label="Lọc bài viết theo chủ đề">
+            <Link to="/blog" className={styles.active} aria-current="page">
+              Tất cả
             </Link>
-          ))}
-        </nav>
+            {filterTopics.map((topic) => (
+              <Link to={`/blog/tags/${topic.slug}/`} key={topic.slug}>
+                {topic.label}
+              </Link>
+            ))}
+          </nav>
+        )}
         <section aria-label="Danh sách bài viết" className={styles.list}>
-          {items.map(({content}, index) => (
-            <PostCard
-              key={content.metadata.permalink}
-              post={content.metadata}
-              headingLevel={2}
-              index={(metadata.page - 1) * metadata.postsPerPage + index}
-            />
+          {items.map(({content}) => (
+            <PostCard key={content.metadata.permalink} post={content.metadata} headingLevel={2} />
           ))}
         </section>
         <BlogListPaginator metadata={metadata} />
