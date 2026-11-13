@@ -12,7 +12,6 @@ export default function Home(): ReactNode {
   const {posts} = usePluginData('techdoors-content') as {posts: PostSummary[]};
   return (
     <Layout
-      title="Ghi chép về hạ tầng và kỹ thuật"
       description="Mở cửa vào thế giới hạ tầng cùng TechDoors — blog kỹ thuật cá nhân về DevOps, SRE, Kubernetes, Platform Engineering và những điều học được khi xây dựng hệ thống."
     >
       <main id="main-content" className={styles.home}>

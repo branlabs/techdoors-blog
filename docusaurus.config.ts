@@ -37,7 +37,7 @@ const darkCode: PrismTheme = {
 const config: Config = {
   title: 'TechDoors',
   tagline: 'Ghi chép về hạ tầng. Mở thêm một cánh cửa.',
-  favicon: 'img/favicon.svg',
+  favicon: 'img/favicon-door.svg',
   url: 'https://techdoors.io',
   baseUrl: '/',
   trailingSlash: true,
