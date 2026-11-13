@@ -29,14 +29,12 @@ for (const mode of ['light', 'dark'] as const) {
     const nav = footer.getByRole('navigation', {name: 'Liên kết cuối trang'});
     await expect(footer.getByRole('link', {name: 'TechDoors', exact: true})).toBeVisible();
     await expect(footer.getByText('Ghi chép về hạ tầng.', {exact: true})).toBeVisible();
-    await expect(nav.getByRole('link')).toHaveCount(4);
+    await expect(nav.getByRole('link')).toHaveCount(3);
     for (const name of ['Bài viết', 'Dự án', 'Giới thiệu']) {
       await expect(nav.getByRole('link', {name, exact: true})).toBeVisible();
     }
-    await expect(nav.getByRole('link', {name: /GitHub/})).toHaveAttribute(
-      'href', 'https://github.com/branlabs/techdoors-blog',
-    );
-    await expect(nav.getByRole('link', {name: /GitHub/})).toHaveAttribute('target', '_blank');
+    await expect(nav.getByRole('link', {name: /GitHub/i})).toHaveCount(0);
+    await expect(footer.locator('a[href*="github.com"]')).toHaveCount(0);
     await expect(footer).not.toContainText('Mở thêm một cánh cửa.');
     await expect(footer).not.toContainText('Được viết bằng sự tò mò.');
     await expect(footer).not.toContainText('Được xây với Docusaurus.');
@@ -61,7 +59,7 @@ for (const mode of ['light', 'dark'] as const) {
         (await nav.getByRole('link').all()).map((link) => link.boundingBox()),
       );
       const linkTopEdges = linkBoxes.map((box) => box!.y);
-      // Four navigation items should share one row at 320px.
+      // Three navigation items should share one row at 320px.
       expect(Math.max(...linkTopEdges) - Math.min(...linkTopEdges)).toBeLessThanOrEqual(4);
     }
 

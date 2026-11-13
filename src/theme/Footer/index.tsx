@@ -1,6 +1,5 @@
 import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
-import Arrow from '../../components/Arrow';
 import styles from './styles.module.css';
 
 export default function Footer(): ReactNode {
@@ -19,14 +18,6 @@ export default function Footer(): ReactNode {
             <Link to="/blog">Bài viết</Link>
             <Link to="/projects">Dự án</Link>
             <Link to="/about">Giới thiệu</Link>
-            <a
-              href="https://github.com/branlabs/techdoors-blog"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub <Arrow diagonal />
-              <span className="sr-only"> (mở tab mới)</span>
-            </a>
           </nav>
         </div>
         <div className={styles.bottom}>

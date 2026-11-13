@@ -46,6 +46,23 @@ for (const [file, $] of parsed) {
   assert.match($('html').attr('lang') ?? '', /^vi/);
   assert.equal($('h1').length, 1, `${route}: exactly one h1`);
   assert($('title').text().includes('TechDoors'), `${route}: branded title`);
+  // Do not advertise the website repository; unrelated GitHub references in
+  // future technical articles may remain legitimate citations.
+  assert.equal(
+    $('a[href*="github.com/branlabs/techdoors-blog"]').length,
+    0,
+    `${route}: website source link in public page`,
+  );
+  assert.equal(
+    $('a[href*="/edit/main/"]').length,
+    0,
+    `${route}: GitHub editor link in public page`,
+  );
+  const html = await readFile(file, 'utf8');
+  assert(
+    !html.toLowerCase().includes('github.com/branlabs/techdoors-blog'),
+    `${route}: website repository URL leaked in public HTML`,
+  );
   assert($('meta[name="description"]').attr('content'), `${route}: description`);
   const expectedCanonical = route === '/blog/chiec-may-tinh-vo-hinh/' ? 'https://techdoors.io/blog/the-invisible-computer/' : pageUrl.href;
   assert.equal($('link[rel="canonical"]').attr('href'), expectedCanonical, `${route}: canonical`);

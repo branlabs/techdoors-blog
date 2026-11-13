@@ -80,10 +80,8 @@ test('homepage links to the focused blog index and topic pages remain reachable'
     await expect(page.getByRole('link', {name: /RSS|Atom/})).toHaveCount(0);
     const footerNav = page.getByRole('navigation', {name: 'Liên kết cuối trang'});
     await expect(page.locator('footer nav')).toHaveCount(1);
-    await expect(footerNav.getByRole('link', {name: /GitHub/})).toHaveAttribute(
-      'href',
-      'https://github.com/branlabs/techdoors-blog',
-    );
+    await expect(footerNav.getByRole('link')).toHaveCount(3);
+    await expect(footerNav.getByRole('link', {name: /GitHub/i})).toHaveCount(0);
     const posts = recent.getByRole('article');
     expect(await posts.count()).toBeGreaterThan(0);
     expect(await posts.count()).toBeLessThanOrEqual(5);
@@ -198,6 +196,10 @@ test('all public flows render without console errors or horizontal overflow', as
     expect(response?.status(), route).toBe(200);
     await settle(page);
     await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('a[href*="github.com"]')).toHaveCount(0);
+    await expect(
+      page.getByRole('link', {name: /edit this page|chỉnh sửa trang|sửa bài viết/i}),
+    ).toHaveCount(0);
     await expect(page.locator('footer a[href$="rss.xml"], footer a[href$="atom.xml"]')).toHaveCount(
       0,
     );
