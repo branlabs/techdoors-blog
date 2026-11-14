@@ -19,7 +19,7 @@ export default function PostCard({
   headingLevel?: 2 | 3;
 }): ReactNode {
   const Heading = headingLevel === 2 ? 'h2' : 'h3';
-  const english = post.permalink.startsWith('/en/blog/');
+  const english = new URL(post.permalink, 'https://techdoors.io').pathname.startsWith('/en/blog/');
   const date = english
     ? new Intl.DateTimeFormat('en-US', {
         day: 'numeric',

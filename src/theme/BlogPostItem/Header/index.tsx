@@ -34,9 +34,11 @@ export default function BlogPostItemHeader(): ReactNode {
   if (!isBlogPostPage) return <OriginalHeader />;
 
   const {date, readingTime, permalink} = metadata;
-  const english = permalink.startsWith('/en/blog/');
+  // Docusaurus blog metadata uses full absolute permalinks in production.
+  const articlePath = new URL(permalink, 'https://techdoors.io').pathname;
+  const english = articlePath.startsWith('/en/blog/');
   const language = english ? 'en' : 'vi';
-  const paired = permalink === invisibleComputer.vi || permalink === invisibleComputer.en;
+  const paired = articlePath === invisibleComputer.vi || articlePath === invisibleComputer.en;
   const authorName = metadata.authors?.[0]?.name ?? 'Brandon';
 
   return (
