@@ -12,13 +12,21 @@ export default function ArticleLanguageMetadata({
   // correct article alternates from articleSeo.ts; keep those, and remove
   // only Helmet's duplicate (and wrong on /en/) language links.
   useEffect(() => {
-    for (const link of Array.from(document.head.querySelectorAll<HTMLLinkElement>(
-      'link[data-rh="true"][rel="alternate"][hreflang]',
-    ))) {
-      if (['vi-VN', 'en-US', 'x-default'].includes(link.hreflang)) {
-        link.remove();
+    const removeDuplicates = () => {
+      // The real article alternates are SSR links from articleSeo.ts, without
+      // data-rh. Remove the default-locale Helmet links it can reinsert.
+      for (const link of Array.from(document.head.querySelectorAll<HTMLLinkElement>(
+        'link[data-rh="true"][rel="alternate"][hreflang]',
+      ))) {
+        if (['vi-VN', 'en-US', 'x-default'].includes(link.hreflang)) {
+          link.remove();
+        }
       }
-    }
+    };
+    removeDuplicates();
+    const observer = new MutationObserver(removeDuplicates);
+    observer.observe(document.head, {childList: true});
+    return () => observer.disconnect();
   }, []);
 
   if (language !== 'en') return null;
