@@ -1,5 +1,4 @@
 import type {ReactNode} from 'react';
-import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 export const invisibleComputer = {
@@ -18,23 +17,23 @@ export default function ArticleLanguageSwitcher({
       className={styles.switcher}
       aria-label={language === 'en' ? 'Article language' : 'Ngôn ngữ bài viết'}
     >
-      <Link
-        to={invisibleComputer.vi}
+      <a
+        href={invisibleComputer.vi}
         lang="vi"
         className={language === 'vi' ? styles.active : undefined}
         aria-current={language === 'vi' ? 'page' : undefined}
       >
         VI
-      </Link>
+      </a>
       <span aria-hidden="true" className={styles.separator}>/</span>
-      <Link
-        to={invisibleComputer.en}
+      <a
+        href={invisibleComputer.en}
         lang="en"
         className={language === 'en' ? styles.active : undefined}
         aria-current={language === 'en' ? 'page' : undefined}
       >
         EN
-      </Link>
+      </a>
     </nav>
   );
 }

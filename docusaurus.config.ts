@@ -105,6 +105,7 @@ const config: Config = {
       {changefreq: 'weekly', priority: 0.5, ignorePatterns: ['/search/**']},
     ],
     './plugins/content.ts',
+    './plugins/articleSeo.ts',
   ],
   themes: [
     ['@docusaurus/theme-classic', {customCss: './src/css/custom.css'}],
