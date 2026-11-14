@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link';
 import {useBlogPost} from '@docusaurus/plugin-content-blog/client';
 import OriginalHeader from '@theme-original/BlogPostItem/Header';
 import HeaderTitle from '@theme/BlogPostItem/Header/Title';
-import ArticleLanguageSwitcher, {invisibleComputer} from '../../../components/ArticleLanguageSwitcher';
+import ArticleLanguageSwitcher from '../../../components/ArticleLanguageSwitcher';
 import ArticleLanguageMetadata from '../../../components/ArticleLanguageSwitcher/Metadata';
 import styles from './styles.module.css';
 
@@ -33,12 +33,12 @@ export default function BlogPostItemHeader(): ReactNode {
   const {metadata, isBlogPostPage} = useBlogPost();
   if (!isBlogPostPage) return <OriginalHeader />;
 
-  const {date, readingTime, permalink} = metadata;
-  // Docusaurus blog metadata uses full absolute permalinks in production.
-  const articlePath = new URL(permalink, 'https://techdoors.io').pathname;
-  const english = articlePath.startsWith('/en/blog/');
+  const {date, readingTime} = metadata;
+  // This is an article-only translation: match its actual published titles,
+  // rather than relying on a theme-specific permalink representation.
+  const english = metadata.title === 'The Invisible Computer';
   const language = english ? 'en' : 'vi';
-  const paired = articlePath === invisibleComputer.vi || articlePath === invisibleComputer.en;
+  const paired = english || metadata.title === 'Chiếc máy tính vô hình';
   const authorName = metadata.authors?.[0]?.name ?? 'Brandon';
 
   return (

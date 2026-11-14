@@ -22,7 +22,7 @@ export default function BlogPostItemFooter(): ReactNode {
   return (
     <>
       <Footer />
-      {isBlogPostPage && !new URL(metadata.permalink, 'https://techdoors.io').pathname.startsWith('/en/blog/') && (
+      {isBlogPostPage && metadata.title !== 'The Invisible Computer' && (
         <section className={styles.related} aria-labelledby="related-heading">
           <p className="eyebrow">MỞ THÊM MỘT CÁNH CỬA</p>
           <h2 id="related-heading">
