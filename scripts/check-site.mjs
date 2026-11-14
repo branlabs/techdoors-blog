@@ -156,6 +156,15 @@ const englishArticle = parsed.get(englishPage);
 assert.equal(englishArticle('h1').first().text(), 'The Invisible Computer');
 assert(!englishArticle('body').text().includes('QEMY'), 'Uncorrected translation typo found');
 
+assert(
+  !locations.some((location) => location.includes('/en/blog/authors/')),
+  'English author index should remain unlisted from sitemap until translated',
+);
+for (const [file, $] of parsed) {
+  if (!file.includes(path.join('en', 'blog', 'authors'))) continue;
+  assert.match($('meta[name="robots"]').attr('content') ?? '', /noindex/, 'English author pages must not be indexed');
+}
+
 for (const location of locations) {
   const url = new URL(location);
   assert.equal(url.origin, origin);

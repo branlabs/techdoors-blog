@@ -1,4 +1,4 @@
-import {readFile, writeFile} from 'node:fs/promises';
+import {readFile, readdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import type {Plugin} from '@docusaurus/types';
 
@@ -33,6 +33,27 @@ export default function articleSeoPlugin(): Plugin {
         html = html.replace('</head>', links + '</head>');
         await writeFile(file, html);
       }
+
+      // Untranslated author archive pages should not be searchable.
+      // Normalize language metadata on English blog routes.
+      async function normalizeEnglishPages(dir: string): Promise<void> {
+        for (const entry of await readdir(dir, {withFileTypes: true})) {
+          const file = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            await normalizeEnglishPages(file);
+          } else if (entry.isFile() && entry.name.endsWith('.html')) {
+            let html = await readFile(file, 'utf8');
+            html = html.replace(/(<html\b[^>]*\blang=["'])[^"']+(["'])/i, '$1en$2');
+            const authors = file.includes(path.sep + 'authors' + path.sep);
+            if (authors) {
+              html = html.replace(/<meta\b(?=[^>]*\bname=["']robots["'])[^>]*>/gi, '');
+              html = html.replace('</head>', '<meta name="robots" content="noindex, follow"/></head>');
+            }
+            await writeFile(file, html);
+          }
+        }
+      }
+      await normalizeEnglishPages(path.join(outDir, 'en', 'blog'));
     },
   };
 }
