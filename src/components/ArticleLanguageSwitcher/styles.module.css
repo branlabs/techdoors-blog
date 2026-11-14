@@ -1,0 +1,30 @@
+.switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  font: 600 0.74rem/1.7 var(--ifm-font-family-monospace);
+  white-space: nowrap;
+}
+.switcher a {
+  color: var(--td-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.switcher a:hover,
+.switcher a:focus-visible,
+.switcher a.active {
+  color: var(--td-ink);
+  border-bottom-color: currentColor;
+  text-decoration: none;
+}
+.separator {
+  color: var(--td-muted);
+  opacity: 0.7;
+}
+@media (max-width: 600px) {
+  .switcher {
+    font-size: 0.77rem;
+    gap: 10px;
+  }
+}

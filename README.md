@@ -30,7 +30,7 @@ npm run serve
 
 ## Viết bài và kiểm tra
 
-Bài viết nằm trong `blog/` dưới dạng Markdown hoặc MDX. Tiêu đề có thể bằng tiếng Việt, còn `slug` ưu tiên tiếng Anh để dùng chung khi có phiên bản song ngữ. Hiện website mới phát hành giao diện tiếng Việt; bản tiếng Anh sẽ được bổ sung khi nội dung sẵn sàng.
+Bài viết nằm trong `blog/` dưới dạng Markdown hoặc MDX. Tiêu đề có thể bằng tiếng Việt, còn `slug` ưu tiên tiếng Anh để dùng chung khi có phiên bản song ngữ. Giao diện chung hiện vẫn dùng tiếng Việt. Bài đầu tiên đã có bản English tại [The Invisible Computer](https://techdoors.io/en/blog/the-invisible-computer/), với nút chuyển VI / EN ngay trong bài. Chưa bật chuyển ngôn ngữ toàn website khi các trang khác chưa được viết bằng tiếng Anh.
 
 Dùng [mẫu bài viết](templates/blog-post.md) và khai báo tác giả, thẻ chủ đề trong `blog/authors.yml`, `blog/tags.yml`. Bài chưa sẵn sàng có thể dùng `draft: true`; bài chỉ muốn giữ đường dẫn trực tiếp có thể dùng `unlisted: true`.
 
