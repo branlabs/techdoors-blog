@@ -82,6 +82,7 @@ const config: Config = {
         id: 'english',
         path: 'blog-en',
         routeBasePath: 'en/blog',
+        archiveBasePath: null,
         blogTitle: 'Articles',
         blogDescription: 'TechDoors stories about Linux, virtual machines, and infrastructure.',
         blogSidebarCount: 0,
