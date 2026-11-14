@@ -74,12 +74,39 @@ const config: Config = {
         },
       } satisfies Partial<BlogOptions>,
     ],
+    // Article-only English publishing. Keep the main site in Vietnamese until
+    // Brandon has written translations for its general pages.
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'english',
+        path: 'blog-en',
+        routeBasePath: 'en/blog',
+        archiveBasePath: null,
+        blogTitle: 'Articles',
+        blogDescription: 'TechDoors stories about Linux, virtual machines, and infrastructure.',
+        blogSidebarCount: 0,
+        postsPerPage: 6,
+        showReadingTime: true,
+        onInlineTags: 'throw',
+        onInlineAuthors: 'throw',
+        onUntruncatedBlogPosts: 'throw',
+        feedOptions: {
+          type: ['rss', 'atom'],
+          title: 'TechDoors — Technical Notes',
+          description: 'English articles about infrastructure and the systems behind the screen.',
+          language: 'en-US',
+          copyright: `© ${new Date().getFullYear()} TechDoors`,
+        },
+      } satisfies Partial<BlogOptions>,
+    ],
     '@docusaurus/plugin-content-pages',
     [
       '@docusaurus/plugin-sitemap',
-      {changefreq: 'weekly', priority: 0.5, ignorePatterns: ['/search/**']},
+      {changefreq: 'weekly', priority: 0.5, ignorePatterns: ['/search/**', '/en/blog/authors/**']},
     ],
     './plugins/content.ts',
+    './plugins/articleSeo.ts',
   ],
   themes: [
     ['@docusaurus/theme-classic', {customCss: './src/css/custom.css'}],

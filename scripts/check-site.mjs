@@ -43,7 +43,8 @@ for (const [file, $] of parsed) {
       .join('/')
       .replace(/index\.html$/, '');
   const pageUrl = new URL(route, origin);
-  assert.match($('html').attr('lang') ?? '', /^vi/);
+  const english = route.startsWith('/en/blog/');
+  assert.match($('html').attr('lang') ?? '', english ? /^en/ : /^vi/, `${route}: html lang`);
   assert.equal($('h1').length, 1, `${route}: exactly one h1`);
   assert($('title').text().includes('TechDoors'), `${route}: branded title`);
   // Do not advertise the website repository; unrelated GitHub references in
@@ -66,6 +67,24 @@ for (const [file, $] of parsed) {
   assert($('meta[name="description"]').attr('content'), `${route}: description`);
   const expectedCanonical = route === '/blog/chiec-may-tinh-vo-hinh/' ? 'https://techdoors.io/blog/the-invisible-computer/' : pageUrl.href;
   assert.equal($('link[rel="canonical"]').attr('href'), expectedCanonical, `${route}: canonical`);
+  if (route === '/blog/the-invisible-computer/' || route === '/en/blog/the-invisible-computer/') {
+    const alternates = {
+      'vi-VN': origin + '/blog/the-invisible-computer/',
+      'en-US': origin + '/en/blog/the-invisible-computer/',
+      'x-default': origin + '/blog/the-invisible-computer/',
+    };
+    for (const [lang, href] of Object.entries(alternates)) {
+      assert.equal(
+        $('link[rel="alternate"]').filter((_, element) => $(element).attr('hreflang') === lang).attr('href'),
+        href,
+        `${route}: missing ${lang} alternate`,
+      );
+    }
+    assert.equal($('nav[aria-label="Article language"], nav[aria-label="Ngôn ngữ bài viết"]').length, 1, `${route}: missing language selector`);
+  }
+  if (english) {
+    assert.equal($('meta[property="og:locale"]').attr('content'), 'en_US', `${route}: English Open Graph locale`);
+  }
   assert.equal(
     $('meta[property="og:image"]').attr('content'),
     `${origin}/img/og-default.png`,
@@ -89,13 +108,15 @@ for (const [file, $] of parsed) {
     links++;
   }
 }
-for (const [file, element] of [
-  ['blog/rss.xml', 'item'],
-  ['blog/atom.xml', 'entry'],
+for (const [file, element, title] of [
+  ['blog/rss.xml', 'item', 'Chiếc máy tính vô hình'],
+  ['blog/atom.xml', 'entry', 'Chiếc máy tính vô hình'],
+  ['en/blog/rss.xml', 'item', 'The Invisible Computer'],
+  ['en/blog/atom.xml', 'entry', 'The Invisible Computer'],
 ]) {
   const xml = load(await readFile(path.join(root, file), 'utf8'), {xmlMode: true});
   assert(xml(element).length >= 1, `${file}: published post`);
-  assert(xml('title').text().includes('Chiếc máy tính vô hình'), `${file}: published article`);
+  assert(xml('title').text().includes(title), `${file}: published article`);
   assert(!xml('title').text().includes('Chào mừng đến với TechDoors'), `${file}: unlisted welcome`);
   assert(!xml('title').text().includes('CloudPlay:'), `${file}: unlisted CloudPlay`);
   assert(
@@ -107,7 +128,7 @@ const sitemap = load(await readFile(path.join(root, 'sitemap.xml'), 'utf8'), {xm
 const locations = sitemap('loc')
   .toArray()
   .map((element) => sitemap(element).text());
-for (const route of ['/', '/about/', '/projects/', '/blog/', '/blog/the-invisible-computer/'])
+for (const route of ['/', '/about/', '/projects/', '/blog/', '/blog/the-invisible-computer/', '/en/blog/', '/en/blog/the-invisible-computer/'])
   assert(locations.includes(origin + route), `Sitemap missing ${route}`);
 assert(
   !locations.some((url) => /404|\/search\//.test(url)),
@@ -128,6 +149,21 @@ assert(legacy, 'Legacy redirect must be parsed');
 assert.equal(legacy('link[rel="canonical"]').attr('href'), origin + '/blog/the-invisible-computer/');
 assert.equal(legacy('meta[name="robots"]').attr('content'), 'noindex, follow');
 assert.match(legacy('meta[http-equiv="refresh"]').attr('content') ?? '', /url=\/blog\/the-invisible-computer\//);
+
+const englishPage = await targetFor(new URL(origin + '/en/blog/the-invisible-computer/'));
+assert(englishPage && parsed.has(englishPage), 'English translation must be generated');
+const englishArticle = parsed.get(englishPage);
+assert.equal(englishArticle('h1').first().text(), 'The Invisible Computer');
+assert(!englishArticle('body').text().includes('QEMY'), 'Uncorrected translation typo found');
+
+assert(
+  !locations.some((location) => location.includes('/en/blog/authors/')),
+  'English author index should remain unlisted from sitemap until translated',
+);
+for (const [file, $] of parsed) {
+  if (!file.includes(path.join('en', 'blog', 'authors'))) continue;
+  assert.match($('meta[name="robots"]').attr('content') ?? '', /noindex/, 'English author pages must not be indexed');
+}
 
 for (const location of locations) {
   const url = new URL(location);

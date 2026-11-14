@@ -19,7 +19,15 @@ export default function PostCard({
   headingLevel?: 2 | 3;
 }): ReactNode {
   const Heading = headingLevel === 2 ? 'h2' : 'h3';
-  const date = dateFormat.format(new Date(post.date)).replaceAll('/', '.');
+  const english = post.title === 'The Invisible Computer';
+  const date = english
+    ? new Intl.DateTimeFormat('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'Asia/Ho_Chi_Minh',
+      }).format(new Date(post.date))
+    : dateFormat.format(new Date(post.date)).replaceAll('/', '.');
   // A series label belongs beside the date; topic tags stay in the article.
   const series = post.tags.find(({label}) => label === 'Under the Hood');
   return (
@@ -34,7 +42,9 @@ export default function PostCard({
           )}
           <time dateTime={post.date}>{date}</time>
           <span aria-hidden="true">·</span>
-          <span>{Math.max(1, Math.ceil(post.readingTime ?? 1))} phút đọc</span>
+          <span>
+            {Math.max(1, Math.ceil(post.readingTime ?? 1))} {english ? 'min read' : 'phút đọc'}
+          </span>
         </div>
         <Heading>
           <Link to={post.permalink}>

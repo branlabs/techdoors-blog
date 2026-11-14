@@ -1,5 +1,7 @@
 import type {ReactNode} from 'react';
 import Layout from '@theme/Layout';
+import Head from '@docusaurus/Head';
+import {useLocation} from '@docusaurus/router';
 import Link from '@docusaurus/Link';
 import {usePluginData} from '@docusaurus/useGlobalData';
 import BlogListPaginator from '@theme/BlogListPaginator';
@@ -22,18 +24,29 @@ function usefulTopics(posts: PostSummary[]) {
 
 export default function BlogListPage(props: Props): ReactNode {
   const {items, metadata} = props;
+  const english = useLocation().pathname.startsWith('/en/blog/');
   const {posts} = usePluginData('techdoors-content') as {posts: PostSummary[]};
   const filterTopics = usefulTopics(posts);
-  const showFilters = filterTopics.length >= 2;
+  const showFilters = !english && filterTopics.length >= 2;
   return (
     <Layout title={metadata.blogTitle} description={metadata.blogDescription}>
+      {english && (
+        <Head>
+          <html lang="en" />
+          <meta property="og:locale" content="en_US" />
+        </Head>
+      )}
       <SearchMetadata tag="blog_posts_list" />
       <BlogListPageStructuredData {...props} />
       <main className={styles.page}>
         <header className={`${styles.header} ${styles.indexHeader}`}>
-          <p className="eyebrow">TECHDOORS / BÀI VIẾT</p>
-          <h1>Những điều được ghi lại.</h1>
-          <p>Ghi chép về hạ tầng, thử nghiệm và những điều mình muốn hiểu rõ hơn.</p>
+          <p className="eyebrow">{english ? 'TECHDOORS / ARTICLES' : 'TECHDOORS / BÀI VIẾT'}</p>
+          <h1>{english ? 'Notes from the inside.' : 'Những điều được ghi lại.'}</h1>
+          <p>
+            {english
+              ? 'Stories about infrastructure, experiments, and the questions that keep me curious.'
+              : 'Ghi chép về hạ tầng, thử nghiệm và những điều mình muốn hiểu rõ hơn.'}
+          </p>
         </header>
         {showFilters && (
           <nav className={styles.topics} aria-label="Lọc bài viết theo chủ đề">
@@ -47,7 +60,7 @@ export default function BlogListPage(props: Props): ReactNode {
             ))}
           </nav>
         )}
-        <section aria-label="Danh sách bài viết" className={styles.list}>
+        <section aria-label={english ? 'Articles' : 'Danh sách bài viết'} className={styles.list}>
           {items.map(({content}) => (
             <PostCard key={content.metadata.permalink} post={content.metadata} headingLevel={2} />
           ))}

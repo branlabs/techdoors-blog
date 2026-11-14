@@ -1,0 +1,16 @@
+under-the-hood:
+  label: Under the Hood
+  permalink: /under-the-hood
+  description: Stories that explain the ideas behind everyday infrastructure.
+virtualization:
+  label: Virtualization
+  permalink: /virtualization
+  description: Virtual machines, hypervisors, and virtualized hardware.
+linux:
+  label: Linux
+  permalink: /linux
+  description: Linux and the systems that run on it.
+infrastructure:
+  label: Infrastructure
+  permalink: /infrastructure
+  description: Infrastructure and how it works.
