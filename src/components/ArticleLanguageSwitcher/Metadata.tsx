@@ -12,9 +12,9 @@ export default function ArticleLanguageMetadata({
   // correct article alternates from articleSeo.ts; keep those, and remove
   // only Helmet's duplicate (and wrong on /en/) language links.
   useEffect(() => {
-    for (const link of document.head.querySelectorAll<HTMLLinkElement>(
+    for (const link of Array.from(document.head.querySelectorAll<HTMLLinkElement>(
       'link[data-rh="true"][rel="alternate"][hreflang]',
-    )) {
+    ))) {
       if (['vi-VN', 'en-US', 'x-default'].includes(link.hreflang)) {
         link.remove();
       }
