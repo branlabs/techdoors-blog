@@ -44,6 +44,9 @@ export default function articleSeoPlugin(): Plugin {
           } else if (entry.isFile() && entry.name.endsWith('.html')) {
             let html = await readFile(file, 'utf8');
             html = html.replace(/(<html\b[^>]*\blang=["'])[^"']+(["'])/i, '$1en$2');
+            html = html.replace(/<meta\b(?=[^>]*\bproperty=["']og:locale["'])[^>]*>/gi, (tag) =>
+              tag.replace(/\bcontent=["'][^"']*["']/i, 'content="en_US"'),
+            );
             const authors = file.includes(path.sep + 'authors' + path.sep);
             if (authors) {
               html = html.replace(/<meta\b(?=[^>]*\bname=["']robots["'])[^>]*>/gi, '');
