@@ -68,8 +68,6 @@ for (const [file, $] of parsed) {
   const expectedCanonical = route === '/blog/chiec-may-tinh-vo-hinh/' ? 'https://techdoors.io/blog/the-invisible-computer/' : pageUrl.href;
   assert.equal($('link[rel="canonical"]').attr('href'), expectedCanonical, `${route}: canonical`);
   if (route === '/blog/the-invisible-computer/' || route === '/en/blog/the-invisible-computer/') {
-    const linkTags = $('head link[rel="alternate"]').toArray().map((element) => $(element).attr());
-    console.log('SEO alternate diagnostic', route, JSON.stringify(linkTags));
     const alternates = {
       'vi-VN': origin + '/blog/the-invisible-computer/',
       'en-US': origin + '/en/blog/the-invisible-computer/',
