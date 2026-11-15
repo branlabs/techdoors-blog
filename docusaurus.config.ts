@@ -34,10 +34,31 @@ const darkCode: PrismTheme = {
   ],
 };
 
+// The tracking ID is a public website identifier, not an API secret.
+// It is supplied at deploy time; without it, builds contain no analytics tracker.
+const umamiWebsiteId = process.env.UMAMI_WEBSITE_ID?.trim();
+if (umamiWebsiteId && !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(umamiWebsiteId)) {
+  throw new Error('UMAMI_WEBSITE_ID must be the UUID from Umami Cloud tracking code');
+}
+
+const umamiScripts: Config['scripts'] = umamiWebsiteId
+  ? [
+      {
+        src: 'https://cloud.umami.is/script.js',
+        defer: true,
+        'data-website-id': umamiWebsiteId,
+        'data-domains': 'techdoors.io,www.techdoors.io',
+        'data-exclude-hash': 'true',
+        'data-do-not-track': 'true',
+      },
+    ]
+  : [];
+
 const config: Config = {
   title: 'TechDoors',
   tagline: 'Ghi chép về hạ tầng. Mở thêm một cánh cửa.',
   favicon: 'img/favicon-door.svg',
+  scripts: umamiScripts,
   url: 'https://techdoors.io',
   baseUrl: '/',
   trailingSlash: true,
