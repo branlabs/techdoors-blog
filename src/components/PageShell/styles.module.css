@@ -1,0 +1,72 @@
+/* One editorial frame; each page controls only the width of its content. */
+.page {
+  width: 100%;
+  max-width: 1120px;
+  padding: 65px 40px 75px;
+  margin: 0 auto;
+}
+
+.header {
+  max-width: 760px;
+  margin-bottom: 46px;
+}
+
+.header h1 {
+  font-size: clamp(2.35rem, 4.4vw, 3.25rem);
+  line-height: 1.3;
+  letter-spacing: -0.066em;
+  margin: 20px 0 14px;
+}
+
+.description {
+  color: var(--td-muted);
+  font-size: 0.94rem;
+  line-height: 1.75;
+  max-width: 700px;
+  margin: 0;
+}
+
+.headerCompact {
+  margin-bottom: 26px;
+}
+
+.headerCompact h1 {
+  margin-bottom: 0;
+}
+
+@media (max-width: 996px) {
+  .page {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding: 42px 24px 56px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .headerCompact {
+    margin-bottom: 24px;
+  }
+
+  .header h1 {
+    font-size: clamp(2.1rem, 7.3vw, 2.8rem);
+    line-height: 1.34;
+    margin-top: 16px;
+    margin-bottom: 12px;
+  }
+
+  .headerCompact h1 {
+    margin-bottom: 0;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+}
