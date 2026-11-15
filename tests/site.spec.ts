@@ -39,30 +39,23 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
   });
 }
 
-test('projects page introduces the real CloudPlay homelab card without placeholders', async ({
-  page,
-}) => {
+test('projects page shows a compact, non-clickable CloudPlay preview', async ({page}) => {
   await page.goto('/projects/');
   await settle(page);
   const projects = page.getByRole('region', {name: 'Các dự án'});
   const card = projects.getByRole('article');
   await expect(card).toHaveCount(1);
-  await expect(
-    card.getByRole('heading', {
-      name: 'CloudPlay - OpenStack GPU Gaming Lab',
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(card).toContainText(
-    'Xây dựng hệ thống Cloud Gaming trên OpenStack, sử dụng PCI GPU Passthrough',
-  );
-  await expect(card).toContainText('Windows VM, Sunshine và Moonlight');
-  await expect(card).toContainText('1080p60');
-  await expect(card).toContainText('OpenStack / KVM / GPU Passthrough / Cloud Gaming');
+  await expect(card.getByRole('heading', {name: 'CloudPlay', exact: true})).toBeVisible();
+  await expect(card).toContainText('OpenStack GPU Gaming Lab');
+  await expect(card).toContainText('Thử nghiệm truyền hình ảnh từ máy ảo Windows');
+  await expect(card).toContainText('Sunshine và Moonlight');
+  await expect(card).toContainText('Đang hoàn thiện nội dung');
+  await expect(card.getByRole('link')).toHaveCount(0);
+  await expect(card.locator('dl')).toHaveCount(0);
+  await expect(card).not.toContainText(/CHỦ ĐỀ|HIỆN TRẠNG|CẬP NHẬT NỘI DUNG/);
+  const dimensions = await card.boundingBox();
+  expect(dimensions?.height).toBeLessThan(450);
   await expect(projects).not.toContainText(/placeholder|chưa triển khai|khung nội dung mẫu|BranLabs/i);
-  await expect(card.getByRole('link', {name: 'Xem chi tiết dự án'})).toHaveAttribute(
-    'href', '/projects/cloudplay/',
-  );
 });
 
 test('homepage links to the focused blog index and topic pages remain reachable', async ({
