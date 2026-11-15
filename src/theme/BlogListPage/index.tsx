@@ -8,6 +8,7 @@ import BlogListPaginator from '@theme/BlogListPaginator';
 import BlogListPageStructuredData from '@theme/BlogListPage/StructuredData';
 import SearchMetadata from '@theme/SearchMetadata';
 import type {Props} from '@theme/BlogListPage';
+import {PageHeader, PageShell} from '../../components/PageShell';
 import PostCard from '../../components/PostCard';
 import {topics, type PostSummary} from '../../types/content';
 import styles from './styles.module.css';
@@ -38,16 +39,16 @@ export default function BlogListPage(props: Props): ReactNode {
       )}
       <SearchMetadata tag="blog_posts_list" />
       <BlogListPageStructuredData {...props} />
-      <main className={styles.page}>
-        <header className={`${styles.header} ${styles.indexHeader}`}>
-          <p className="eyebrow">{english ? 'TECHDOORS / ARTICLES' : 'TECHDOORS / BÀI VIẾT'}</p>
-          <h1>{english ? 'Notes from the inside.' : 'Những điều được ghi lại.'}</h1>
-          <p>
-            {english
+      <PageShell>
+        <PageHeader
+          eyebrow={english ? 'TECHDOORS / ARTICLES' : 'TECHDOORS / BÀI VIẾT'}
+          title={english ? 'Notes from the inside.' : 'Những điều được ghi lại.'}
+          description={
+            english
               ? 'Stories about infrastructure, experiments, and the questions that keep me curious.'
-              : 'Ghi chép về hạ tầng, thử nghiệm và những điều mình muốn hiểu rõ hơn.'}
-          </p>
-        </header>
+              : 'Ghi chép về hạ tầng, thử nghiệm và những điều mình muốn hiểu rõ hơn.'
+          }
+        />
         {showFilters && (
           <nav className={styles.topics} aria-label="Lọc bài viết theo chủ đề">
             <Link to="/blog" className={styles.active} aria-current="page">
@@ -60,13 +61,13 @@ export default function BlogListPage(props: Props): ReactNode {
             ))}
           </nav>
         )}
-        <section aria-label={english ? 'Articles' : 'Danh sách bài viết'} className={styles.list}>
+        <section aria-label={english ? 'Articles' : 'Danh sách bài viết'} className={styles.list} data-editorial-content>
           {items.map(({content}) => (
             <PostCard key={content.metadata.permalink} post={content.metadata} headingLevel={2} />
           ))}
         </section>
         <BlogListPaginator metadata={metadata} />
-      </main>
+      </PageShell>
     </Layout>
   );
 }
