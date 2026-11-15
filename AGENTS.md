@@ -7,5 +7,5 @@
 - Home/recommendations derive from the blog plugin through `plugins/content.ts`; never duplicate post data. Avoid hand-editing generated files.
 - Preserve semantic HTML, keyboard navigation, visible focus, reduced motion, readable contrast and mobile layouts. Keep assets/fonts local.
 - Use Node 24 and `npm ci`. Before a PR run `npm run typecheck`, `npm run build`, `npm run check:site`, and `npm run test:e2e` (install Chromium once).
-- No backend, database, paid integrations, analytics, secrets, or fabricated claims. Keep `package-lock.json` committed and review security overrides when upgrading.
+- No backend, database, paid integrations, secrets, or fabricated claims. Privacy-focused aggregate analytics requires the owner's explicit authorization; document collection and avoid user-identifying tracking. Keep `package-lock.json` committed and review security overrides when upgrading.
 - Work on feature branches and open a PR to `main`. Do not merge, change DNS, enable Pages, or deploy production without owner approval. Preserve the opt-in deployment gate and environment review described in `docs/deployment.md`.

@@ -65,6 +65,18 @@ curl.exe -I http://techdoors.io/
 
 Kỳ vọng HTTPS apex trả `200`, `www` trả redirect về `https://techdoors.io/`, HTTP chuyển sang HTTPS. Kiểm tra thêm một URL bài viết và một URL không tồn tại: bài viết trả `200`, URL sai hiển thị 404 tiếng Việt và server trả `404`. Canonical, sitemap và feeds luôn dùng apex HTTPS.
 
+## Analytics Umami (cấu hình tùy chọn)
+
+Umami Cloud cấp Website ID công khai `a4d415be-3f00-4e3c-95b9-18ab651767ae`
+cho TechDoors. Job production build trong `.github/workflows/deploy.yml` đặt sẵn
+`UMAMI_WEBSITE_ID` với giá trị này để Docusaurus nhúng
+`https://cloud.umami.is/script.js`. Không cần tạo thêm repository variable.
+CI/localhost không có biến này nên không nhúng tracker và không làm nhiễu báo cáo.
+
+Để kích hoạt, PR tích hợp Umami phải được merge sau khi CI xanh và duyệt
+environment `github-pages` như quy trình ở trên.
+Hướng dẫn thiết lập/đọc báo cáo tại [analytics.md](analytics.md).
+
 ## 5. Rollback và xử lý lỗi
 
 - Muốn rollback nội dung: revert thay đổi bằng PR, chạy CI, review và merge; duyệt environment để phát hành bản đã revert. Không force-push `main`.
