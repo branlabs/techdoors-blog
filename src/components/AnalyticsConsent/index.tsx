@@ -130,7 +130,9 @@ export default function AnalyticsConsent(): ReactNode {
     }
   }
 
-  if (consent === null || (consent !== 'undecided' && !showSettings)) return null;
+  // A consent prompt must never cover article content on initial page load.
+  // Readers can opt in or change their choice from the footer at any time.
+  if (consent === null || !showSettings) return null;
 
   return (
     <aside className={styles.notice} aria-label="Lựa chọn thống kê truy cập">
