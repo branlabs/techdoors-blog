@@ -154,6 +154,19 @@ for (const hidden of ['/blog/chao-mung-den-voi-techdoors/', '/blog/cloudplay-tu-
   assert(hiddenPage, `${hidden}: direct URL should still exist`);
   assert.match(parsed.get(hiddenPage)('meta[name="robots"]').attr('content') ?? '', /noindex/, `${hidden}: not blocked from indexing`);
 }
+// Unfinished CloudPlay details must stay accessible to the author by direct URL,
+// but they should not be indexed or advertised as published project pages.
+for (const route of ['/projects/cloudplay/', '/projects/cloudplay/updates/']) {
+  assert(!locations.includes(origin + route), `${route}: unpublished detail in sitemap`);
+  const destination = await targetFor(new URL(origin + route));
+  assert(destination && parsed.has(destination), `${route}: direct URL must remain available`);
+  assert.match(
+    parsed.get(destination)('meta[name="robots"]').attr('content') ?? '',
+    /noindex/,
+    `${route}: unpublished detail must be noindex`,
+  );
+}
+
 const legacyRoute = '/blog/chiec-may-tinh-vo-hinh/';
 assert(!locations.includes(origin + legacyRoute), 'Legacy permalink must not appear in sitemap');
 const legacyPage = await targetFor(new URL(origin + legacyRoute));
