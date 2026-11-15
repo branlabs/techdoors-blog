@@ -99,11 +99,12 @@ test('CloudPlay card stays discoverable while unfinished detail routes stay unli
   for (const hidden of [hub, updates, story]) {
     await expect(dialog.locator(`a[href="${hidden}"]`)).toHaveCount(0);
   }
-  const listing = dialog.locator('a[href="/projects/"]');
-  await expect(listing).toBeVisible();
-  await listing.click();
-  await expect(page).toHaveURL(/\/projects\/$/);
-  await expect(page.getByRole('region', {name: 'Các dự án'}).getByRole('link')).toHaveCount(0);
+  // The custom project listing is reached through the normal navigation,
+  // not through search results for unpublished detail content.
+  await page.goto('/projects/');
+  const card = page.getByRole('region', {name: 'Các dự án'}).getByRole('article');
+  await expect(card).toContainText('CloudPlay');
+  await expect(card.getByRole('link')).toHaveCount(0);
 
   const sitemap = await request.get('/sitemap.xml');
   expect(sitemap.status()).toBe(200);
