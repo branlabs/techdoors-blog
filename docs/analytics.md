@@ -1,53 +1,96 @@
-# Thống kê độc giả TechDoors bằng Google Analytics 4
+# Thống kê độc giả TechDoors bằng Umami Cloud
 
-- Website: https://techdoors.io/
-- Measurement ID: `G-THZSCXZY06` (public, không phải API secret)
-- Nền tảng: Docusaurus 3 / GitHub Pages
-- DNS: giữ nguyên iNET, không cần Google Tag Manager
-- Múi giờ báo cáo: đặt `Asia/Ho_Chi_Minh` trong GA4 property
+TechDoors sử dụng Umami Cloud thay cho Google Analytics 4. Không còn Google Tag,
+Google Tag Manager, popup đồng ý hoặc cookie analytics của GA4.
 
-## Cách hoạt động
+## Thiết lập Umami Cloud
 
-Không hiện popup thống kê khi người đọc mở TechDoors.
-Mặc định không tải Google Analytics và không ghi nhận lượt truy cập của khách chưa chọn.
-Chỉ khi người đọc chủ động mở **Tùy chọn thống kê** ở footer và chọn
-**Cho phép thống kê**, trang mới chèn `gtag.js` và gửi page views.
-Lựa chọn được lưu trong localStorage dưới khóa `techdoors.ga4-consent.v1`.
-Người đọc có thể đổi lựa chọn bất cứ lúc nào ở footer.
-Từ chối sau khi đã chấp thuận sẽ cập nhật consent, xóa các cookie GA có thể truy cập
-và tải lại trang để gỡ script khỏi phiên làm việc hiện tại.
+1. Tạo tài khoản Hobby miễn phí tại https://cloud.umami.is/signup và xác minh email.
+2. Chọn vùng lưu trữ dữ liệu US hoặc EU trong bước thiết lập tài khoản.
+3. Vào **Websites → Add website**:
+   - Name: `TechDoors`
+   - Domain: `techdoors.io` (không có `https://`).
+4. Mở cài đặt website vừa tạo, trong mục **Tracking code** sao chép duy nhất
+   `data-website-id` (UUID). Không dùng API key, account token hay mật khẩu.
+5. Trong repository `branlabs/techdoors-blog`, vào
+   **Settings → Secrets and variables → Actions → Variables → New repository variable**.
+   - Name: `UMAMI_WEBSITE_ID`
+   - Value: UUID từ `data-website-id`.
+6. Sau khi đã đặt biến, cần build/deploy lại bằng quy trình PR của TechDoors và duyệt
+   môi trường `github-pages`. Thay đổi repository variable **không cập nhật website đang chạy**
+   nếu không có lần build mới.
 
-Để tránh lượt kiểm tra/test làm sai lệch báo cáo, analytics chỉ hoạt động trên
-`techdoors.io` và `www.techdoors.io`, không hoạt động trên localhost hay preview.
-Vì Docusaurus điều hướng theo SPA, mỗi lần đổi đường dẫn ghi nhận một `page_view`,
-và tắt automatic page view để tránh đếm đôi.
+## Cấu hình được tạo trong site
+
+Docusaurus đọc `UMAMI_WEBSITE_ID` tại thời điểm build, sau đó sinh script:
+
+```html
+<script
+  defer
+  src="https://cloud.umami.is/script.js"
+  data-website-id="<UUID từ Umami Cloud>"
+  data-domains="techdoors.io,www.techdoors.io"
+  data-exclude-hash="true"
+  data-do-not-track="true"
+></script>
+```
+
+- Khi biến `UMAMI_WEBSITE_ID` chưa có, build **không nhúng bất kỳ tracker nào**.
+- Khi biến không đúng định dạng UUID, build lỗi để tránh phát hành cấu hình sai.
+- Script mặc định tự đo pageview và chuyển trang SPA của Docusaurus.
+  Không cần tự gọi `umami.track()` khi đổi route; làm vậy có thể đếm đôi.
+- Giới hạn domain giúp môi trường localhost/staging không tạo event production.
+- Không tự bật các tính năng session replay, heatmap hay error tracking.
+- Browser có bật tín hiệu Do Not Track (nếu hỗ trợ) sẽ được tôn trọng.
 
 ## Đọc báo cáo
 
-- **Realtime**: xem hoạt động trong vòng 30 phút gần nhất sau khi bật tag và đồng ý.
-- **Reports → User attributes → Demographic details**: chọn Country, Region, City hoặc Continent để so sánh địa lý.
-- **Reports → Engagement → Pages and screens**: xem bài viết nào được đọc.
-- **Reports → Acquisition → Traffic acquisition**: chọn Session source / medium để phân biệt LinkedIn, Medium, Google.
-- Dùng date range để so sánh hôm nay với hôm qua, hoặc 7/30 ngày; các báo cáo chi tiết có độ trễ xử lý.
+Trong https://cloud.umami.is, chọn website **TechDoors** và khoảng thời gian Today,
+Yesterday, 7 days, 30 days hoặc ngày tùy chọn. Theo dõi:
 
-Không kỳ vọng dữ liệu của người không đồng ý hiển thị trong GA4.
-Địa điểm ước tính qua mạng và IP nên có thể sai khi dùng VPN, mạng di động hoặc CGNAT.
-Measurement ID có thể công khai trong mã trang; **không** đưa credentials, API key có quyền quản trị
-hay service account vào repository.
+- **Visitors / Visits / Views**: khách truy cập ước tính, phiên và lượt xem trang.
+- **Countries / Regions / Cities**: quốc gia, vùng/tỉnh và thành phố *ước tính*.
+- **Pages**: bài viết/trang nào được xem nhiều.
+- **Referrers / UTM**: nguồn như LinkedIn, Medium, Google hoặc trực tiếp.
+- Các báo cáo theo khoảng thời gian cho phép so sánh traffic mỗi ngày.
 
-## Kiểm chứng sau deploy
+Một IP có thể đại diện nhiều người (NAT, CGNAT), hoặc một người có nhiều IP.
+Dữ liệu location không chính xác đến địa chỉ hay tỉnh trong mọi trường hợp.
+Umami không dùng cookie web tracker, nhưng vẫn xử lý IP tạm thời; hạ tầng có thể ghi
+IP trong security/operational logs. Xem https://umami.is/privacy.
 
-1. Truy cập trang ở chế độ ẩn danh, mở DevTools → Network, lọc `googletagmanager` hoặc `google-analytics`.
-2. Khi vừa mở trang: không có popup, script hoặc request Google Analytics.
-3. Bấm **Tùy chọn thống kê** ở footer → **Cho phép thống kê** và kiểm tra script `gtag/js?id=G-THZSCXZY06` được tải.
-4. Trong GA4, xem Realtime hoặc dùng DebugView/Tag Assistant để xác nhận page_view.
-5. Chuyển từ /blog/ sang một bài viết: mỗi page view chỉ ghi một lần.
-6. Chọn **Tùy chọn thống kê** rồi **Không đồng ý**: tag ngừng tải ở lượt mở trang kế tiếp.
+## Kiểm tra sau deploy
 
-Cấu hình PR vẫn phải được review, merge và phê duyệt environment `github-pages` trước khi phát hành.
-Không cài thêm thủ công đoạn Google Tag hoặc GTM trong giao diện Analytics, tránh đo trùng.
+1. Kiểm tra nguồn trang trên `https://techdoors.io/` có đúng một script
+   `https://cloud.umami.is/script.js` với `data-website-id` phù hợp.
+2. Kiểm tra không còn `G-THZSCXZY06`, `gtag.js`, `googletagmanager.com` hoặc
+   nút `Tùy chọn thống kê`.
+3. Mở DevTools → Network, lọc `umami` và mở website ở trình duyệt cho phép tracking.
+4. Xem bảng điều khiển Umami theo thời gian thực; thử mở trang chủ rồi vào `/blog/`.
+   Kiểm tra một lượt xem cho mỗi lần điều hướng.
+5. Kiểm tra light/dark trên desktop/mobile, không có popup chắn nội dung.
+
+### Loại trừ lượt truy cập của chính mình
+
+Trong Console trên **techdoors.io**, chạy:
+
+```js
+localStorage.setItem('umami.disabled', 1);
+```
+
+Tải lại trang. Lựa chọn này chỉ áp dụng cho trình duyệt hiện tại.
+Để cho phép thống kê lại, dùng:
+
+```js
+localStorage.removeItem('umami.disabled');
+```
+
+Không có API secret trong source code. Website ID là mã công khai trong HTML,
+nên không sử dụng làm thông tin xác thực.
 
 Tham khảo:
-- https://developers.google.com/tag-platform/security/guides/consent?consentmode=basic
-- https://support.google.com/analytics/answer/14009635
-- https://support.google.com/analytics/answer/14218557
+- https://docs.umami.is/docs/cloud/sign-up
+- https://docs.umami.is/docs/add-a-website
+- https://docs.umami.is/docs/collect-data
+- https://docs.umami.is/docs/guides/track-single-page-apps
+- https://docs.umami.is/docs/exclude-my-own-visits
