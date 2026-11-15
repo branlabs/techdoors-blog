@@ -3,7 +3,9 @@ export interface ProjectSummary {
   number: string;
   name: string;
   title: string;
+  subtitle: string;
   category: string;
+  detailsReady: boolean;
   description: string;
   topics: readonly string[];
   status: string;
@@ -21,9 +23,11 @@ export const cloudplay: ProjectSummary = {
   number: '01',
   name: 'CloudPlay',
   title: 'CloudPlay - OpenStack GPU Gaming Lab',
+  subtitle: 'OpenStack GPU Gaming Lab',
   category: 'Dự án Homelab',
+  detailsReady: false,
   description:
-    'Xây dựng hệ thống Cloud Gaming trên OpenStack, sử dụng PCI GPU Passthrough, Windows VM, Sunshine và Moonlight. Đã thử streaming 1080p60 trong mạng nội bộ; chưa kiểm thử game thực tế.',
+    'Thử nghiệm truyền hình ảnh từ máy ảo Windows trên OpenStack, sử dụng GPU passthrough, Sunshine và Moonlight.',
   topics: ['OpenStack', 'KVM', 'GPU Passthrough', 'Cloud Gaming'],
   status: 'Bản thử nghiệm - chưa kiểm thử game',
   startedLabel: 'Đầu tháng 11/2026',
