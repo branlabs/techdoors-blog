@@ -21,7 +21,16 @@ export default function Footer(): ReactNode {
           </nav>
         </div>
         <div className={styles.bottom}>
-          <span>© {new Date().getFullYear()} TechDoors</span>
+          <span>
+            © {new Date().getFullYear()} TechDoors
+            <button
+              type="button"
+              className={styles.privacySettings}
+              onClick={() => window.dispatchEvent(new Event('techdoors:analytics-settings'))}
+            >
+              Tùy chọn thống kê
+            </button>
+          </span>
           <span lang="en">Keep opening doors.</span>
         </div>
       </div>
