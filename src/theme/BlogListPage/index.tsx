@@ -61,7 +61,7 @@ export default function BlogListPage(props: Props): ReactNode {
             ))}
           </nav>
         )}
-        <section aria-label={english ? 'Articles' : 'Danh sách bài viết'} className={styles.list}>
+        <section aria-label={english ? 'Articles' : 'Danh sách bài viết'} className={styles.list} data-editorial-content>
           {items.map(({content}) => (
             <PostCard key={content.metadata.permalink} post={content.metadata} headingLevel={2} />
           ))}
