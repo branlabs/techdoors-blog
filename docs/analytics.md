@@ -8,10 +8,12 @@
 
 ## Cách hoạt động
 
-TechDoors chỉ chèn `gtag.js` sau khi người đọc chọn **Cho phép thống kê**.
-Trước khi đồng ý, không có Google Analytics script hay Google Analytics request.
+Không hiện popup thống kê khi người đọc mở TechDoors.
+Mặc định không tải Google Analytics và không ghi nhận lượt truy cập của khách chưa chọn.
+Chỉ khi người đọc chủ động mở **Tùy chọn thống kê** ở footer và chọn
+**Cho phép thống kê**, trang mới chèn `gtag.js` và gửi page views.
 Lựa chọn được lưu trong localStorage dưới khóa `techdoors.ga4-consent.v1`.
-Người đọc có thể đổi lựa chọn qua **Tùy chọn thống kê** ở footer.
+Người đọc có thể đổi lựa chọn bất cứ lúc nào ở footer.
 Từ chối sau khi đã chấp thuận sẽ cập nhật consent, xóa các cookie GA có thể truy cập
 và tải lại trang để gỡ script khỏi phiên làm việc hiện tại.
 
@@ -36,8 +38,8 @@ hay service account vào repository.
 ## Kiểm chứng sau deploy
 
 1. Truy cập trang ở chế độ ẩn danh, mở DevTools → Network, lọc `googletagmanager` hoặc `google-analytics`.
-2. Trước khi đồng ý: không có script hoặc request Google Analytics.
-3. Bấm **Cho phép thống kê** và kiểm tra script `gtag/js?id=G-THZSCXZY06` được tải.
+2. Khi vừa mở trang: không có popup, script hoặc request Google Analytics.
+3. Bấm **Tùy chọn thống kê** ở footer → **Cho phép thống kê** và kiểm tra script `gtag/js?id=G-THZSCXZY06` được tải.
 4. Trong GA4, xem Realtime hoặc dùng DebugView/Tag Assistant để xác nhận page_view.
 5. Chuyển từ /blog/ sang một bài viết: mỗi page view chỉ ghi một lần.
 6. Chọn **Tùy chọn thống kê** rồi **Không đồng ý**: tag ngừng tải ở lượt mở trang kế tiếp.
