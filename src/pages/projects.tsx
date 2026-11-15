@@ -22,17 +22,14 @@ export default function Projects(): ReactNode {
               <span className={styles.badge}>
                 {project.number} / {project.category}
               </span>
-              <h2><Link to={project.href}>{project.title}</Link></h2>
-              <p>{project.description}</p>
-              <dl>
-                <dt>CHỦ ĐỀ</dt>
-                <dd>{project.topics.join(' / ')}</dd>
-                <dt>HIỆN TRẠNG</dt>
-                <dd>{project.status}</dd>
-                <dt>CẬP NHẬT NỘI DUNG</dt>
-                <dd><time dateTime={project.updatedOn}>{project.updatedLabel}</time></dd>
-              </dl>
-              <p><Link to={project.href}>Xem chi tiết dự án</Link></p>
+              <h2>
+                {project.detailsReady ? <Link to={project.href}>{project.name}</Link> : project.name}
+              </h2>
+              <p className={styles.projectSubtitle}>{project.subtitle}</p>
+              <p className={styles.projectDescription}>{project.description}</p>
+              {!project.detailsReady && (
+                <p className={styles.projectProgress}>Đang hoàn thiện nội dung</p>
+              )}
             </article>
           ))}
         </section>

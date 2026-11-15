@@ -45,6 +45,9 @@ for (const mode of ['light', 'dark'] as const) {
       await setTheme(page, mode);
       await expect(page.locator('h1')).toHaveCount(1);
       await expect(page.locator('h1')).toHaveText(title);
+      if (label !== 'story') {
+        await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
+      }
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://techdoors.io${route}`);
       await expect(page.locator('main')).not.toContainText('BranLabs CloudPlay');
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
@@ -60,11 +63,15 @@ for (const mode of ['light', 'dark'] as const) {
   }
 }
 
-test('CloudPlay card, hub and updates remain connected without a link to the unlisted story', async ({page}) => {
+test('CloudPlay preview has no links while direct lab notes remain accessible', async ({page}) => {
   await page.goto('/projects/');
   await settle(page);
-  await page.getByRole('link', {name: 'Xem chi tiết dự án', exact: true}).click();
-  await expect(page).toHaveURL(new RegExp(hub + '$'));
+  const card = page.getByRole('region', {name: 'Các dự án'}).getByRole('article');
+  await expect(card.getByRole('link')).toHaveCount(0);
+  await expect(card).toContainText('Đang hoàn thiện nội dung');
+
+  // Direct URLs are retained for editing; the public listing is not an entry point.
+  await page.goto(hub);
   await expect(page.locator('main')).toContainText('Chưa kiểm thử game thực tế');
   const navigation = page.getByRole('navigation', {name: 'Điều hướng dự án CloudPlay'});
   await expect(navigation.getByRole('link', {name: 'Tổng quan', exact: true})).toHaveAttribute('aria-current', 'page');
@@ -79,7 +86,7 @@ test('CloudPlay card, hub and updates remain connected without a link to the unl
   await expect(page.locator('main').locator(`a[href="${story}"]`)).toHaveCount(0);
 });
 
-test('CloudPlay project remains discoverable while its article is unlisted', async ({page, request}) => {
+test('CloudPlay card stays discoverable while unfinished detail routes stay unlisted', async ({page, request}) => {
   test.setTimeout(60000);
   await page.goto('/');
   await settle(page);
@@ -89,16 +96,22 @@ test('CloudPlay project remains discoverable while its article is unlisted', asy
   await page.getByRole('button', {name: 'Tìm kiếm trên TechDoors'}).click();
   const dialog = page.getByRole('dialog', {name: 'Tìm trong TechDoors'});
   await dialog.getByRole('searchbox', {name: 'Từ khóa'}).fill('CloudPlay');
-  await expect(dialog.locator(`a[href="${story}"]`)).toHaveCount(0);
-  const result = dialog.locator(`a[href="${hub}"]`);
-  await expect(result).toBeVisible();
-  await result.click();
-  await expect(page).toHaveURL(new RegExp(hub + '$'));
+  for (const hidden of [hub, updates, story]) {
+    await expect(dialog.locator(`a[href="${hidden}"]`)).toHaveCount(0);
+  }
+  // The custom project listing is reached through the normal navigation,
+  // not through search results for unpublished detail content.
+  await page.goto('/projects/');
+  const card = page.getByRole('region', {name: 'Các dự án'}).getByRole('article');
+  await expect(card).toContainText('CloudPlay');
+  await expect(card.getByRole('link')).toHaveCount(0);
+
   const sitemap = await request.get('/sitemap.xml');
   expect(sitemap.status()).toBe(200);
   const xml = await sitemap.text();
-  for (const route of [hub, updates]) expect(xml).toContain(`https://techdoors.io${route}`);
-  expect(xml).not.toContain(`https://techdoors.io${story}`);
+  for (const route of [hub, updates, story]) {
+    expect(xml).not.toContain(`https://techdoors.io${route}`);
+  }
   for (const format of ['rss', 'atom']) {
     const feed = await request.get(`/blog/${format}.xml`);
     expect(feed.status()).toBe(200);

@@ -16,11 +16,13 @@ type SearchData = {
 };
 let cachedIndex: Promise<SearchData> | undefined;
 
-// Docusaurus builds unlisted pages for direct links. The local-search plugin
-// still indexes them, so exclude these intentionally unlisted routes from results.
-const unlistedBlogRoutes = new Set([
+// Keep unfinished and unlisted content reachable by direct URL without
+// recommending it in search until it is ready to publish.
+const unlistedRoutes = new Set([
   '/blog/chao-mung-den-voi-techdoors/',
   '/blog/cloudplay-tu-card-trong-server-den-stream-60fps/',
+  '/projects/cloudplay/',
+  '/projects/cloudplay/updates/',
 ]);
 
 function readIndex(url: string): Promise<SearchData> {
@@ -102,7 +104,7 @@ export default function SearchBar(): ReactNode {
         const document = data.documents.get(result.ref);
         return document ? [document] : [];
       })
-      .filter((document) => !unlistedBlogRoutes.has(document.sectionRoute.split('#')[0] ?? ''))
+      .filter((document) => !unlistedRoutes.has(document.sectionRoute.split('#')[0] ?? ''))
       .slice(0, 8);
   }, [data, query]);
 

@@ -103,7 +103,7 @@ const config: Config = {
     '@docusaurus/plugin-content-pages',
     [
       '@docusaurus/plugin-sitemap',
-      {changefreq: 'weekly', priority: 0.5, ignorePatterns: ['/search/**', '/en/blog/authors/**']},
+      {changefreq: 'weekly', priority: 0.5, ignorePatterns: ['/search/**', '/en/blog/authors/**', '/projects/cloudplay/', '/projects/cloudplay/**']},
     ],
     './plugins/content.ts',
     './plugins/articleSeo.ts',
