@@ -67,15 +67,14 @@ Kỳ vọng HTTPS apex trả `200`, `www` trả redirect về `https://techdoors
 
 ## Analytics Umami (cấu hình tùy chọn)
 
-Mã Website ID của Umami Cloud là giá trị công khai, nhưng chỉ được thêm sau khi
-chủ website tạo website trên Umami. Thiết lập repository variable
-`UMAMI_WEBSITE_ID` trong **Settings → Secrets and variables → Actions → Variables**.
-Job build của `.github/workflows/deploy.yml` truyền biến này cho Docusaurus để nhúng
-`https://cloud.umami.is/script.js`. Khi biến chưa được cấu hình, site build
-vẫn thành công nhưng **không gửi thống kê**.
+Umami Cloud cấp Website ID công khai `a4d415be-3f00-4e3c-95b9-18ab651767ae`
+cho TechDoors. Job production build trong `.github/workflows/deploy.yml` đặt sẵn
+`UMAMI_WEBSITE_ID` với giá trị này để Docusaurus nhúng
+`https://cloud.umami.is/script.js`. Không cần tạo thêm repository variable.
+CI/localhost không có biến này nên không nhúng tracker và không làm nhiễu báo cáo.
 
-Thay đổi repository variable không tự deploy lại website. Cần một PR mới có thay đổi
-thực sự, CI xanh, merge và duyệt environment `github-pages` như quy trình ở trên.
+Để kích hoạt, PR tích hợp Umami phải được merge sau khi CI xanh và duyệt
+environment `github-pages` như quy trình ở trên.
 Hướng dẫn thiết lập/đọc báo cáo tại [analytics.md](analytics.md).
 
 ## 5. Rollback và xử lý lỗi
