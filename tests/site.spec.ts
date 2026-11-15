@@ -341,6 +341,11 @@ test('Markdown, syntax highlighting, code copy, TOC and related navigation', asy
   await expect(related.locator('a[href*="cloudplay-tu-card"]')).toHaveCount(0);
   await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant' }));
   await page.screenshot({path: testInfo.outputPath('article.png'), fullPage: true});
+  // The consent notice can cover the bottom edge on touch screens until the reader decides.
+  const consent = page.getByRole('complementary', {name: 'Lựa chọn thống kê truy cập'});
+  if (await consent.isVisible()) {
+    await consent.getByRole('button', {name: 'Không đồng ý'}).click();
+  }
   await page.locator('footer').getByRole('link', {name: 'Giới thiệu', exact: true}).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByRole('heading', {level: 1, name: 'Một chút về mình'})).toBeVisible();
