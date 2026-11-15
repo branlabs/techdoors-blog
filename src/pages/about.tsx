@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import {PageHeader, PageShell} from '../components/PageShell';
 import styles from './info.module.css';
 
 export default function About(): ReactNode {
@@ -9,12 +10,9 @@ export default function About(): ReactNode {
       title="Giới thiệu"
       description="Một chút về Brandon, người viết TechDoors: nơi ghi lại những điều đã học, đã thử và những câu hỏi kỹ thuật còn muốn tìm hiểu."
     >
-      <main className={styles.page}>
-        <header className={`${styles.header} ${styles.aboutHeader}`}>
-          <p className="eyebrow">TECHDOORS / ABOUT</p>
-          <h1>Một chút về mình</h1>
-        </header>
-        <div className={styles.aboutStory}>
+      <PageShell>
+        <PageHeader eyebrow="TECHDOORS / ABOUT" title="Một chút về mình" compact />
+        <div className={styles.aboutStory} data-editorial-content>
           <p>
             Mình là Brandon. Công việc của mình gắn với Linux, Kubernetes và những hệ thống vận hành
             phía sau các ứng dụng mà chúng ta sử dụng mỗi ngày.
@@ -40,7 +38,7 @@ export default function About(): ReactNode {
             tiên trong series <em>Under the Hood</em>.
           </p>
         </div>
-      </main>
+      </PageShell>
     </Layout>
   );
 }
