@@ -10,33 +10,33 @@ Google Tag Manager, popup đồng ý hoặc cookie analytics của GA4.
 3. Vào **Websites → Add website**:
    - Name: `TechDoors`
    - Domain: `techdoors.io` (không có `https://`).
-4. Mở cài đặt website vừa tạo, trong mục **Tracking code** sao chép duy nhất
-   `data-website-id` (UUID). Không dùng API key, account token hay mật khẩu.
-5. Trong repository `branlabs/techdoors-blog`, vào
-   **Settings → Secrets and variables → Actions → Variables → New repository variable**.
-   - Name: `UMAMI_WEBSITE_ID`
-   - Value: UUID từ `data-website-id`.
-6. Sau khi đã đặt biến, cần build/deploy lại bằng quy trình PR của TechDoors và duyệt
-   môi trường `github-pages`. Thay đổi repository variable **không cập nhật website đang chạy**
-   nếu không có lần build mới.
+4. Trong mục **Tracking code**, Website ID của TechDoors đã được xác nhận là
+   `a4d415be-3f00-4e3c-95b9-18ab651767ae`. Đây là mã công khai, không phải API key,
+   account token hay mật khẩu.
+5. Mã này đã được cấu hình trực tiếp vào job production build trong
+   `.github/workflows/deploy.yml`, không cần tạo repository variable thủ công.
+6. Sau khi PR được merge, duyệt môi trường `github-pages` để phát hành bản
+   chứa Umami tracker.
 
 ## Cấu hình được tạo trong site
 
-Docusaurus đọc `UMAMI_WEBSITE_ID` tại thời điểm build, sau đó sinh script:
+Docusaurus đọc `UMAMI_WEBSITE_ID` từ môi trường build. Job production
+đặt giá trị công khai đã xác nhận; CI/local không đặt biến để tránh gửi dữ liệu thử nghiệm.
+Bản production sinh script:
 
 ```html
 <script
   defer
   src="https://cloud.umami.is/script.js"
-  data-website-id="<UUID từ Umami Cloud>"
+  data-website-id="a4d415be-3f00-4e3c-95b9-18ab651767ae"
   data-domains="techdoors.io,www.techdoors.io"
   data-exclude-hash="true"
   data-do-not-track="true"
 ></script>
 ```
 
-- Khi biến `UMAMI_WEBSITE_ID` chưa có, build **không nhúng bất kỳ tracker nào**.
-- Khi biến không đúng định dạng UUID, build lỗi để tránh phát hành cấu hình sai.
+- Trong CI/local không có `UMAMI_WEBSITE_ID` nên build **không nhúng tracker**.
+- Khi giá trị `UMAMI_WEBSITE_ID` không đúng định dạng UUID, build lỗi để tránh phát hành cấu hình sai.
 - Script mặc định tự đo pageview và chuyển trang SPA của Docusaurus.
   Không cần tự gọi `umami.track()` khi đổi route; làm vậy có thể đếm đôi.
 - Giới hạn domain giúp môi trường localhost/staging không tạo event production.
