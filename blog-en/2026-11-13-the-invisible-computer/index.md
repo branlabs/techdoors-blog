@@ -5,6 +5,7 @@ date: 2026-11-13T13:00:00+07:00
 slug: the-invisible-computer
 authors: [techdoors]
 tags: [under-the-hood, virtualization, linux, infrastructure]
+image: /img/the-invisible-computer-og.jpg
 ---
 
 *Under the Hood #01 — QEMU, KVM, and the Magic Behind Virtual Machines.*
