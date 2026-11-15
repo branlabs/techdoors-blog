@@ -19,6 +19,9 @@ jobs:
     if: github.event.pull_request.merged == true && vars.PAGES_DEPLOY_APPROVED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      # Public Umami Website ID. No tracker is emitted if this variable is unset.
+      UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
