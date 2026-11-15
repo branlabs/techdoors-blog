@@ -55,7 +55,7 @@ function configureAnalytics(): void {
 function clearAnalyticsCookies(): void {
   const cookieNames = document.cookie
     .split(';')
-    .map((cookie) => cookie.split('=')[0].trim())
+    .map((cookie) => cookie.split('=')[0]?.trim() ?? '')
     .filter((name) => /^_ga(?:_|$)|^_gid$|^_gat(?:_|$)/.test(name));
   const domains = ['', window.location.hostname, '.techdoors.io'];
   for (const name of cookieNames) {
