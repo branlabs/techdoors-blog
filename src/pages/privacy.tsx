@@ -24,9 +24,10 @@ export default function Privacy(): ReactNode {
           </p>
           <h2>Bạn có quyền lựa chọn</h2>
           <p>
-            Google Analytics chỉ được tải sau khi bạn chọn “Cho phép thống kê”.
-            Nếu không đồng ý, website vẫn hoạt động bình thường. Bạn có thể đổi lựa chọn
-            bất cứ lúc nào bằng nút “Tùy chọn thống kê” ở cuối trang.
+            TechDoors không tự động bật Google Analytics và không hiện popup khi bạn truy cập.
+            Nếu muốn cho phép thống kê, bạn có thể chủ động mở “Tùy chọn thống kê” ở cuối trang
+            và chọn “Cho phép thống kê”. Bạn cũng có thể đổi hoặc rút lại lựa chọn tại đây.
+            Website vẫn hoạt động bình thường khi bạn không đồng ý.
           </p>
           <h2>Dữ liệu và giới hạn</h2>
           <p>

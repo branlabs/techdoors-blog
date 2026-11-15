@@ -4,14 +4,19 @@ import AxeBuilder from '@axe-core/playwright';
 test('analytics is opt-in, preference persists and can be changed', async ({page}) => {
   await page.goto('/');
   const banner = page.getByRole('complementary', {name: 'Lựa chọn thống kê truy cập'});
+  // New visitors see no overlay. Analytics remains disabled until an explicit choice.
+  await expect(banner).toHaveCount(0);
+  await expect(page.locator('script[src*="googletagmanager.com"]')).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem('techdoors.ga4-consent.v1'))).toBeNull();
+
+  await page.goto('/blog/');
+  await expect(banner).toHaveCount(0);
+  await page.getByRole('button', {name: 'Tùy chọn thống kê'}).click();
   await expect(banner).toBeVisible();
   await expect(banner.getByRole('link', {name: 'Tìm hiểu thêm'})).toHaveAttribute(
     'href',
     '/privacy/',
   );
-
-  // A public-domain-only tag is never injected during local/preview testing.
-  await expect(page.locator('script[src*="googletagmanager.com"]')).toHaveCount(0);
   await banner.getByRole('button', {name: 'Không đồng ý'}).click();
   await expect(banner).toHaveCount(0);
 
@@ -44,6 +49,8 @@ test('privacy page is readable and consent controls are accessible', async ({pag
   await expect(page.getByRole('heading', {name: 'Quyền riêng tư', level: 1})).toBeVisible();
   await expect(page.locator('main')).toContainText('Google Analytics 4');
   const banner = page.getByRole('complementary', {name: 'Lựa chọn thống kê truy cập'});
+  await expect(banner).toHaveCount(0);
+  await page.getByRole('button', {name: 'Tùy chọn thống kê'}).click();
   await expect(banner).toBeVisible();
   const {violations} = await new AxeBuilder({page})
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
