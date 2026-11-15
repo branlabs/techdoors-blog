@@ -48,6 +48,6 @@ test('build is wired to an Umami website ID and avoids duplicate SPA tracking', 
   expect(config).toContain("'data-do-not-track': 'true'");
   expect(config).not.toContain('googletagmanager.com');
   expect(config).not.toContain('G-THZSCXZY06');
-  expect(deploy).toContain('UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}');
+  expect(deploy).toContain("UMAMI_WEBSITE_ID: 'a4d415be-3f00-4e3c-95b9-18ab651767ae'");
   expect(doc).toContain('Umami Cloud');
 });
