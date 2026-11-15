@@ -85,9 +85,11 @@ for (const [file, $] of parsed) {
   if (english) {
     assert.equal($('meta[property="og:locale"]').attr('content'), 'en_US', `${route}: English Open Graph locale`);
   }
+  const articlePreview =
+    route === '/blog/the-invisible-computer/' || route === '/en/blog/the-invisible-computer/';
   assert.equal(
     $('meta[property="og:image"]').attr('content'),
-    `${origin}/img/og-default.png`,
+    `${origin}/img/${articlePreview ? 'the-invisible-computer-og.jpg' : 'og-default.png'}`,
     `${route}: Open Graph image`,
   );
   for (const node of $('a[href], img[src]').toArray()) {
