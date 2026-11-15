@@ -8,6 +8,8 @@ export interface ProjectSummary {
   detailsReady: boolean;
   description: string;
   topics: readonly string[];
+  previewTags?: readonly string[];
+  preview?: {src: string; alt: string};
   status: string;
   startedLabel: string;
   updatedOn: string;
@@ -27,8 +29,13 @@ export const cloudplay: ProjectSummary = {
   category: 'Dự án Homelab',
   detailsReady: false,
   description:
-    'Thử nghiệm truyền hình ảnh từ máy ảo Windows trên OpenStack, sử dụng GPU passthrough, Sunshine và Moonlight.',
+    'Provision một máy ảo Windows trên OpenStack để chơi game từ xa, sử dụng GPU passthrough, Sunshine và Moonlight.',
   topics: ['OpenStack', 'KVM', 'GPU Passthrough', 'Cloud Gaming'],
+  previewTags: ['OpenStack', 'KVM', 'GPU', 'Gaming'],
+  preview: {
+    src: '/img/cloudplay-preview.svg',
+    alt: 'Minh họa màn hình máy tính và tay cầm chơi game',
+  },
   status: 'Bản thử nghiệm - chưa kiểm thử game',
   startedLabel: 'Đầu tháng 11/2026',
   updatedOn: '2026-11-08',
