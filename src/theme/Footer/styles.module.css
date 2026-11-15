@@ -81,19 +81,15 @@
 }
 
 
-.privacySettings {
-  border: 0;
-  padding: 0;
+.privacyLink {
   margin-left: 14px;
-  background: transparent;
   color: var(--td-muted);
   font: inherit;
   text-decoration: underline;
   text-underline-offset: 4px;
-  cursor: pointer;
 }
 
-.privacySettings:hover {
+.privacyLink:hover {
   color: var(--td-accent);
 }
 
