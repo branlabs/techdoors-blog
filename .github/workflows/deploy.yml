@@ -20,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      # Public Umami Website ID. No tracker is emitted if this variable is unset.
-      UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
+      # Public Umami Website ID. Keep production tracking out of preview/CI builds.
+      UMAMI_WEBSITE_ID: 'a4d415be-3f00-4e3c-95b9-18ab651767ae'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
