@@ -27,6 +27,17 @@ export default function articleSeoPlugin(): Plugin {
         const file = path.join(outDir, route.slice(1), 'index.html');
         let html = await readFile(file, 'utf8');
         html = html.replace(languageLink, '');
+        // Keep the branded browser <title>, but use the article title alone
+        // in link previews (LinkedIn, Messenger, X/Twitter).
+        const socialTitle = route === en ? 'The Invisible Computer' : 'Chiếc máy tính vô hình';
+        const openGraphTitle = /<meta\b(?=[^>]*\bproperty=["']og:title["'])[^>]*>/gi;
+        const twitterTitle = /<meta\b(?=[^>]*\bname=["']twitter:title["'])[^>]*>/gi;
+        if (!openGraphTitle.test(html)) {
+          throw new Error('Cannot set social title: missing og:title in ' + route);
+        }
+        const replaceTitle = (tag: string) =>
+          tag.replace(/\bcontent=(["'])[^"']*\1/i, 'content="' + socialTitle + '"');
+        html = html.replace(openGraphTitle, replaceTitle).replace(twitterTitle, replaceTitle);
         if (!html.includes('</head>')) {
           throw new Error('Cannot write article alternates: missing head in ' + route);
         }

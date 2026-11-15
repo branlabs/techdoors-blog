@@ -87,6 +87,18 @@ for (const [file, $] of parsed) {
   }
   const articlePreview =
     route === '/blog/the-invisible-computer/' || route === '/en/blog/the-invisible-computer/';
+  if (articlePreview) {
+    const expectedSocialTitle = english ? 'The Invisible Computer' : 'Chiếc máy tính vô hình';
+    assert.equal(
+      $('meta[property="og:title"]').attr('content'),
+      expectedSocialTitle,
+      `${route}: article-only Open Graph title`,
+    );
+    const twitterTitle = $('meta[name="twitter:title"]').attr('content');
+    if (twitterTitle !== undefined) {
+      assert.equal(twitterTitle, expectedSocialTitle, `${route}: article-only Twitter title`);
+    }
+  }
   assert.equal(
     $('meta[property="og:image"]').attr('content'),
     `${origin}/img/${articlePreview ? 'the-invisible-computer-og.jpg' : 'og-default.png'}`,
