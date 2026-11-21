@@ -10,25 +10,30 @@ Series: **Under the Hood #02**
 
 **Core question:** “If an Ubuntu computer is already virtual, where does it get the ability to run another virtual computer?”
 
-**Aha:** An L1 guest may act as a hypervisor if the underlying L0 can support and expose the necessary hardware virtualization features. Both levels ultimately share physical resources; creating L2 never creates another physical CPU.
+**Aha:** A machine can be a guest of one hypervisor and run another hypervisor of its own. The engineer gains a separate place to make changes. Hardware acceleration still depends on what L0 exposes, and both guests draw on the same physical resources.
+
+## The engineer's reason to nest
+
+Picture an engineer on a shared Linux host with other workloads already running. They need to install QEMU/KVM, change a hypervisor setting, and observe what happens to a guest they control. Two Ubuntu guests directly on L0 would work if the goal were simply to run two Ubuntu systems. That arrangement would leave L0's shared hypervisor as the system under test.
+
+Give the engineer an Ubuntu guest (L1) in which they control the virtualization stack. They can edit that stack's configuration and boot or restart its disposable guest (L2) without applying those changes to L0's hypervisor. L0 still supplies CPU, memory, storage, and network capacity. Resource contention and host-level configuration or failures remain possible. Establish this boundary in the story before presenting the lab.
 
 ## What the reader should understand without running code
 
 1. L0 = physical host in this lab; L1 = guest that itself runs a hypervisor; L2 = guest running inside L1. These are layers, not three physical servers.
 2. QEMU can emulate a machine in software; KVM acceleration within L1 depends on hardware/host/guest capabilities and configuration. The existence of L2 does not alone prove **nested KVM**.
-3. **Hypervisor** is the name for the virtualization role the reader has already seen in #01. Introduce it gently in 2–4 sentences when needed, then return to the nested question. Avoid diverting into an entire Type 1 / Type 2 taxonomy.
+3. **Hypervisor** names the role the engineer wants to control. Introduce it in 2–4 sentences when the choice of which layer to change becomes relevant. Skip Type 1 / Type 2 taxonomy.
 4. The physical CPU and resources are still shared. Guest virtual CPUs and host CPU extensions must not be conflated.
 5. A short, reproducible lab can test the explanation; Terraform is the method of reproduction, not the episode's protagonist.
 
 ## Suggested plot turns — not mandatory published headings
 
-1. **Return to the scene:** A seemingly ordinary Ubuntu VM from #01. The reader now tries to create another VM *inside it*.
-2. **The contradiction:** There is no new physical CPU or separate computer. How can this guest become the place another guest runs?
-3. **The first clue:** Introduce hypervisor in plain language and separate creating a virtual computer from receiving the host's ability to accelerate execution.
-4. **The layered reveal:** Explain L0 → L1 → L2 visually and trace CPU execution back toward physical hardware.
-5. **The missing ingredient:** Why L1 does not always have KVM, how exposing CPU virtualization features matters, and why QEMU software emulation is a different possibility.
-6. **The proof near the end:** A safe preflight, reproducible L1 and L2 creation, clear checks and observation. The user suggested roughly **80% conceptual storytelling / 20% proof** as an editorial balance for this episode only.
-7. **The reframe:** Return to the original question; the machine did not gain new silicon, it was given a capability. A possible bridge to #03: what happens when a VM boots?
+1. **Return to #01:** The Ubuntu guest is already running. Starting the next machine inside it seems like an unnecessary detour.
+2. **Let the engineer's choice reveal the need:** Another guest on L0 is the simple answer for another workload. The engineer wants to change the virtualization stack that runs the guest, and L0 is shared.
+3. **Find the place to make the change:** L1 can run a stack the engineer controls and give it a guest to manage. Name the hypervisor role and the L0 → L1 → L2 relationship here.
+4. **Follow the work to the CPU:** QEMU can emulate a machine in L1. KVM acceleration requires nested support in L0 and the relevant CPU capabilities exposed to L1. Explain why L1's own hardware-accelerated boot does not establish that capability.
+5. **Test the explanation near the end:** Describe the proposed lab and the runtime evidence that would distinguish KVM from emulation. Keep roughly **80% story and mechanism / 20% evidence** for this episode.
+6. **Return to the opening choice:** The reader can now predict which hypervisor settings the engineer can change in L1, which guest they affect, and why L0 still matters.
 
 ## Lab architecture and scope
 
@@ -39,7 +44,7 @@ L0 — one existing physical Linux node from the author's homelab
         CPU virtualization extensions exposed if supported/configured
         QEMU/KVM/libvirt installed and validated
         └── L2 — small Ubuntu guest provisioned by Terraform/libvirt in L1
-              Booted Linux, inspected and verified
+              Guest boot and active accelerator to be verified
 ```
 
 OpenStack may exist elsewhere on the homelab or on this physical machine, but **OpenStack is deliberately out of the story and out of the provisioning stack**. Do not imply L0 runs no other workloads, and do not alter OpenStack networking, Nova, or storage to make the demo work.
@@ -51,7 +56,7 @@ OpenStack may exist elsewhere on the homelab or on this physical machine, but **
 | L0 preflight | CPU/KVM nested support, host config, free resources, absence of operational conflict | That L1 has the right features exposed |
 | L1 created | QEMU/libvirt configuration and guest startup | That `/dev/kvm` works inside L1 |
 | L1 hypervisor ready | L1 virtualization CPU flags, `/dev/kvm` access, correct runtime permissions, functioning KVM-capable hypervisor | That the L2 guest specifically ran with KVM acceleration |
-| L2 created | Guest boot, OS reachable, hypervisor mode/configuration and runtime evidence in L1 | That nested virtualization is efficient, secure for all workloads, or faster than emulation |
+| L2 running | Guest boot plus the active KVM accelerator reported by the QEMU instance running L2 inside L1 | That nested virtualization is efficient, secure for all workloads, or faster than emulation |
 
 Do **not** write that the lab “proved nested KVM” based on a boot screenshot alone. Identify how the runtime backend was selected and used. Keep logs or evidence if available; label expected output as **expected**, not **observed**.
 

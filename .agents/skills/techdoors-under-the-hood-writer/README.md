@@ -1,8 +1,8 @@
-# TechDoors Under the Hood Writer — v2 (literary craft edition)
+# TechDoors Under the Hood Writer — v3 (purpose before mechanism)
 
 An Agent Skill for writing **original literary technical nonfiction** in TechDoors' own voice. It develops the method already visible in *Chiếc máy tính vô hình / The Invisible Computer*: a tangible puzzle, controlled discovery, an accurate mechanism, and a satisfying payoff.
 
-This version adds a storytelling craft playbook inspired by general techniques of mystery-driven literary fiction, including techniques the author admires in J. K. Rowling's writing. It **does not instruct the agent to imitate her distinctive style or copy existing literary work**.
+V3 adds a pre-draft check for who needs the mechanism, the obstacle they face, and what a simpler approach leaves unmet. The story starts with curiosity and reveals that need through the situation. The payoff is a change in the reader's understanding. The playbook uses general storytelling techniques in TechDoors' own voice.
 
 ## Install into the TechDoors repository
 
@@ -26,6 +26,6 @@ It is a repository-scoped Agent Skill. For Codex, reference `$techdoors-under-th
 
 ## Usage
 
-The agent should first offer a **story card** and outline, not jump directly into a long article. Once approved, draft Vietnamese, fact-check the mechanism, perform the literary editing pass, then write idiomatic English when requested. It must not fabricate experiments or merge/publish without explicit consent.
+Complete the **story card** before drafting. Share it for approval when the brief asks for an outline first, or use it privately when the author requests a reading draft. Draft Vietnamese, check the mechanism and evidence, and use the editorial rubric before delivery. Write a separate, idiomatic English edition when requested. Keep reading drafts in chat when requested and label experiments according to their actual evidence.
 
 This style system is initially based on **one published article with two language editions**, not a large portfolio. Update it as more posts are approved.
