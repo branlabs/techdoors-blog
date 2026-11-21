@@ -21,32 +21,32 @@ The author wants to learn from the **craft** of literary mystery and discovery�
 - For Under the Hood #02 (nested virtualization), **must** read `references/under-the-hood-02-brief.md`.
 - Use `references/review-rubric.md` before submitting or publishing a draft.
 
-## Non-negotiable narrative contract
+## Narrative contract: purpose before mechanism
 
-Before drafting, state these to yourself or in a compact proposal:
+Before drafting, answer these in a private story card or a proposal when requested:
 
-1. **The central question:** one genuine puzzle a curious newcomer would ask.
-2. **The initial observation:** a concrete scene or behavior that creates that puzzle.
-3. **The technical truth:** the mechanism that answers it, including indispensable prerequisites/limits.
-4. **The turning point:** what the reader can explain after the reveal that they could not explain before.
-5. **The evidence:** what is actually observable, simulated, or still hypothetical.
-6. **The next door:** a natural unresolved question, only if the story earns one.
+1. **Observation and question:** What does the reader witness that makes them curious?
+2. **Need:** Who would actually need this, and what are they trying to do?
+3. **Obstacle:** What gets in their way?
+4. **Simpler option:** What would they normally do, and what requirement would that option leave unmet?
+5. **Mechanism:** Which technical capability addresses that gap, under what conditions, and what evidence can distinguish it from other explanations?
+6. **Change in understanding:** What can the reader explain or predict after the reveal?
 
-If any of the first four are unclear, **outline before writing prose**. Do not replace the missing idea with dramatic language.
+If the purpose, obstacle, or simpler option feels contrived, revise the situation before writing prose. These questions guide the writer. Let curiosity open the story, let actions disclose the practical need, and let the obstacle create a reason to discover the mechanism. Keep the published prose free of a mandatory Problem → Solution → Benefits outline.
 
 ## Literary craft adapted to infrastructure
 
 ### The opening: something ordinary, slightly impossible
 
-Open with a specific and understandable situation. Establish what the reader sees, expects, and finds puzzling. A terminal, an ordinary server, a boot screen, a log message, or a seemingly empty room can be enough. Avoid abstract openings like “In today's fast-paced world” or “X is an innovative technology.”
+Open with a specific and understandable situation. Establish what the reader sees, expects, and finds puzzling. An ordinary server or a familiar screen can be enough. Introduce a term, filename, configuration detail, or command only after the reader knows why it matters.
 
 Introduce **one** central mystery rather than spraying questions. A good hook creates curiosity *without claiming anything impossible actually occurred*. No fictional benchmark, real server state, successful test, or dialogue unless provided by the user or explicitly labeled as imagined.
 
 ### Controlled revelations: let concepts earn their entrance
 
-Guide readers from **observation → question → partial mechanism → a more precise question → deeper mechanism**. Introduce jargon at the moment it solves a real uncertainty. A term can receive one accurate, plain-language introduction and then be used normally; avoid glossary detours. Do not use “to understand X, first we must understand Y” as the default transition.
+Guide readers from **observation → question → practical need → obstacle → mechanism → changed understanding**. Let each answer make the next uncertainty more specific. Reveal enough for the reader to follow the decision at hand, and introduce deeper detail when it explains a consequence. Introduce jargon at the moment it solves a real uncertainty. A term can receive one accurate, plain-language introduction and then be used normally; avoid glossary detours. Do not use “to understand X, first we must understand Y” as the default transition.
 
-A recurring object or detail introduced early may become meaningful later (*setup → payoff*). For example, a virtual CPU that seemed ordinary in the opening becomes the key to understanding what the physical CPU actually does. Never hide a required prerequisite just to create suspense.
+Setup can be an expectation, decision, or constraint. A recurring object or phrase is optional. Payoff comes from changing what the reader understands about the opening situation. Never hide a required prerequisite just to create suspense.
 
 ### Narration at human scale
 
@@ -56,7 +56,7 @@ Write with natural variation: a longer descriptive paragraph can lead into a sho
 
 ### Earn the reveal and close the loop
 
-The most important revelation should answer or reframe the opening question. After giving the answer, revisit the concrete scene and show **what has changed in the reader's understanding**. End quietly, not with “technology is magic” or “the possibilities are endless.” A natural unanswered question may link to the next Under the Hood episode; avoid a formulaic cliffhanger in every post.
+The most important revelation should answer or reframe the opening question. After giving the answer, show **what has changed in the reader's understanding**. A return to the opening scene can help if the reader can now explain a result or make a different choice. End quietly, not with “technology is magic” or “the possibilities are endless.” A natural unanswered question may link to the next Under the Hood episode; avoid a formulaic cliffhanger in every post.
 
 ### Analogies as temporary scaffolding
 
@@ -71,7 +71,7 @@ Use an analogy only if it clarifies a specific mechanism. Name the exact corresp
 - **Mostly continuous prose:** add a few narrative headings only when useful. Do not force numbered chapters, tables, lists, FAQ, or a glossary into the finished story.
 - **One diagram when useful:** add it where it resolves a specific spatial/conceptual confusion, not as decoration. Use meaningful alt text and distinguish conceptual diagrams from observed architectures.
 
-Remember: #01's rhythm is a reference, **not a reusable sentence template**. Every article needs its own scene, image, tension and payoff. Do not start every episode with “Have you ever imagined...?” or end every episode with the same “the story is not over” line.
+Remember: #01's rhythm is a reference, **not a reusable sentence template**. Choose the situation and pacing that fit each article's question. Do not start every episode with “Have you ever imagined...?” or end every episode with the same “the story is not over” line.
 
 ## Technical truth is part of the story
 
@@ -93,11 +93,11 @@ Default first draft to Vietnamese unless the user specifies otherwise. Write nat
 ## Agent workflow
 
 1. **Inspect** the relevant article(s), actual repo conventions and user brief. For a TechDoors repo task, inspect `AGENTS.md`, frontmatter, existing blog paths, assets, language routing, and checks. Never assume paths from this skill supersede the current repo.
-2. **Propose a story card**: working VI/EN titles; a single reader question; a one-sentence promise; the reader's “aha”; 4–6 causal beats; necessary technical concepts; anticipated evidence and its status. Briefly ask approval if the user requested an outline/plan first.
-3. **Write a narrative outline** based on turns of discovery, not standard docs headings (Definition → Features → Pros/Cons). Decide where the one major explanation and proof belong.
+2. **Complete the purpose-before-mechanism story card** using the six questions above. Record the anticipated evidence and its status. Present the card and wait only when the brief asks to approve an outline first. For an authorized reading draft, use the card privately and deliver in the requested medium.
+3. **Outline the turns of discovery.** Show why each action or finding motivates the next. Decide when the reader needs the simpler option, the central explanation, and the evidence.
 4. **Draft the story** using specific physical details and controlled reveals. Avoid inventing autobiographical experience or conversations. Use a diagram only when it helps.
 5. **Technical truth pass**: verify each essential claim, analogy boundaries and prerequisites; label hypothetical vs measured facts; check source and configuration specifics. Resolve inconsistencies before polishing literary language.
-6. **Literary revision**: remove generic prose, strengthen transitions, shorten overexplained passages, vary sentence length, add or move one meaningful setup/payoff, make the final insight answer the opening question. Check for accidental imitation of the novelist or the #01 article.
+6. **Literary revision**: remove generic prose, strengthen transitions, shorten overexplained passages, vary sentence length, test whether the reveal answers or reframes the opening question, and keep recurring details only when they help that change land. Check for accidental imitation of the novelist or the #01 article.
 7. **Localize** into the second language only when requested; compare a claim-by-claim fact ledger across editions.
 8. **Package** to match repo conventions. Separate companion code/README from the editorial post. Run applicable formatting, build/link and browser checks if repository files changed; report checks that were not run.
 9. **Deliver for review**: article/outline, an ultra-short “reader learns” statement, technical verification notes and unresolved claims. **Never merge, publish, deploy, or make disruptive infrastructure changes without explicit authorization.**
@@ -107,13 +107,14 @@ Default first draft to Vietnamese unless the user specifies otherwise. Write nat
 Revise before submitting if any of the following is true:
 
 - A reader cannot state the core question after the opening.
-- The first third is mainly definitions, abstract history or unrelated jargon.
+- The opening leads with incidental implementation details or the first third reads mainly as definitions.
+- The example exists mainly to showcase the technology, or the story cannot name the requirement a simpler option leaves unmet.
 - The story uses long stretches of rhetorical questions with no new information.
 - An analogy contradicts the real mechanism or keeps going after it stops helping.
 - A “magical” tone substitutes for causal explanation.
 - A fabricated measurement, log, command result, or first-hand experience is presented as real.
 - Terraform instructions dominate a nested-virtualization story meant to explain nested virtualization.
-- The last paragraph does not answer the first question.
+- The ending leaves the opening question unanswered, or relies on a callback alone for its payoff.
 - Both languages are literal copies rather than individually natural versions.
 - Any passage sounds like a particular novelist instead of TechDoors' own voice.
 

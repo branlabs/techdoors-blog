@@ -9,20 +9,24 @@ Perform this review as a **revision step**; don't print a large rubric into the 
 | Criterion | 2 = pass |
 | --- | --- |
 | A. Curiosity | A tangible opening creates one compelling technical question without generic bait. |
-| B. Discovery | Each paragraph advances observation, mechanism or consequence; new terms arrive only when needed. |
-| C. Literary craft | A concrete detail introduced earlier earns a later payoff; pacing varies without melodrama. |
+| B. Discovery and tension | A real constraint drives the next decision. Each answer narrows the question, and new terms arrive when needed. |
+| C. Literary craft | Concrete action, varied pacing, and restraint hold attention through a clear causal explanation. |
 | D. Technical truth | Essential claims and prerequisite distinctions are accurate and appropriately sourced. |
-| E. Reader payoff | A newcomer can answer the opening question and explain why the mechanism matters. |
+| E. Meaningful revelation | A newcomer can answer the opening question and explain what they now understand or would do differently. A recurring detail is optional. |
 | F. Evidence honesty | Lab status, illustrative examples, observed outputs, and limitations are distinguished. |
 | G. Originality | Voice is distinctly TechDoors; not a clone of #01 or of an admired novelist. |
 | H. Bilingual parity | If two editions exist, claims and caveats match while phrasing feels native. |
+| I. Relevance and motivation | The reader can name who needs the mechanism, what obstacle it addresses, and why the ordinary option falls short in this situation. |
 
-Target **at least 14/16**, with **D and F each scoring 2**. If an edition is not requested, mark H as N/A and target **12/14**. A technically false story fails regardless of the aggregate score.
+Target **at least 16/18**, with **D, E, F, and I each scoring 2**. If a second edition is not requested, mark H as N/A and target **14/16**. A technically false story fails regardless of the aggregate score.
 
-## Two short editorial tests
+## Editorial tests
 
 1. **Remove adjectives.** Does the scene remain interesting and the technical logic understandable? If not, it may be relying on decoration.
-2. **Hide the lab.** Can a reader still explain the main mechanism? If not, the article may have become a tutorial.
+2. **Hide the lab.** Can a reader still explain the main mechanism? If not, revise the explanation in the story.
+3. **Take the simpler route.** What concrete requirement would the ordinary approach leave unmet? If the answer is unclear, fix the situation.
+4. **Remove the callback.** Does the ending still let the reader explain a result or choose where to act? If it only repeats an opening detail, rewrite the payoff.
+5. **Delay the incidental detail.** If the first paragraph names a file, setting, or command, move it to where it first changes the reader's understanding.
 
 ## Disallowed shortcuts
 
